@@ -1,0 +1,35 @@
+# Directories
+UDKLightHouse/
+UDKBin/
+
+# Visual Studio files
+*.user
+*.vcxproj
+*.vcxproj.filters
+*.sln
+
+# Visual Studio directories
+.vs/
+
+# Codelite files
+*.mk
+*.project
+*.workspace
+
+# Codelite directories
+.codelite/
+
+# Linux specific files
+Makefile
+Application.txt
+Karma.txt
+
+# Linux specific directories
+.build-debug/
+
+# Xcode files
+*.xcodeproj
+*.xcworkspace
+
+# Mac store stuff
+*.DS_Store
