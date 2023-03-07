@@ -79,14 +79,13 @@ list(APPEND ESSENTIAL_LIBS spdlog)
 # Finally the runnable file!
 add_executable(UDK src/UDK/UDKChief.cpp)
 
-# MSVC specific extra mile of likning crap
-if(MSVC)
-    target_include_directories(UDK
+
+target_include_directories(UDK
         PRIVATE  
 		${CMAKE_CURRENT_SOURCE_DIR}/../UDK/vendor/wxWidgets/include
     	${CMAKE_CURRENT_SOURCE_DIR}
-    )
-endif()
+)
+
 
 target_compile_definitions(UDK PRIVATE UDK)
 
