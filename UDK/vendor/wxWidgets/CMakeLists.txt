@@ -102,13 +102,50 @@ if(APPLE AND NOT CMAKE_VERSION VERSION_LESS "3.16")
     list(APPEND wxLANGUAGES OBJCXX)
 endif()
 
+add_compile_definitions(WXBUILDING)
+
 project(wxWidgets VERSION 1.0)
 
 include(build/cmake/main.cmake)
+
+# Building the project (STATIC or DYNAMIC (SHARED))
+if (BUILD_SHARED_LIBS)
+    add_library(wxWidgets SHARED ${MSW_LOWLEVEL_SRC} ${BASE_AND_GUI_CMN_SRC} ${MSW_SRC} ${BASE_CMN_SRC} ${GUI_CMN_SRC} ${BASE_WIN32_SRC} ${BASE_AND_GUI_WIN32_SRC}
+    ${MSW_DESKTOP_SRC})
+else()
+    add_library(wxWidgets STATIC ${MSW_LOWLEVEL_SRC} ${BASE_AND_GUI_CMN_SRC} ${MSW_SRC} ${BASE_CMN_SRC} ${GUI_CMN_SRC} ${BASE_WIN32_SRC} ${BASE_AND_GUI_WIN32_SRC}
+    ${MSW_DESKTOP_SRC})
+endif()
 
 # Set the default startup project for Visual Studio
 if(wxBUILD_SAMPLES AND wxUSE_GUI)
     set_directory_properties(PROPERTIES VS_STARTUP_PROJECT minimal)
 endif()
 
-#target_compile_definitions(wxWidgets PUBLIC wxWidgets)
+# INTERFACE (Something that Consumers require but Producers don't)
+# Since I am a library coder here, I am the Producer
+# Rest of the Engine is Consumer here
+
+target_include_directories(wxWidgets
+    PRIVATE
+        # where the library itself will look for its internal headers
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jpeg
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/png
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tiff/libtiff
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/zlib
+        ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/pcre/src/wx
+    PUBLIC
+        # where top-level project will look for the library's public headers
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/include
+        # where external projects will look for the library's public headers
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
+
+if(WIN32)
+target_link_libraries(wxWidgets 
+    comctl32.lib
+    Winmm.dll)
+endif()
+
+target_compile_definitions(wxWidgets PUBLIC wxWidgets)
