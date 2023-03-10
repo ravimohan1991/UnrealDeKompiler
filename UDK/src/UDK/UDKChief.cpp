@@ -13,16 +13,15 @@
  * wxWidgets hello world code
  */
 
-class MyApp : public wxApp
-{
 /**
  * @brief Construct a new My Class object
  *
  * Detailed explaination of how it prints hello world
  */
+class MyApp : public wxApp
+{
 
 public:
-
     /**
      * @brief What to do on initialization
      *
