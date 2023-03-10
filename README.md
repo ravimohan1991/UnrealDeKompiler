@@ -8,3 +8,26 @@ A tool to reconstruct programmer's unreal script
 -  [Talk by Tsviatko](https://www.youtube.com/watch?v=uYZZbteb8Gc)
 -  [Wikipedia](https://en.wikipedia.org/wiki/Decompiler)
 -  [wxWidgets cmake](https://github.com/Ravbug/UnityHubNative/tree/master)
+
+## Crash course on gh-pages
+
+To create a branch of your github software repository which contains nothing but 
+documentation, first create a new, empty branch on your local copy and push it up.
+
+cd /path/to/repoName
+
+git symbolic-ref HEAD refs/heads/gh-pages
+
+rm .git/index
+
+git clean -fdx
+
+echo "My GitHub Page" > index.md
+
+git add .
+
+git commit -a -m "First pages commit"
+
+git push origin gh-pages
+
+You have to configure your repository - Settings -> Action -> General -> Workflow permissions and choose read and write permissions
