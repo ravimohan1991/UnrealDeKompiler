@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['oninit_0',['OnInit',['../class_my_app.html#a79fa75d1155f0e85e20f2869538296d6',1,'MyApp']]]
+  ['myframe_0',['MyFrame',['../class_my_frame.html#aeb2b4ff8a8437835f3f0c394db581ebf',1,'MyFrame']]]
 ];

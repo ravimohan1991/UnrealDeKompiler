@@ -3,7 +3,7 @@ var indexSectionsWithContent =
   0: "mou",
   1: "m",
   2: "u",
-  3: "o",
+  3: "mo",
   4: "u"
 };
 
