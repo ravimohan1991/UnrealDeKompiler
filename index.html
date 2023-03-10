@@ -80,8 +80,20 @@ Resources for consulting</h1>
 <li><a href="https://www.cs.cmu.edu/~fp/courses/15411-f13/lectures/20-decompilation.pdf">Summarized Notes</a></li>
 <li><a href="https://www.youtube.com/watch?v=uYZZbteb8Gc">Talk by Tsviatko</a></li>
 <li><a href="https://en.wikipedia.org/wiki/Decompiler">Wikipedia</a></li>
-<li><a href="https://github.com/Ravbug/UnityHubNative/tree/master">wxWidgets cmake</a> </li>
+<li><a href="https://github.com/Ravbug/UnityHubNative/tree/master">wxWidgets cmake</a></li>
 </ul>
+<h1><a class="anchor" id="autotoc_md2"></a>
+Crash course on gh-pages</h1>
+<p>To create a branch of your github software repository which contains nothing but documentation, first create a new, empty branch on your local copy and push it up.</p>
+<p>cd /path/to/repoName</p>
+<p>git symbolic-ref HEAD refs/heads/gh-pages</p>
+<p>rm .git/index</p>
+<p>git clean -fdx</p>
+<p>echo "My GitHub Page" &gt; index.md</p>
+<p>git add .</p>
+<p>git commit -a -m "First pages commit"</p>
+<p>git push origin gh-pages</p>
+<p>You have to configure your repository - Settings -&gt; Action -&gt; General -&gt; Workflow permissions and choose read and write permissions </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
