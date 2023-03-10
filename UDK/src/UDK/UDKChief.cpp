@@ -28,7 +28,7 @@ public:
      *
      * Create new frame and display that
      *
-     * @return true on successful initialization of application
+     * @return true on successful initialization of "hello world" application
      */
     virtual bool OnInit();
 };
