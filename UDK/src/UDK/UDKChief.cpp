@@ -70,7 +70,7 @@ private:
 	 *
 	 * Opens up a modal message window with desired hello message.
 	 *
-	 * @see MyFrame::MyFrame()
+	 * @see UDKHalo::MyFrame()
 	 */
 	void OnHello(wxCommandEvent& event);
 
@@ -79,7 +79,7 @@ private:
 	 *
 	 * Closes the application.
 	 *
-	 * @see MyFrame::MyFrame()
+	 * @see UDKHalo::MyFrame()
 	 */
 	void OnExit(wxCommandEvent& event);
 
@@ -88,7 +88,7 @@ private:
 	 *
 	 * Opens up a modal message window with desired application information.
 	 *
-	 * @see MyFrame::MyFrame()
+	 * @see UDKHalo::MyFrame()
 	 */
 	void OnAbout(wxCommandEvent& event);
 };
