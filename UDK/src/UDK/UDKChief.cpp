@@ -1,3 +1,26 @@
+/*
+ *   ---------------------
+ *  |  UDKChief.cpp
+ *   ---------------------
+ *   This file is part of Unreal DeKompiler.
+ *
+ *   Unreal DeKompiler is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Unreal DeKompiler is distributed in the hope and belief that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Unreal DeKompiler.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ *   Timeline:
+ *   March, 2023: First Inscription.
+ */
+
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP
@@ -5,12 +28,12 @@
 #endif
 
 /** @file
- * @brief Hello World code
+ * @brief UDKApplication code
  *
- * wxWidgets hello world code
+ * Contains the main() and associated code for UDKApplication.
  */
 
-class MyApp : public wxApp
+class UDKApplication : public wxApp
 {
 public:
 	/**
@@ -24,7 +47,7 @@ public:
 	virtual bool OnInit();
 };
 
-class MyFrame : public wxFrame
+class UDKHalo : public wxFrame
 {
 public:
 	/**
@@ -39,7 +62,7 @@ public:
 	 * @see MyFrame::OnExit()
 	 * @see MyFrame::OnAbout(wxCommandEvent& event)
 	 */
-	MyFrame();
+	UDKHalo();
 
 private:
 	/**
@@ -75,17 +98,19 @@ enum
 	ID_Hello = 1
 };
 
-wxIMPLEMENT_APP_CONSOLE(MyApp);
+wxIMPLEMENT_APP_CONSOLE(UDKApplication);
 
-bool MyApp::OnInit()
+bool UDKApplication::OnInit()
 {
-	MyFrame* frame = new MyFrame();
+	UDKHalo* frame = new UDKHalo();
 	frame->Show(true);
+	frame->SetSize(wxDefaultPosition.x, wxDefaultPosition.y, 900, 500);
+
 	return true;
 }
 
-MyFrame::MyFrame()
-	: wxFrame(nullptr, wxID_ANY, "Hello World")
+UDKHalo::UDKHalo()
+	: wxFrame(nullptr, wxID_ANY, "Unreal DeKompiler")
 {
 	wxMenu* menuFile = new wxMenu;
 	menuFile->Append(ID_Hello, "&Hello...\tCtrl-H",
@@ -103,25 +128,25 @@ MyFrame::MyFrame()
 	SetMenuBar(menuBar);
 
 	CreateStatusBar();
-	SetStatusText("Welcome to wxWidgets!");
+	SetStatusText("Welcome to Unreal DeKompiler!");
 
-	Bind(wxEVT_MENU, &MyFrame::OnHello, this, ID_Hello);
-	Bind(wxEVT_MENU, &MyFrame::OnAbout, this, wxID_ABOUT);
-	Bind(wxEVT_MENU, &MyFrame::OnExit, this, wxID_EXIT);
+	Bind(wxEVT_MENU, &UDKHalo::OnHello, this, ID_Hello);
+	Bind(wxEVT_MENU, &UDKHalo::OnAbout, this, wxID_ABOUT);
+	Bind(wxEVT_MENU, &UDKHalo::OnExit, this, wxID_EXIT);
 }
 
-void MyFrame::OnExit(wxCommandEvent& event)
+void UDKHalo::OnExit(wxCommandEvent& event)
 {
 	Close(true);
 }
 
-void MyFrame::OnAbout(wxCommandEvent& event)
+void UDKHalo::OnAbout(wxCommandEvent& event)
 {
-	wxMessageBox("This is a wxWidgets Hello World example",
-		"About Hello World", wxOK | wxICON_INFORMATION);
+	wxMessageBox("Written by The_Cowboy",
+		"About Unreal DeKompiler", wxOK | wxICON_INFORMATION);
 }
 
-void MyFrame::OnHello(wxCommandEvent& event)
+void UDKHalo::OnHello(wxCommandEvent& event)
 {
-	wxLogMessage("Hello world from wxWidgets!");
+	wxLogMessage("Hello reversal lovers, greetings from Unreal DeKompiler!");
 }
