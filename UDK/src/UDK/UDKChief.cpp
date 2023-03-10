@@ -1,6 +1,3 @@
-// wxWidgets "Hello World" Program
- 
-// For compilers that support precompilation, includes "wx/wx.h".
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP
@@ -13,21 +10,17 @@
  * wxWidgets hello world code
  */
 
-/**
- * @brief Construct a new My Class object
- *
- * Detailed explaination of how it prints hello world
- */
 class MyApp : public wxApp
 {
 
 public:
     /**
-     * @brief What to do on initialization
+     * @brief Create new frame and display that
      *
-     * Create new frame and display that
+     * This routine creates new frame and displays the same.
      *
      * @return true on successful initialization of "hello world" application
+     * @see wxTopLevelWindowMSW::Show
      */
     virtual bool OnInit();
 };
