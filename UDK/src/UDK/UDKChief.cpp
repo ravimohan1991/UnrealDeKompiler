@@ -49,7 +49,7 @@ enum
     ID_Hello = 1
 };
  
-wxIMPLEMENT_APP(MyApp);
+wxIMPLEMENT_APP_CONSOLE(MyApp);
  
 bool MyApp::OnInit()
 {
