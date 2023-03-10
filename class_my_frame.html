@@ -71,6 +71,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="class_my_frame-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">MyFrame Class Reference</div></div>
 </div><!--header-->
@@ -87,6 +88,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aeb2b4ff8a8437835f3f0c394db581ebf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_my_frame.html#aeb2b4ff8a8437835f3f0c394db581ebf">MyFrame</a> ()</td></tr>
 <tr class="memdesc:aeb2b4ff8a8437835f3f0c394db581ebf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frame setup.  <br /></td></tr>
 <tr class="separator:aeb2b4ff8a8437835f3f0c394db581ebf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a86b48287b527870ff56fedf9515ff9d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_my_frame.html#a86b48287b527870ff56fedf9515ff9d6">OnHello</a> (wxCommandEvent &amp;event)</td></tr>
+<tr class="memdesc:a86b48287b527870ff56fedf9515ff9d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hello entry callback.  <br /></td></tr>
+<tr class="separator:a86b48287b527870ff56fedf9515ff9d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab72daefc5a74695f02427ae126df7261"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_my_frame.html#ab72daefc5a74695f02427ae126df7261">OnExit</a> (wxCommandEvent &amp;event)</td></tr>
+<tr class="memdesc:ab72daefc5a74695f02427ae126df7261"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exit entry callback.  <br /></td></tr>
+<tr class="separator:ab72daefc5a74695f02427ae126df7261"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab470cba0c5d8d46980c602589d556ee5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_my_frame.html#ab470cba0c5d8d46980c602589d556ee5">OnAbout</a> (wxCommandEvent &amp;event)</td></tr>
+<tr class="memdesc:ab470cba0c5d8d46980c602589d556ee5"><td class="mdescLeft">&#160;</td><td class="mdescRight">About entry callback.  <br /></td></tr>
+<tr class="separator:ab470cba0c5d8d46980c602589d556ee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aeb2b4ff8a8437835f3f0c394db581ebf" name="aeb2b4ff8a8437835f3f0c394db581ebf"></a>
@@ -109,11 +122,102 @@ Public Member Functions</h2></td></tr>
 Quit entries while Help contains About entry. A status bar at the bottom is <br  />
 also created. A relevant bind to the OnHello, OnExit, and OnAbout routines <br  />
 is done for desired callback.</p>
-<dl class="section see"><dt>See also</dt><dd>MyFrame::OnHello(wxCommandEvent&amp;) </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_my_frame.html#a86b48287b527870ff56fedf9515ff9d6" title="Hello entry callback.">MyFrame::OnHello(wxCommandEvent&amp;)</a> </dd>
 <dd>
-MyFrame::OnExit() </dd>
+<a class="el" href="class_my_frame.html#ab72daefc5a74695f02427ae126df7261" title="Exit entry callback.">MyFrame::OnExit()</a> </dd>
 <dd>
-MyFrame::OnAbout(wxCommandEvent&amp; event) </dd></dl>
+<a class="el" href="class_my_frame.html#ab470cba0c5d8d46980c602589d556ee5" title="About entry callback.">MyFrame::OnAbout(wxCommandEvent&amp; event)</a> </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab470cba0c5d8d46980c602589d556ee5" name="ab470cba0c5d8d46980c602589d556ee5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab470cba0c5d8d46980c602589d556ee5">&#9670;&#160;</a></span>OnAbout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MyFrame::OnAbout </td>
+          <td>(</td>
+          <td class="paramtype">wxCommandEvent &amp;&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>About entry callback. </p>
+<p>Opens up a modal message window with desired application information.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_my_frame.html#aeb2b4ff8a8437835f3f0c394db581ebf" title="Frame setup.">MyFrame::MyFrame()</a> </dd></dl>
+
+</div>
+</div>
+<a id="ab72daefc5a74695f02427ae126df7261" name="ab72daefc5a74695f02427ae126df7261"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab72daefc5a74695f02427ae126df7261">&#9670;&#160;</a></span>OnExit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MyFrame::OnExit </td>
+          <td>(</td>
+          <td class="paramtype">wxCommandEvent &amp;&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Exit entry callback. </p>
+<p>Closes the application.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_my_frame.html#aeb2b4ff8a8437835f3f0c394db581ebf" title="Frame setup.">MyFrame::MyFrame()</a> </dd></dl>
+
+</div>
+</div>
+<a id="a86b48287b527870ff56fedf9515ff9d6" name="a86b48287b527870ff56fedf9515ff9d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86b48287b527870ff56fedf9515ff9d6">&#9670;&#160;</a></span>OnHello()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MyFrame::OnHello </td>
+          <td>(</td>
+          <td class="paramtype">wxCommandEvent &amp;&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Hello entry callback. </p>
+<p>Opens up a modal message window with desired hello message.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_my_frame.html#aeb2b4ff8a8437835f3f0c394db581ebf" title="Frame setup.">MyFrame::MyFrame()</a> </dd></dl>
 
 </div>
 </div>
