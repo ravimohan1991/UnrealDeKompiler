@@ -6,10 +6,30 @@
 #ifndef WX_PRECOMP
     #include <wx/wx.h>
 #endif
- 
+
+/** @file
+ * @brief Hello World code
+ *
+ * wxWidgets hello world code
+ */
+
 class MyApp : public wxApp
 {
+/**
+ * @brief Construct a new My Class object
+ *
+ * Detailed explaination of how it prints hello world
+ */
+
 public:
+
+    /**
+     * @brief What to do on initialization
+     *
+     * Create new frame and display that
+     *
+     * @return true on successful initialization
+     */
     virtual bool OnInit();
 };
  
