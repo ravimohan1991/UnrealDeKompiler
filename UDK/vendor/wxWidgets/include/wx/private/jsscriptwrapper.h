@@ -33,42 +33,38 @@ public:
     };
 
     wxJSScriptWrapper(const wxString& js, OutputType outputType)
-        : m_outputType(outputType)
+        : m_escapedCode(js), m_outputType(outputType)
     {
         // Adds one escape level.
         const char *charsNeededToBeEscaped = "\\\"\n\r\v\t\b\f";
-        m_escapedCode.reserve(js.size());
-        for (wxString::const_iterator it = js.begin(); it != js.end(); ++it)
-        {
-            if (wxStrchr(charsNeededToBeEscaped, *it))
+        for (
+            size_t pos = m_escapedCode.find_first_of(charsNeededToBeEscaped, 0);
+            pos != wxString::npos;
+            pos = m_escapedCode.find_first_of(charsNeededToBeEscaped, pos)
+        ) {
+            switch (m_escapedCode[pos].GetValue())
             {
-                m_escapedCode += '\\';
-                switch ((wxChar) *it)
-                {
-                case 0x0A: // '\n'
-                    m_escapedCode += 'n';
-                    break;
-                case 0x0D: // '\r'
-                    m_escapedCode += 'r';
-                    break;
-                case 0x0B: // '\v'
-                    m_escapedCode += 'v';
-                    break;
-                case 0x09: // '\t'
-                    m_escapedCode += 't';
-                    break;
-                case 0x08: // '\b'
-                    m_escapedCode += 'b';
-                    break;
-                case 0x0C: // '\f'
-                    m_escapedCode += 'f';
-                    break;
-                default:
-                    m_escapedCode += *it;
-                }
+            case 0x0A: // '\n'
+                m_escapedCode[pos] = 'n';
+                break;
+            case 0x0D: // '\r'
+                m_escapedCode[pos] = 'r';
+                break;
+            case 0x0B: // '\v'
+                m_escapedCode[pos] = 'v';
+                break;
+            case 0x09: // '\t'
+                m_escapedCode[pos] = 't';
+                break;
+            case 0x08: // '\b'
+                m_escapedCode[pos] = 'b';
+                break;
+            case 0x0C: // '\f'
+                m_escapedCode[pos] = 'f';
+                break;
             }
-            else
-                m_escapedCode += *it;
+            m_escapedCode.insert(pos, '\\');
+            pos += 2;
         }
     }
 

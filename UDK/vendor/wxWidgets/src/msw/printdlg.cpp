@@ -87,8 +87,7 @@ public:
             return false;
 
         DWORD bufSize = 0;
-        ::GetPrinter(m_hPrinter, level, NULL, 0, &bufSize);
-        if ( !bufSize )
+        if ( !::GetPrinter(m_hPrinter, level, NULL, 0, &bufSize) || !bufSize )
             return false;
 
         if ( !::GetPrinter(m_hPrinter,

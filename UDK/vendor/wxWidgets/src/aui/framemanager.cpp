@@ -3902,8 +3902,7 @@ void wxAuiManager::Render(wxDC* dc)
 
 void wxAuiManager::Repaint(wxDC* dc)
 {
-#if defined(__WXMAC__) || defined(__WXGTK3__)
-    // We can't use wxClientDC in these ports.
+#ifdef __WXMAC__
     if ( dc == NULL )
     {
         m_frame->Refresh() ;

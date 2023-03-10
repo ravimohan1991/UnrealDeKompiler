@@ -164,46 +164,6 @@ inline wxDataViewItem wxDataViewItemFromMaybeNilItem(id item)
 @end
 
 // ----------------------------------------------------------------------------
-// wxDVCNSHeaderView: exists only to override rightMouseDown:
-// ----------------------------------------------------------------------------
-
-@interface wxDVCNSHeaderView : NSTableHeaderView
-{
-    wxDataViewCtrl* dvc;
-}
-
-    -(id) initWithDVC:(wxDataViewCtrl*)ctrl;
-    -(void) rightMouseDown:(NSEvent *)theEvent;
-@end
-
-@implementation wxDVCNSHeaderView
-
--(id) initWithDVC:(wxDataViewCtrl*)ctrl
-{
-    self = [super init];
-    if (self != nil)
-    {
-        dvc = ctrl;
-    }
-    return self;
-}
-
--(void) rightMouseDown:(NSEvent *)theEvent
-{
-    NSPoint locInWindow = [theEvent locationInWindow];
-    NSPoint locInView = [self convertPoint:locInWindow fromView:nil];
-    NSInteger colIdx = [self columnAtPoint:locInView];
-    wxDataViewColumn* const
-        column = colIdx == -1 ? NULL : dvc->GetColumn(colIdx);
-    wxDataViewEvent
-        event(wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, dvc, column);
-    if ( !dvc->HandleWindowEvent(event) )
-        [super rightMouseDown:theEvent];
-}
-
-@end
-
-// ----------------------------------------------------------------------------
 // wxDVCNSTableColumn: exists only to override NSTableColumn:dataCellForRow:
 // ----------------------------------------------------------------------------
 
@@ -2025,13 +1985,8 @@ void wxCocoaDataViewControl::InitOutlineView(long style)
     [m_OutlineView setAllowsMultipleSelection:           (style & wxDV_MULTIPLE)  != 0];
     [m_OutlineView setUsesAlternatingRowBackgroundColors:(style & wxDV_ROW_LINES) != 0];
 
-    NSTableHeaderView* header = nil;
-    if ( !(style & wxDV_NO_HEADER) )
-    {
-        header = [[wxDVCNSHeaderView alloc] initWithDVC:GetDataViewCtrl()];
-    }
-
-    [m_OutlineView setHeaderView:header];
+    if ( style & wxDV_NO_HEADER )
+        [m_OutlineView setHeaderView:nil];
 }
 
 wxCocoaDataViewControl::~wxCocoaDataViewControl()
@@ -2583,29 +2538,8 @@ void wxCocoaDataViewControl::DoSetIndent(int indent)
     [m_OutlineView setIndentationPerLevel:static_cast<CGFloat>(indent)];
 }
 
-void wxCocoaDataViewControl::HitTest(const wxPoint& point_, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const
+void wxCocoaDataViewControl::HitTest(const wxPoint& point, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const
 {
-    // Assume no item by default.
-    columnPtr = NULL;
-    item      = wxDataViewItem();
-
-    // Make a copy before modifying it.
-    wxPoint point(point_);
-
-    // First check that the point is not inside the header area and adjust it
-    // by its offset.
-    if (NSTableHeaderView* const headerView = [m_OutlineView headerView])
-    {
-        if (point.y < headerView.visibleRect.size.height)
-            return;
-    }
-
-    // Convert from the window coordinates to the virtual scrolled view coordinates.
-    NSScrollView *scrollView = [m_OutlineView enclosingScrollView];
-    const NSRect& visibleRect = scrollView.contentView.visibleRect;
-    point.x += visibleRect.origin.x;
-    point.y += visibleRect.origin.y;
-
     NSPoint const nativePoint = wxToNSPoint((NSScrollView*) GetWXWidget(),point);
 
     int indexColumn;
@@ -2618,6 +2552,11 @@ void wxCocoaDataViewControl::HitTest(const wxPoint& point_, wxDataViewItem& item
     {
         columnPtr = GetColumn(indexColumn);
         item      = wxDataViewItem([[m_OutlineView itemAtRow:indexRow] pointer]);
+    }
+    else
+    {
+        columnPtr = NULL;
+        item      = wxDataViewItem();
     }
 }
 

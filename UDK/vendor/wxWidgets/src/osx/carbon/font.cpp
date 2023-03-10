@@ -258,13 +258,10 @@ wxFontRefData::wxFontRefData(const wxFontInfo& info)
 {
     m_info.Init();
 
-    wxFontFamily family = info.GetFamily();
-    if (family == wxFONTFAMILY_DEFAULT)
-        family = wxFONTFAMILY_SWISS;
-    SetFamily(family);
-
     if ( info.HasFaceName() )
         SetFaceName(info.GetFaceName());
+    else
+        SetFamily(info.GetFamily());
 
     m_info.SetSizeOrDefault(info.GetFractionalPointSize());
     SetNumericWeight(info.GetNumericWeight());
@@ -349,7 +346,7 @@ void wxFontRefData::Alloc()
         CachedFontEntry& entryNoSize = fontcache[lookupnameNoSize];
         if ( entryNoSize.used )
         {
-            m_ctFont = CTFontCreateCopyWithAttributes(entryNoSize.font, m_info.GetFractionalPointSize(), NULL, NULL);
+            m_ctFont = CTFontCreateCopyWithAttributes(entryNoSize.font, m_info.GetPointSize(), NULL, NULL);
             m_ctFontAttributes = entryNoSize.fontAttributes.CreateCopy();
             m_ctFontAttributes.SetValue(kCTFontAttributeName,m_ctFont.get());
             m_cgFont = CTFontCopyGraphicsFont(m_ctFont, NULL);
@@ -366,7 +363,7 @@ void wxFontRefData::Alloc()
             if ( m_info.GetStyle() != wxFONTSTYLE_NORMAL && m_info.GetCTSlant(m_info.GetCTFontDescriptor()) < 0.01 )
                 remainingTransform = &kSlantTransform;
 
-            wxCFRef<CTFontRef> font = CTFontCreateWithFontDescriptor(m_info.GetCTFontDescriptor(), m_info.GetFractionalPointSize(), remainingTransform);
+            wxCFRef<CTFontRef> font = CTFontCreateWithFontDescriptor(m_info.GetCTFontDescriptor(), m_info.GetPointSize(), remainingTransform);
 
             // emulate weigth if necessary
             int difference = m_info.GetNumericWeight() - CTWeightToWX(wxNativeFontInfo::GetCTWeight(font));
@@ -721,7 +718,7 @@ wxSize wxFont::GetPixelSize() const
     wxDouble width, height = 0;
     dc->GetTextExtent(wxT("g"), &width, &height, NULL, NULL);
     delete dc;
-    return wxSize(wxRound(width), wxRound(height));
+    return wxSize((int)width, (int)height);
 #else
     return wxFontBase::GetPixelSize();
 #endif

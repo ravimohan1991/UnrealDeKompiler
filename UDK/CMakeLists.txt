@@ -53,6 +53,7 @@ elseif(UNIX AND NOT APPLE)
     add_compile_definitions(UDK_LINUX_PLATFORM)
 elseif(APPLE)
     add_compile_definitions(UDK_MAC_PLATFORM)
+    set(wxUSE_ACCESSIBILITY 0)
 endif()
 
 # Handling MSVC static class members for dynamic linkage. I know!

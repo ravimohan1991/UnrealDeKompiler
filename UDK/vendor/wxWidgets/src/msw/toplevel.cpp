@@ -327,13 +327,6 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
     return rc;
 }
 
-void
-wxTopLevelWindowMSW::MSWUpdateFontOnDPIChange(const wxSize& WXUNUSED(newDPI))
-{
-    if ( !m_icons.IsEmpty() )
-        DoSetIcons();
-}
-
 bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
                                        const wxString& title,
                                        const wxPoint& pos,
@@ -1050,13 +1043,8 @@ void wxTopLevelWindowMSW::SetIcons(const wxIconBundle& icons)
         return;
     }
 
-    DoSetIcons();
-}
-
-void wxTopLevelWindowMSW::DoSetIcons()
-{
-    DoSelectAndSetIcon(m_icons, SM_CXSMICON, SM_CYSMICON, ICON_SMALL);
-    DoSelectAndSetIcon(m_icons, SM_CXICON, SM_CYICON, ICON_BIG);
+    DoSelectAndSetIcon(icons, SM_CXSMICON, SM_CYSMICON, ICON_SMALL);
+    DoSelectAndSetIcon(icons, SM_CXICON, SM_CYICON, ICON_BIG);
 }
 
 wxContentProtection wxTopLevelWindowMSW::GetContentProtection() const

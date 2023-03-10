@@ -205,18 +205,9 @@ public:
     static void SetValue(const T& value,
                          wxAnyValueBuffer& buf)
     {
-        // Use placement new, taking care to avoid running into problems with
-        // "new" redefinition in wx/msw/msvcrt.h.
-#ifdef WXDEBUG_NEW
-    #undef new
-#endif
-
+        // Use placement new
         void* const place = buf.m_buffer;
         ::new(place) T(value);
-
-#ifdef WXDEBUG_NEW
-    #define new WXDEBUG_NEW
-#endif
     }
 
     static const T& GetValue(const wxAnyValueBuffer& buf)

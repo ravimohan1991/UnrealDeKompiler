@@ -86,11 +86,9 @@ SEL wxOSXGetSelectorFromID(int menuId )
     wxUnusedVar(sender);
     if ( impl )
     {
-        if ( wxMenuItem* menuitem = impl->GetWXPeer() )
+        wxMenuItem* menuitem = impl->GetWXPeer();
+        if ( menuitem->GetMenu()->HandleCommandProcess(menuitem) == false )
         {
-            // Ignore the return value as there doesn't seem anything to do
-            // with it here.
-            menuitem->GetMenu()->HandleCommandProcess(menuitem);
         }
      }
 }

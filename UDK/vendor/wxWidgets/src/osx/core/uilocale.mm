@@ -131,13 +131,7 @@ wxUILocaleImplCF::Use()
 wxString
 wxUILocaleImplCF::GetName() const
 {
-    wxString name = wxCFStringRef::AsString([m_nsloc localeIdentifier]);
-
-    // Check for the special case of the "empty" system locale, see CreateStdC()
-    if ( name.empty() )
-        name = "C";
-
-    return name;
+    return wxCFStringRef::AsString([m_nsloc localeIdentifier]);
 }
 
 wxLocaleIdent
@@ -155,31 +149,47 @@ wxUILocaleImplCF::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 wxString
 wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
 {
-    NSLocale* convLocale = NULL;
-    switch (form)
-    {
-        case wxLOCALE_FORM_NATIVE:
-            convLocale = m_nsloc;
-            break;
-        case wxLOCALE_FORM_ENGLISH:
-            convLocale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
-            break;
-        default:
-            wxFAIL_MSG("unknown wxLocaleForm");
-            return wxString();
-    }
-
     NSString* str = NULL;
     switch (name)
     {
         case wxLOCALE_NAME_LOCALE:
-            str = [convLocale localizedStringForLocaleIdentifier:[m_nsloc localeIdentifier]];
+            switch (form)
+            {
+                case wxLOCALE_FORM_NATIVE:
+                    str = [m_nsloc localizedStringForLocaleIdentifier:[m_nsloc localeIdentifier]];
+                    break;
+                case wxLOCALE_FORM_ENGLISH:
+                    str = [m_nsloc displayNameForKey:NSLocaleIdentifier value:[m_nsloc localeIdentifier]];
+                    break;
+                default:
+                    wxFAIL_MSG("unknown wxLocaleForm");
+            }
             break;
         case wxLOCALE_NAME_LANGUAGE:
-            str = [convLocale localizedStringForLanguageCode:[m_nsloc languageCode]];
+            switch (form)
+            {
+                case wxLOCALE_FORM_NATIVE:
+                    str = [m_nsloc localizedStringForLanguageCode:[m_nsloc languageCode]];
+                    break;
+                case wxLOCALE_FORM_ENGLISH:
+                    str = [m_nsloc displayNameForKey:NSLocaleIdentifier value:[m_nsloc localeIdentifier]];
+                    break;
+                default:
+                     wxFAIL_MSG("unknown wxLocaleForm");
+            }
             break;
         case wxLOCALE_NAME_COUNTRY:
-            str = [convLocale localizedStringForCountryCode:[m_nsloc countryCode]];
+            switch (form)
+            {
+                case wxLOCALE_FORM_NATIVE:
+                    str = [m_nsloc localizedStringForCountryCode:[m_nsloc countryCode]];
+                    break;
+                case wxLOCALE_FORM_ENGLISH:
+                    str = [m_nsloc displayNameForKey:NSLocaleIdentifier value:[m_nsloc localeIdentifier]];
+                    break;
+                default:
+                    wxFAIL_MSG("unknown wxLocaleForm");
+            }
             break;
     }
     return wxCFStringRef::AsString(str);
@@ -199,12 +209,7 @@ wxUILocaleImplCF::GetLayoutDirection() const
 /* static */
 wxUILocaleImpl* wxUILocaleImpl::CreateStdC()
 {
-    // This is an "empty" locale, but it seems to correspond rather well to the
-    // "C" locale under POSIX systems and using localeWithLocaleIdentifier:@"C"
-    // wouldn't be much better as we'd still need a hack for it in GetName()
-    // because the locale names are always converted to lower case, while we
-    // really want to return "C" rather than "c" as the name of this one.
-    return new wxUILocaleImplCF([NSLocale systemLocale]);
+    return wxUILocaleImplCF::Create(wxLocaleIdent().Language("C"));
 }
 
 /* static */

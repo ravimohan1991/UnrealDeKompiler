@@ -136,8 +136,6 @@ private:
 
     // the global/default versions of the above
     static EGLConfig *ms_glEGLConfig;
-
-    friend void wxEGLUpdatePosition(wxGLCanvasEGL* win);
 };
 
 // ----------------------------------------------------------------------------

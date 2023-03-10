@@ -719,11 +719,10 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                     case wxDF_HTML:
                     case CF_TEXT:
                     case CF_OEMTEXT:
-                        // Size must include the trailing NUL.
-                        size = strlen((const char *)ptr.Get()) + 1;
+                        size = strlen((const char *)ptr.Get());
                         break;
                     case CF_UNICODETEXT:
-                        size = (wxWcslen((const wchar_t *)ptr.Get()) + 1) * sizeof(wchar_t);
+                        size = wxWcslen((const wchar_t *)ptr.Get()) * sizeof(wchar_t);
                         break;
                     case CF_BITMAP:
                     case CF_HDROP:
@@ -1489,7 +1488,7 @@ void wxURLDataObject::SetURL(const wxString& url)
     }
 
 #if wxUSE_UNICODE
-    SetData(wxDF_UNICODETEXT, (url.length() + 1)*sizeof(wxChar), url.wc_str());
+    SetData(wxDF_UNICODETEXT, url.length()*sizeof(wxChar), url.wc_str());
 #endif
 }
 
