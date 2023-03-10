@@ -70,6 +70,11 @@ if(MSVC AND BUILD_SHARED_LIBS)
     endif()
 endif()
 
+set(wxUSE_STL ON CACHE INTERNAL "")
+set(wxUSE_REGEX OFF CACHE INTERNAL "")
+set(wxUSE_LIBJPEG OFF CACHE INTERNAL "")
+set(wxUSE_LIBTIFF OFF CACHE INTERNAL "")
+set(wxUSE_ZLIB builtin CACHE INTERNAL "")
 
 # Involved libraries and essentials
 add_subdirectory(vendor/wxWidgets)
