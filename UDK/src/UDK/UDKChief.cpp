@@ -20,7 +20,7 @@ public:
      * This routine creates new frame and displays the same.
      *
      * @return true on successful initialization of "hello world" application
-     * @see wxTopLevelWindowMSW::Show
+     * @see wxTopLevelWindowMSW::Show()
      */
     virtual bool OnInit();
 };
@@ -28,6 +28,18 @@ public:
 class MyFrame : public wxFrame
 {
 public:
+    /**
+     * @brief Frame setup
+     *
+     * Sets and populates menubar with File and Help menus. File contains Hello and
+     * Quit entries while Help contains About entry. A status bar at the bottom is
+     * also created. A relevant bind to the OnHello, OnExit, and OnAbout routines
+     * is done for desired callback.
+     *
+     * @see MyFrame::OnHello(wxCommandEvent&)
+     * @see MyFrame::OnExit()
+     * @see MyFrame::OnAbout(wxCommandEvent& event)
+     */
     MyFrame();
  
 private:
