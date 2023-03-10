@@ -101,7 +101,7 @@ elseif(XCODE)
 endif()
 
 # Linking to our UDK application
-target_link_libraries(UDK PUBLIC wxWidgets)
+target_link_libraries(UDK PUBLIC wx::core)
 
 # Cluster UDK's libraries into a single folder for project/solution visualization
 # set_property(TARGET wxWidgets PROPERTY FOLDER "${UDKLIBRARYFOLDER}")
