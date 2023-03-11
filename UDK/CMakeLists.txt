@@ -70,6 +70,7 @@ if(MSVC AND BUILD_SHARED_LIBS)
     endif()
 endif()
 
+# wxWidgets settings
 set(wxUSE_STL ON CACHE INTERNAL "")
 set(wxUSE_REGEX OFF CACHE INTERNAL "")
 set(wxUSE_LIBJPEG OFF CACHE INTERNAL "")
@@ -79,12 +80,16 @@ set(wxUSE_ZLIB builtin CACHE INTERNAL "")
 # Involved libraries and essentials
 add_subdirectory(vendor/wxWidgets)
 
-list(APPEND ESSENTIAL_LIBS spdlog)
+# UDK's personal code
+file(GLOB_RECURSE CPPFILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+# Shows the headerfile directory in project
+file(GLOB_RECURSE HEADERFILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h)
 
+# Organize the files in relevant groups
+# SOURCE_GROUP_BY_FOLDER(src)
 
 # Finally the runnable file!
-add_executable(UDK src/UDK/UDKChief.cpp)
-
+add_executable(UDK ${CPPFILES} ${HEADERFILES})
 
 target_include_directories(UDK
         PRIVATE  
@@ -92,9 +97,7 @@ target_include_directories(UDK
     	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-
 target_compile_definitions(UDK PRIVATE UDK)
-
 
 if(MSVC)
     # Set local debugger path

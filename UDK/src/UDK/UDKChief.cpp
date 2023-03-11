@@ -22,10 +22,14 @@
  */
 
 #include <wx/wxprec.h>
+#include "wx/filedlg.h"
+#include "wx/filesys.h"
 
 #ifndef WX_PRECOMP
 #include <wx/wx.h>
 #endif
+
+#include "UDKChief.h"
 
 /** @file
  * @brief UDKApplication code
@@ -33,79 +37,15 @@
  * Contains the main() and associated code for UDKApplication.
  */
 
-class UDKApplication : public wxApp
-{
-public:
-	/**
-	 * @brief Create new frame and display that
-	 *
-	 * This routine creates new frame and displays the same.
-	 *
-	 * @return true on successful initialization of "hello world" application
-	 * @see wxTopLevelWindowMSW::Show()
-	 */
-	virtual bool OnInit();
-};
-
-class UDKHalo : public wxFrame
-{
-public:
-	/**
-	 * @brief Frame setup
-	 *
-	 * Sets and populates menubar with File and Help menus. File contains Hello and \n
-	 * Quit entries while Help contains About entry. A status bar at the bottom is \n
-	 * also created. A relevant bind to the OnHello, OnExit, and OnAbout routines \n
-	 * is done for desired callback.
-	 *
-	 * @see MyFrame::OnHello(wxCommandEvent&)
-	 * @see MyFrame::OnExit()
-	 * @see MyFrame::OnAbout(wxCommandEvent& event)
-	 */
-	UDKHalo();
-
-private:
-	/**
-	 * @brief Hello entry callback
-	 *
-	 * Opens up a modal message window with desired hello message.
-	 *
-	 * @see UDKHalo::MyFrame()
-	 */
-	void OnHello(wxCommandEvent& event);
-
-	/**
-	 * @brief Exit entry callback
-	 *
-	 * Closes the application.
-	 *
-	 * @see UDKHalo::MyFrame()
-	 */
-	void OnExit(wxCommandEvent& event);
-
-	/**
-	 * @brief About entry callback
-	 *
-	 * Opens up a modal message window with desired application information.
-	 *
-	 * @see UDKHalo::MyFrame()
-	 */
-	void OnAbout(wxCommandEvent& event);
-};
-
-enum
-{
-	ID_Hello = 1
-};
+UDKHalo* UDKApplication::m_Frame = nullptr;
 
 wxIMPLEMENT_APP_CONSOLE(UDKApplication);
 
 bool UDKApplication::OnInit()
 {
-	UDKHalo* frame = new UDKHalo();
-	frame->Show(true);
-	frame->SetSize(wxDefaultPosition.x, wxDefaultPosition.y, 900, 500);
-
+	m_Frame = new UDKHalo();
+	m_Frame->Show(true);
+	m_Frame->SetSize(wxDefaultPosition.x, wxDefaultPosition.y, 900, 500);
 	return true;
 }
 
@@ -115,6 +55,8 @@ UDKHalo::UDKHalo()
 	wxMenu* menuFile = new wxMenu;
 	menuFile->Append(ID_Hello, "&Hello...\tCtrl-H",
 		"Help string shown in status bar for this menu item");
+	menuFile->AppendSeparator();
+	menuFile->Append(wxID_OPEN);
 	menuFile->AppendSeparator();
 	menuFile->Append(wxID_EXIT);
 
@@ -133,6 +75,7 @@ UDKHalo::UDKHalo()
 	Bind(wxEVT_MENU, &UDKHalo::OnHello, this, ID_Hello);
 	Bind(wxEVT_MENU, &UDKHalo::OnAbout, this, wxID_ABOUT);
 	Bind(wxEVT_MENU, &UDKHalo::OnExit, this, wxID_EXIT);
+	Bind(wxEVT_MENU, &UDKHalo::OnOpenFile, this, wxID_OPEN);
 }
 
 void UDKHalo::OnExit(wxCommandEvent& event)
@@ -149,4 +92,25 @@ void UDKHalo::OnAbout(wxCommandEvent& event)
 void UDKHalo::OnHello(wxCommandEvent& event)
 {
 	wxLogMessage("Hello reversal lovers, greetings from Unreal DeKompiler!");
+}
+
+void UDKHalo::OnOpenFile(wxCommandEvent& event)
+{
+	wxFileDialog dialog(this, "Please choose Unreal code package",
+							wxEmptyString, wxEmptyString, "*.u", wxFD_OPEN);
+
+	if (dialog.ShowModal() == wxID_OK)
+	{
+		wxString filename(dialog.GetPath());
+
+		wxFileSystem currentFileSystem;
+
+		wxFSFile* currentFile = currentFileSystem.OpenFile(filename);
+
+		if(filename.find(".u") == 0)
+		{
+			wxLogError("Sorry, UDK can't and won't work with unfamiliar code packages.");
+			return;
+		}
+	}
 }
