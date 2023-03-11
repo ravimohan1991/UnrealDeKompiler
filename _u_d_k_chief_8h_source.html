@@ -99,53 +99,55 @@ $(function() {
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment"> *   March, 2023: First Inscription.</span></div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment"> */</span></div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &lt;wx/wxprec.h&gt;</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#ifndef WX_PRECOMP</span></div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#include &lt;wx/wx.h&gt;</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="keyword">class </span><a class="code hl_class" href="class_u_d_k_halo.html">UDKHalo</a>;</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="class_u_d_k_application.html">   38</a></span><span class="keyword">class </span><a class="code hl_class" href="class_u_d_k_application.html">UDKApplication</a> : <span class="keyword">public</span> wxApp</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>{</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="class_u_d_k_application.html#a28650fecca90e1cc35aacaa3519480c7">OnInit</a>();</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="class_u_d_k_application.html#a94d2822927a8814ff2c2327f73b44d4e">   58</a></span>    <span class="keyword">static</span> <a class="code hl_class" href="class_u_d_k_halo.html">UDKHalo</a>* <a class="code hl_function" href="class_u_d_k_application.html#a94d2822927a8814ff2c2327f73b44d4e">GetMainFrame</a>() { <span class="keywordflow">return</span> <a class="code hl_variable" href="class_u_d_k_application.html#afdd5bbdb49b6836f1be406380bf8183d">m_Frame</a>; }</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno"><a class="line" href="class_u_d_k_application.html#afdd5bbdb49b6836f1be406380bf8183d">   67</a></span>    <span class="keyword">static</span> <a class="code hl_class" href="class_u_d_k_halo.html">UDKHalo</a>* <a class="code hl_variable" href="class_u_d_k_application.html#afdd5bbdb49b6836f1be406380bf8183d">m_Frame</a>;</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>};</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno"><a class="line" href="class_u_d_k_halo.html">   70</a></span><span class="keyword">class </span><a class="code hl_class" href="class_u_d_k_halo.html">UDKHalo</a> : <span class="keyword">public</span> wxFrame</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>{</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <a class="code hl_function" href="class_u_d_k_halo.html#aff4ac2fa354f430e82a7837ac23ded00">UDKHalo</a>();</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_u_d_k_halo.html#a334cb035aaf38922e348ee80f4f18a89">OnHello</a>(wxCommandEvent&amp; event);</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_u_d_k_halo.html#aca1351915567907025e40093dc2aa15a">OnExit</a>(wxCommandEvent&amp; event);</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_u_d_k_halo.html#a91d96a9a1b93645b600ace2e218b1c59">OnAbout</a>(wxCommandEvent&amp; event);</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> </div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_u_d_k_halo.html#a7247e1cc2416d00b053fd1dcdb5c8cf4">OnOpenFile</a>(wxCommandEvent&amp; event);</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>};</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span> </div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="keyword">enum</span></div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>{</div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    ID_Hello = 1</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>};</div>
-<div class="ttc" id="aclass_u_d_k_application_html"><div class="ttname"><a href="class_u_d_k_application.html">UDKApplication</a></div><div class="ttdef"><b>Definition:</b> UDKChief.h:39</div></div>
-<div class="ttc" id="aclass_u_d_k_application_html_a28650fecca90e1cc35aacaa3519480c7"><div class="ttname"><a href="class_u_d_k_application.html#a28650fecca90e1cc35aacaa3519480c7">UDKApplication::OnInit</a></div><div class="ttdeci">virtual bool OnInit()</div><div class="ttdoc">Create new frame and display that.</div><div class="ttdef"><b>Definition:</b> UDKChief.cpp:44</div></div>
-<div class="ttc" id="aclass_u_d_k_application_html_a94d2822927a8814ff2c2327f73b44d4e"><div class="ttname"><a href="class_u_d_k_application.html#a94d2822927a8814ff2c2327f73b44d4e">UDKApplication::GetMainFrame</a></div><div class="ttdeci">static UDKHalo * GetMainFrame()</div><div class="ttdoc">Obtain pointer to main frame.</div><div class="ttdef"><b>Definition:</b> UDKChief.h:58</div></div>
-<div class="ttc" id="aclass_u_d_k_application_html_afdd5bbdb49b6836f1be406380bf8183d"><div class="ttname"><a href="class_u_d_k_application.html#afdd5bbdb49b6836f1be406380bf8183d">UDKApplication::m_Frame</a></div><div class="ttdeci">static UDKHalo * m_Frame</div><div class="ttdoc">Pointer to main frame.</div><div class="ttdef"><b>Definition:</b> UDKChief.h:67</div></div>
-<div class="ttc" id="aclass_u_d_k_halo_html"><div class="ttname"><a href="class_u_d_k_halo.html">UDKHalo</a></div><div class="ttdef"><b>Definition:</b> UDKChief.h:71</div></div>
-<div class="ttc" id="aclass_u_d_k_halo_html_a334cb035aaf38922e348ee80f4f18a89"><div class="ttname"><a href="class_u_d_k_halo.html#a334cb035aaf38922e348ee80f4f18a89">UDKHalo::OnHello</a></div><div class="ttdeci">void OnHello(wxCommandEvent &amp;event)</div><div class="ttdoc">Hello entry callback.</div><div class="ttdef"><b>Definition:</b> UDKChief.cpp:92</div></div>
-<div class="ttc" id="aclass_u_d_k_halo_html_a7247e1cc2416d00b053fd1dcdb5c8cf4"><div class="ttname"><a href="class_u_d_k_halo.html#a7247e1cc2416d00b053fd1dcdb5c8cf4">UDKHalo::OnOpenFile</a></div><div class="ttdeci">void OnOpenFile(wxCommandEvent &amp;event)</div><div class="ttdoc">OpenFile entry callback.</div><div class="ttdef"><b>Definition:</b> UDKChief.cpp:97</div></div>
-<div class="ttc" id="aclass_u_d_k_halo_html_a91d96a9a1b93645b600ace2e218b1c59"><div class="ttname"><a href="class_u_d_k_halo.html#a91d96a9a1b93645b600ace2e218b1c59">UDKHalo::OnAbout</a></div><div class="ttdeci">void OnAbout(wxCommandEvent &amp;event)</div><div class="ttdoc">About entry callback.</div><div class="ttdef"><b>Definition:</b> UDKChief.cpp:86</div></div>
-<div class="ttc" id="aclass_u_d_k_halo_html_aca1351915567907025e40093dc2aa15a"><div class="ttname"><a href="class_u_d_k_halo.html#aca1351915567907025e40093dc2aa15a">UDKHalo::OnExit</a></div><div class="ttdeci">void OnExit(wxCommandEvent &amp;event)</div><div class="ttdoc">Exit entry callback.</div><div class="ttdef"><b>Definition:</b> UDKChief.cpp:81</div></div>
-<div class="ttc" id="aclass_u_d_k_halo_html_aff4ac2fa354f430e82a7837ac23ded00"><div class="ttname"><a href="class_u_d_k_halo.html#aff4ac2fa354f430e82a7837ac23ded00">UDKHalo::UDKHalo</a></div><div class="ttdeci">UDKHalo()</div><div class="ttdoc">Frame setup.</div><div class="ttdef"><b>Definition:</b> UDKChief.cpp:52</div></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &lt;wx/wxprec.h&gt;</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#ifndef WX_PRECOMP</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &lt;wx/wx.h&gt;</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="keyword">class </span><a class="code hl_class" href="class_u_d_k_halo.html">UDKHalo</a>;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="class_u_d_k_application.html">   40</a></span><span class="keyword">class </span><a class="code hl_class" href="class_u_d_k_application.html">UDKApplication</a> : <span class="keyword">public</span> wxApp</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>{</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="class_u_d_k_application.html#a28650fecca90e1cc35aacaa3519480c7">OnInit</a>();</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="class_u_d_k_application.html#a94d2822927a8814ff2c2327f73b44d4e">   60</a></span>    <span class="keyword">static</span> <a class="code hl_class" href="class_u_d_k_halo.html">UDKHalo</a>* <a class="code hl_function" href="class_u_d_k_application.html#a94d2822927a8814ff2c2327f73b44d4e">GetMainFrame</a>() { <span class="keywordflow">return</span> <a class="code hl_variable" href="class_u_d_k_application.html#afdd5bbdb49b6836f1be406380bf8183d">m_Frame</a>; }</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="class_u_d_k_application.html#afdd5bbdb49b6836f1be406380bf8183d">   69</a></span>    <span class="keyword">static</span> <a class="code hl_class" href="class_u_d_k_halo.html">UDKHalo</a>* <a class="code hl_variable" href="class_u_d_k_application.html#afdd5bbdb49b6836f1be406380bf8183d">m_Frame</a>;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>};</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="class_u_d_k_halo.html">   72</a></span><span class="keyword">class </span><a class="code hl_class" href="class_u_d_k_halo.html">UDKHalo</a> : <span class="keyword">public</span> wxFrame</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>{</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    <a class="code hl_function" href="class_u_d_k_halo.html#aff4ac2fa354f430e82a7837ac23ded00">UDKHalo</a>();</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_u_d_k_halo.html#a334cb035aaf38922e348ee80f4f18a89">OnHello</a>(wxCommandEvent&amp; event);</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_u_d_k_halo.html#aca1351915567907025e40093dc2aa15a">OnExit</a>(wxCommandEvent&amp; event);</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_u_d_k_halo.html#a91d96a9a1b93645b600ace2e218b1c59">OnAbout</a>(wxCommandEvent&amp; event);</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_u_d_k_halo.html#a7247e1cc2416d00b053fd1dcdb5c8cf4">OnOpenFile</a>(wxCommandEvent&amp; event);</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>};</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="keyword">enum</span></div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>{</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    ID_Hello = 1</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>};</div>
+<div class="ttc" id="aclass_u_d_k_application_html"><div class="ttname"><a href="class_u_d_k_application.html">UDKApplication</a></div><div class="ttdef"><b>Definition:</b> UDKChief.h:41</div></div>
+<div class="ttc" id="aclass_u_d_k_application_html_a28650fecca90e1cc35aacaa3519480c7"><div class="ttname"><a href="class_u_d_k_application.html#a28650fecca90e1cc35aacaa3519480c7">UDKApplication::OnInit</a></div><div class="ttdeci">virtual bool OnInit()</div><div class="ttdoc">Create new frame and display that.</div><div class="ttdef"><b>Definition:</b> UDKChief.cpp:43</div></div>
+<div class="ttc" id="aclass_u_d_k_application_html_a94d2822927a8814ff2c2327f73b44d4e"><div class="ttname"><a href="class_u_d_k_application.html#a94d2822927a8814ff2c2327f73b44d4e">UDKApplication::GetMainFrame</a></div><div class="ttdeci">static UDKHalo * GetMainFrame()</div><div class="ttdoc">Obtain pointer to main frame.</div><div class="ttdef"><b>Definition:</b> UDKChief.h:60</div></div>
+<div class="ttc" id="aclass_u_d_k_application_html_afdd5bbdb49b6836f1be406380bf8183d"><div class="ttname"><a href="class_u_d_k_application.html#afdd5bbdb49b6836f1be406380bf8183d">UDKApplication::m_Frame</a></div><div class="ttdeci">static UDKHalo * m_Frame</div><div class="ttdoc">Pointer to main frame.</div><div class="ttdef"><b>Definition:</b> UDKChief.h:69</div></div>
+<div class="ttc" id="aclass_u_d_k_halo_html"><div class="ttname"><a href="class_u_d_k_halo.html">UDKHalo</a></div><div class="ttdef"><b>Definition:</b> UDKChief.h:73</div></div>
+<div class="ttc" id="aclass_u_d_k_halo_html_a334cb035aaf38922e348ee80f4f18a89"><div class="ttname"><a href="class_u_d_k_halo.html#a334cb035aaf38922e348ee80f4f18a89">UDKHalo::OnHello</a></div><div class="ttdeci">void OnHello(wxCommandEvent &amp;event)</div><div class="ttdoc">Hello entry callback.</div><div class="ttdef"><b>Definition:</b> UDKChief.cpp:91</div></div>
+<div class="ttc" id="aclass_u_d_k_halo_html_a7247e1cc2416d00b053fd1dcdb5c8cf4"><div class="ttname"><a href="class_u_d_k_halo.html#a7247e1cc2416d00b053fd1dcdb5c8cf4">UDKHalo::OnOpenFile</a></div><div class="ttdeci">void OnOpenFile(wxCommandEvent &amp;event)</div><div class="ttdoc">OpenFile entry callback.</div><div class="ttdef"><b>Definition:</b> UDKChief.cpp:96</div></div>
+<div class="ttc" id="aclass_u_d_k_halo_html_a91d96a9a1b93645b600ace2e218b1c59"><div class="ttname"><a href="class_u_d_k_halo.html#a91d96a9a1b93645b600ace2e218b1c59">UDKHalo::OnAbout</a></div><div class="ttdeci">void OnAbout(wxCommandEvent &amp;event)</div><div class="ttdoc">About entry callback.</div><div class="ttdef"><b>Definition:</b> UDKChief.cpp:85</div></div>
+<div class="ttc" id="aclass_u_d_k_halo_html_aca1351915567907025e40093dc2aa15a"><div class="ttname"><a href="class_u_d_k_halo.html#aca1351915567907025e40093dc2aa15a">UDKHalo::OnExit</a></div><div class="ttdeci">void OnExit(wxCommandEvent &amp;event)</div><div class="ttdoc">Exit entry callback.</div><div class="ttdef"><b>Definition:</b> UDKChief.cpp:80</div></div>
+<div class="ttc" id="aclass_u_d_k_halo_html_aff4ac2fa354f430e82a7837ac23ded00"><div class="ttname"><a href="class_u_d_k_halo.html#aff4ac2fa354f430e82a7837ac23ded00">UDKHalo::UDKHalo</a></div><div class="ttdeci">UDKHalo()</div><div class="ttdoc">Frame setup.</div><div class="ttdef"><b>Definition:</b> UDKChief.cpp:51</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
