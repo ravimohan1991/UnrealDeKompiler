@@ -21,6 +21,8 @@
  *   March, 2023: First Inscription.
  */
 
+#pragma once
+
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP

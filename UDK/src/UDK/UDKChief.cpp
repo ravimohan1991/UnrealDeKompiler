@@ -21,9 +21,8 @@
  *   March, 2023: First Inscription.
  */
 
-#include <wx/wxprec.h>
-#include "wx/filedlg.h"
-#include "wx/filesys.h"
+#include <wx/filedlg.h>
+#include <wx/filesys.h>
 
 #ifndef WX_PRECOMP
 #include <wx/wx.h>
