@@ -100,6 +100,9 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a91d96a9a1b93645b600ace2e218b1c59"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_halo.html#a91d96a9a1b93645b600ace2e218b1c59">OnAbout</a> (wxCommandEvent &amp;event)</td></tr>
 <tr class="memdesc:a91d96a9a1b93645b600ace2e218b1c59"><td class="mdescLeft">&#160;</td><td class="mdescRight">About entry callback.  <br /></td></tr>
 <tr class="separator:a91d96a9a1b93645b600ace2e218b1c59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7247e1cc2416d00b053fd1dcdb5c8cf4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_halo.html#a7247e1cc2416d00b053fd1dcdb5c8cf4">OnOpenFile</a> (wxCommandEvent &amp;event)</td></tr>
+<tr class="memdesc:a7247e1cc2416d00b053fd1dcdb5c8cf4"><td class="mdescLeft">&#160;</td><td class="mdescRight">OpenFile entry callback.  <br /></td></tr>
+<tr class="separator:a7247e1cc2416d00b053fd1dcdb5c8cf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aff4ac2fa354f430e82a7837ac23ded00" name="aff4ac2fa354f430e82a7837ac23ded00"></a>
@@ -122,11 +125,9 @@ Private Member Functions</h2></td></tr>
 Quit entries while Help contains About entry. A status bar at the bottom is <br  />
 also created. A relevant bind to the OnHello, OnExit, and OnAbout routines <br  />
 is done for desired callback.</p>
-<dl class="section see"><dt>See also</dt><dd>MyFrame::OnHello(wxCommandEvent&amp;) </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_u_d_k_halo.html#aca1351915567907025e40093dc2aa15a" title="Exit entry callback.">UDKHalo::OnExit(wxCommandEvent&amp; event)</a> </dd>
 <dd>
-MyFrame::OnExit() </dd>
-<dd>
-MyFrame::OnAbout(wxCommandEvent&amp; event) </dd></dl>
+<a class="el" href="class_u_d_k_halo.html#a91d96a9a1b93645b600ace2e218b1c59" title="About entry callback.">UDKHalo::OnAbout(wxCommandEvent&amp; event)</a> </dd></dl>
 
 </div>
 </div>
@@ -157,7 +158,7 @@ MyFrame::OnAbout(wxCommandEvent&amp; event) </dd></dl>
 
 <p>About entry callback. </p>
 <p>Opens up a modal message window with desired application information.</p>
-<dl class="section see"><dt>See also</dt><dd>MyFrame::MyFrame() </dd></dl>
+<dl class="section see"><dt>See also</dt><dd>UDKHalo::MyFrame() </dd></dl>
 
 </div>
 </div>
@@ -187,7 +188,7 @@ MyFrame::OnAbout(wxCommandEvent&amp; event) </dd></dl>
 
 <p>Exit entry callback. </p>
 <p>Closes the application.</p>
-<dl class="section see"><dt>See also</dt><dd>MyFrame::MyFrame() </dd></dl>
+<dl class="section see"><dt>See also</dt><dd>UDKHalo::MyFrame() </dd></dl>
 
 </div>
 </div>
@@ -217,11 +218,42 @@ MyFrame::OnAbout(wxCommandEvent&amp; event) </dd></dl>
 
 <p>Hello entry callback. </p>
 <p>Opens up a modal message window with desired hello message.</p>
-<dl class="section see"><dt>See also</dt><dd>MyFrame::MyFrame() </dd></dl>
+<dl class="section see"><dt>See also</dt><dd>UDKHalo::MyFrame() </dd></dl>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<a id="a7247e1cc2416d00b053fd1dcdb5c8cf4" name="a7247e1cc2416d00b053fd1dcdb5c8cf4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7247e1cc2416d00b053fd1dcdb5c8cf4">&#9670;&#160;</a></span>OnOpenFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UDKHalo::OnOpenFile </td>
+          <td>(</td>
+          <td class="paramtype">wxCommandEvent &amp;&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>OpenFile entry callback. </p>
+<p>Opens up OpenFile dialog window</p>
+<dl class="section see"><dt>See also</dt><dd>UDKHalo::MyFrame() </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>UDK/src/UDK/<a class="el" href="_u_d_k_chief_8h_source.html">UDKChief.h</a></li>
 <li>UDK/src/UDK/<a class="el" href="_u_d_k_chief_8cpp.html">UDKChief.cpp</a></li>
 </ul>
 </div><!-- contents -->

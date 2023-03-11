@@ -1,7 +1,4 @@
 var searchData=
 [
-  ['onabout_0',['OnAbout',['../class_u_d_k_halo.html#a91d96a9a1b93645b600ace2e218b1c59',1,'UDKHalo']]],
-  ['onexit_1',['OnExit',['../class_u_d_k_halo.html#aca1351915567907025e40093dc2aa15a',1,'UDKHalo']]],
-  ['onhello_2',['OnHello',['../class_u_d_k_halo.html#a334cb035aaf38922e348ee80f4f18a89',1,'UDKHalo']]],
-  ['oninit_3',['OnInit',['../class_u_d_k_application.html#a28650fecca90e1cc35aacaa3519480c7',1,'UDKApplication']]]
+  ['getmainframe_0',['GetMainFrame',['../class_u_d_k_application.html#a94d2822927a8814ff2c2327f73b44d4e',1,'UDKApplication']]]
 ];
