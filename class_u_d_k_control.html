@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.6"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>UnrealDeKompiler: UDK/src/UDK Directory Reference</title>
+<title>UnrealDeKompiler: UDKControl Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -67,29 +67,60 @@ $(function() {
 </div>
 </div>
 
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><a class="el" href="dir_47a09917f75a6df440632783d52c2a54.html">UDK</a></li><li class="navelem"><a class="el" href="dir_d432da976b45fad1c0d8ee7d07add92e.html">src</a></li><li class="navelem"><a class="el" href="dir_443dca061412953293a74479ae14b6bd.html">UDK</a></li>  </ul>
-</div>
 </div><!-- top -->
 <div class="header">
-  <div class="headertitle"><div class="title">UDK Directory Reference</div></div>
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_u_d_k_control-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">UDKControl Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+<div class="dynheader">
+Inheritance diagram for UDKControl:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="class_u_d_k_control.png" usemap="#UDKControl_map" alt=""/>
+  <map id="UDKControl_map" name="UDKControl_map">
+<area href="class_u_d_k_offset_control.html" alt="UDKOffsetControl" shape="rect" coords="0,112,118,136"/>
+  </map>
+</div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="files" name="files"></a>
-Files</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_u_d_k_chief_8cpp.html">UDKChief.cpp</a></td></tr>
-<tr class="memdesc:_u_d_k_chief_8cpp"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_u_d_k_application.html">UDKApplication</a> code. <br /></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_u_d_k_control_1_1_selector.html">Selector</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_u_d_k_chief_8h.html">UDKChief.h</a> <a href="_u_d_k_chief_8h_source.html">[code]</a></td></tr>
-<tr class="memdesc:_u_d_k_chief_8h"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_u_d_k_application.html">UDKApplication</a> code header file. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><b>UDKControl.h</b> <a href="_u_d_k_control_8h_source.html">[code]</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><b>UDKEditorControlGui.h</b> <a href="_u_d_k_editor_control_gui_8h_source.html">[code]</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a18fee29198fa6f412eabf09411df8475"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_control.html#a18fee29198fa6f412eabf09411df8475">RePaint</a> (void)</td></tr>
+<tr class="separator:a18fee29198fa6f412eabf09411df8475"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a18fee29198fa6f412eabf09411df8475" name="a18fee29198fa6f412eabf09411df8475"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18fee29198fa6f412eabf09411df8475">&#9670;&#160;</a></span>RePaint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UDKControl::RePaint </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Directly creating contentx at dc creates flicker!</p>
+<p>delete dcTemp;</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>UDK/src/UDK/<a class="el" href="_u_d_k_control_8h_source.html">UDKControl.h</a></li>
+<li>UDK/src/UDK/UDKControl.cpp</li>
+</ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
