@@ -18,10 +18,12 @@
  *   along with Unreal DeKompiler.  If not, see <https://www.gnu.org/licenses/>.
  *
  *   Timeline:
- *   March, 2023: First Inscription.
+ *   March, 2023: Bringing in code from wxHexEditor.
  */
 
 #include "UDKEditorControlGui.h"
+#include "UDKControl.h"
+#include "UDKControl.h"
 
 UDKEditorControlGui::UDKEditorControlGui(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style)
 {

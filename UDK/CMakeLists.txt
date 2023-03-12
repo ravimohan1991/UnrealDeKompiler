@@ -62,6 +62,7 @@ if(MSVC AND BUILD_SHARED_LIBS)
         # Let Karma handle them
         set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS OFF)
         add_compile_definitions(UDK_DYNAMIC_LINK)
+        add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
         # Disable stupid C4251 warnings due to STL's negligence
 		# https://docs.microsoft.com/en-us/cpp/build/reference/compiler-option-warning-level?view=msvc-170#remarks
         add_compile_options(/wd4251)

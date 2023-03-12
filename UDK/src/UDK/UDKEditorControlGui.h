@@ -18,7 +18,7 @@
  *   along with Unreal DeKompiler.  If not, see <https://www.gnu.org/licenses/>.
  *
  *   Timeline:
- *   March, 2023: First Inscription.
+ *   March, 2023: Bringing in code from wxHexEditor.
  */
 
 #pragma once
@@ -40,7 +40,7 @@
 #define ID_HEXBOX 1000
 #define ID_TEXTBOX 1001
 
-class wxHexControl;
+class UDKControl;
 class wxHexOffsetControl;
 class wxHexTextControl;
 
@@ -52,7 +52,7 @@ protected:
 	wxStaticText* m_StaticByteview;
 	wxStaticText* m_StaticNull;
 	wxHexOffsetControl* m_OffsetControl;
-	wxHexControl* m_HexControl;
+	UDKControl* m_HexControl;
 	wxHexTextControl* m_TextControl;
 
 protected:
