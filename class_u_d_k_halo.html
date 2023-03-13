@@ -77,6 +77,11 @@ $(function() {
   <div class="headertitle"><div class="title">UDKHalo Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>The UDK main window frame class.  
+ <a href="class_u_d_k_halo.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_u_d_k_chief_8h_source.html">UDKChief.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for UDKHalo:</div>
 <div class="dyncontent">
@@ -113,8 +118,13 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a56205cbed43429f2fa5dea0d0d415f6f"><td class="memItemLeft" align="right" valign="top">wxAuiManager *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_halo.html#a56205cbed43429f2fa5dea0d0d415f6f">m_PaneManager</a></td></tr>
 <tr class="memdesc:a56205cbed43429f2fa5dea0d0d415f6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">For managing varitey of panes or panels.  <br /></td></tr>
 <tr class="separator:a56205cbed43429f2fa5dea0d0d415f6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39c8d036922174570e7ff7d92de70006"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_disassembler_panel.html">DisassemblerPanel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_halo.html#a39c8d036922174570e7ff7d92de70006">m_DisassemblerPanel</a></td></tr>
+<tr class="memdesc:a39c8d036922174570e7ff7d92de70006"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disassembler pane.  <br /></td></tr>
+<tr class="separator:a39c8d036922174570e7ff7d92de70006"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>The UDK main window frame class. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aff4ac2fa354f430e82a7837ac23ded00" name="aff4ac2fa354f430e82a7837ac23ded00"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aff4ac2fa354f430e82a7837ac23ded00">&#9670;&#160;</a></span>UDKHalo()</h2>
 
@@ -293,6 +303,31 @@ is done for desired callback.</p>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a39c8d036922174570e7ff7d92de70006" name="a39c8d036922174570e7ff7d92de70006"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39c8d036922174570e7ff7d92de70006">&#9670;&#160;</a></span>m_DisassemblerPanel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_disassembler_panel.html">DisassemblerPanel</a>* UDKHalo::m_DisassemblerPanel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Disassembler pane. </p>
+<p>The lookand(partial)feel of UDK's disassembler pane </p>
+
+</div>
+</div>
 <a id="a56205cbed43429f2fa5dea0d0d415f6f" name="a56205cbed43429f2fa5dea0d0d415f6f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a56205cbed43429f2fa5dea0d0d415f6f">&#9670;&#160;</a></span>m_PaneManager</h2>
 
@@ -315,7 +350,7 @@ is done for desired callback.</p>
 
 <p>For managing varitey of panes or panels. </p>
 <p>Chiefly used for adding, handling resizing, docking, and more <br  />
-of utility panes (to be) present in <a class="el" href="class_u_d_k_halo.html">UDKHalo</a>.<br  />
+of utility panes (to be) present in <a class="el" href="class_u_d_k_halo.html" title="The UDK main window frame class.">UDKHalo</a>.<br  />
  wxAuiManager works as follows: the programmer adds panes to the <br  />
 class, or makes changes to existing pane properties (dock <br  />
 position, floating state, show state, etc.). To apply these <br  />
