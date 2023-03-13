@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['tagelement_0',['TagElement',['../class_tag_element.html',1,'']]]
+  ['myconfigbase_0',['MyConfigBase',['../class_my_config_base.html',1,'']]]
 ];

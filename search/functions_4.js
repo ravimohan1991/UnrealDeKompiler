@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['udkhalo_0',['UDKHalo',['../class_u_d_k_halo.html#aff4ac2fa354f430e82a7837ac23ded00',1,'UDKHalo']]]
+  ['setvalue_0',['SetValue',['../class_u_d_k_offset_control.html#a157053af33513c8c0f9b0cb6533b7fb4',1,'UDKOffsetControl']]]
 ];

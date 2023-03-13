@@ -72,6 +72,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_u_d_k_halo-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">UDKHalo Class Reference</div></div>
 </div><!--header-->
@@ -103,6 +104,15 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a7247e1cc2416d00b053fd1dcdb5c8cf4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_halo.html#a7247e1cc2416d00b053fd1dcdb5c8cf4">OnOpenFile</a> (wxCommandEvent &amp;event)</td></tr>
 <tr class="memdesc:a7247e1cc2416d00b053fd1dcdb5c8cf4"><td class="mdescLeft">&#160;</td><td class="mdescRight">OpenFile entry callback.  <br /></td></tr>
 <tr class="separator:a7247e1cc2416d00b053fd1dcdb5c8cf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17e477ee2d35d3ad05af572007f90e65"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_halo.html#a17e477ee2d35d3ad05af572007f90e65">PrepareAUI</a> (void)</td></tr>
+<tr class="memdesc:a17e477ee2d35d3ad05af572007f90e65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepare the manager for various supported features panes.  <br /></td></tr>
+<tr class="separator:a17e477ee2d35d3ad05af572007f90e65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a56205cbed43429f2fa5dea0d0d415f6f"><td class="memItemLeft" align="right" valign="top">wxAuiManager *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_halo.html#a56205cbed43429f2fa5dea0d0d415f6f">m_PaneManager</a></td></tr>
+<tr class="memdesc:a56205cbed43429f2fa5dea0d0d415f6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">For managing varitey of panes or panels.  <br /></td></tr>
+<tr class="separator:a56205cbed43429f2fa5dea0d0d415f6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aff4ac2fa354f430e82a7837ac23ded00" name="aff4ac2fa354f430e82a7837ac23ded00"></a>
@@ -158,7 +168,7 @@ is done for desired callback.</p>
 
 <p>About entry callback. </p>
 <p>Opens up a modal message window with desired application information.</p>
-<dl class="section see"><dt>See also</dt><dd>UDKHalo::MyFrame() </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_u_d_k_halo.html#aff4ac2fa354f430e82a7837ac23ded00" title="Frame setup.">UDKHalo::UDKHalo()</a> </dd></dl>
 
 </div>
 </div>
@@ -188,7 +198,7 @@ is done for desired callback.</p>
 
 <p>Exit entry callback. </p>
 <p>Closes the application.</p>
-<dl class="section see"><dt>See also</dt><dd>UDKHalo::MyFrame() </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_u_d_k_halo.html#aff4ac2fa354f430e82a7837ac23ded00" title="Frame setup.">UDKHalo::UDKHalo()</a> </dd></dl>
 
 </div>
 </div>
@@ -218,7 +228,7 @@ is done for desired callback.</p>
 
 <p>Hello entry callback. </p>
 <p>Opens up a modal message window with desired hello message.</p>
-<dl class="section see"><dt>See also</dt><dd>UDKHalo::MyFrame() </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_u_d_k_halo.html#aff4ac2fa354f430e82a7837ac23ded00" title="Frame setup.">UDKHalo::UDKHalo()</a> </dd></dl>
 
 </div>
 </div>
@@ -248,7 +258,71 @@ is done for desired callback.</p>
 
 <p>OpenFile entry callback. </p>
 <p>Opens up OpenFile dialog window</p>
-<dl class="section see"><dt>See also</dt><dd>UDKHalo::MyFrame() </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_u_d_k_halo.html#aff4ac2fa354f430e82a7837ac23ded00" title="Frame setup.">UDKHalo::UDKHalo()</a> </dd></dl>
+
+</div>
+</div>
+<a id="a17e477ee2d35d3ad05af572007f90e65" name="a17e477ee2d35d3ad05af572007f90e65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17e477ee2d35d3ad05af572007f90e65">&#9670;&#160;</a></span>PrepareAUI()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UDKHalo::PrepareAUI </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Prepare the manager for various supported features panes. </p>
+<p>Do the necessary adding and modification of feature panes</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_u_d_k_halo.html#aff4ac2fa354f430e82a7837ac23ded00" title="Frame setup.">UDKHalo::UDKHalo()</a> </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a56205cbed43429f2fa5dea0d0d415f6f" name="a56205cbed43429f2fa5dea0d0d415f6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56205cbed43429f2fa5dea0d0d415f6f">&#9670;&#160;</a></span>m_PaneManager</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">wxAuiManager* UDKHalo::m_PaneManager</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>For managing varitey of panes or panels. </p>
+<p>Chiefly used for adding, handling resizing, docking, and more <br  />
+of utility panes (to be) present in <a class="el" href="class_u_d_k_halo.html">UDKHalo</a>.<br  />
+ wxAuiManager works as follows: the programmer adds panes to the <br  />
+class, or makes changes to existing pane properties (dock <br  />
+position, floating state, show state, etc.). To apply these <br  />
+changes, wxAuiManager's Update() function is called. This batch <br  />
+ processing can be used to avoid flicker, by modifying more than <br  />
+ one pane at a time, and then "committing" all of the changes at <br  />
+once by calling Update(). </p>
 
 </div>
 </div>
