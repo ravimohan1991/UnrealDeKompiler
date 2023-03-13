@@ -32,6 +32,7 @@
 #endif
 
 #include "UDKChief.h"
+#include "UDKControl.h"
 
 /** @file
  * @brief UDKApplication code
@@ -128,12 +129,27 @@ void UDKHalo::PrepareAUI(void)
 	m_PaneManager->AddPane(m_DisassemblerPanel, wxAuiPaneInfo().
 		Name(_("Disassembler Panel")).
 		Caption(_("The Disassembler")).
-		TopDockable(false).
-		BottomDockable(false).
+		TopDockable(true).
+		BottomDockable(true).
 		MinSize(wxSize(70, 100)).
 		BestSize(wxSize(140, 100)).
 		Show(false).
 		Right().Layer(1));
+
+	m_FileInfoPanel = new InfoPanel(this, -1);
+	m_PaneManager->AddPane(m_FileInfoPanel, wxAuiPaneInfo().
+		Name(_("InfoPanel")).
+		Caption(_("InfoPanel")).
+		TopDockable(false).
+		BottomDockable(false).
+		BestSize(wxSize(140, 140)).
+		Show(true).
+		//Resizable(false).
+		Left().Layer(1).Position(1));
+
+	wxString tempStr;
+	MyConfigBase::Get()->Read(_T("LastPerspective"), &tempStr, wxEmptyString);
+	m_PaneManager->LoadPerspective(tempStr);
 }
 
 InfoPanelGui::InfoPanelGui(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name) : wxPanel(parent, id, pos, size, style, name)
@@ -152,6 +168,97 @@ InfoPanelGui::InfoPanelGui(wxWindow* parent, wxWindowID id, const wxPoint& pos, 
 
 InfoPanelGui::~InfoPanelGui()
 {
+}
+
+void InfoPanel::Set(wxFileName flnm, uint64_t lenght, wxString AccessMode, int FD, wxString XORKey)
+{
+	static wxMutex mutexinfo;
+	mutexinfo.Lock();
+
+	struct stat* sbufptr = new struct stat;
+	fstat(FD, sbufptr);
+
+	wxString info_string;
+	info_string = info_string + _("Name:") + wxT("\t") + flnm.GetFullName() + wxT("\n") +
+		_("Path:") + wxT("\t") + flnm.GetPath() + wxT("\n") +
+		_("Size:") + wxT("\t") + wxFileName::GetHumanReadableSize(wxULongLong(lenght)) + wxT("\n") +
+		_("Access:") + wxT("\t") + AccessMode + wxT("\n") +
+		_("Device:") + wxT("\t") +
+#ifdef __WXMSW__
+		(sbufptr->st_mode == 0 ? _("BLOCK") : _("FILE"))
+#else
+		(S_ISREG(sbufptr->st_mode) ? _("FILE") :
+			S_ISDIR(sbufptr->st_mode) ? _("DIRECTORY") :
+			S_ISCHR(sbufptr->st_mode) ? _("CHARACTER") :
+			S_ISBLK(sbufptr->st_mode) ? _("BLOCK") :
+			S_ISFIFO(sbufptr->st_mode) ? _("FIFO") :
+			S_ISLNK(sbufptr->st_mode) ? _("LINK") :
+			S_ISSOCK(sbufptr->st_mode) ? _("SOCKET") :
+			wxT("?")
+			)
+#endif
+		+ wxT("\n");
+#ifdef __WXMSW__
+	if (sbufptr->st_mode == 0)	//Enable block size detection code on windows targets,
+#else
+	if (S_ISBLK(sbufptr->st_mode))
+#endif
+	{
+		info_string += _("Sector Size: ") + wxString::Format(wxT("%u\n"), 0);//FDtoBlockSize(FD)); <----------- Needs to be written
+		info_string += _("Sector Count: ") + wxString::Format("%" wxLongLongFmtSpec "u\n", 0);//FDtoBlockCount(FD));
+	}
+
+	if (XORKey != wxEmptyString)
+		info_string += wxString(_("XORKey:")) + wxT("\t") + XORKey + wxT("\n");
+
+	m_InfoPanelText->SetLabel(info_string);
+
+#ifdef _DEBUG_
+	std::cout << flnm.GetPath().ToAscii() << ' ';
+	if (S_ISREG(sbufptr->st_mode))
+		printf("regular file");
+	else if (S_ISDIR(sbufptr->st_mode))
+		printf("directory");
+	else if (S_ISCHR(sbufptr->st_mode))
+		printf("character device");
+	else if (S_ISBLK(sbufptr->st_mode)) {
+		printf("block device");
+	}
+	else if (S_ISFIFO(sbufptr->st_mode))
+		printf("FIFO");
+#ifndef __WXMSW__
+	else if (S_ISLNK(sbufptr->st_mode))
+		printf("symbolic link");
+	else if (S_ISSOCK(sbufptr->st_mode))
+		printf("socket");
+#endif
+	printf("\n");
+#endif
+	//		S_IFMT 	0170000 	bitmask for the file type bitfields
+	//		S_IFSOCK 	0140000 	socket
+	//		S_IFLNK 	0120000 	symbolic link
+	//		S_IFREG 	0100000 	regular file
+	//		S_IFBLK 	0060000 	block device
+	//		S_IFDIR 	0040000 	directory
+	//		S_IFCHR 	0020000 	character device
+	//		S_IFIFO 	0010000 	FIFO
+	//		S_ISUID 	0004000 	set UID bit
+	//		S_ISGID 	0002000 	set-group-ID bit (see below)
+	//		S_ISVTX 	0001000 	sticky bit (see below)
+	//		S_IRWXU 	00700 	mask for file owner permissions
+	//		S_IRUSR 	00400 	owner has read permission
+	//		S_IWUSR 	00200 	owner has write permission
+	//		S_IXUSR 	00100 	owner has execute permission
+	//		S_IRWXG 	00070 	mask for group permissions
+	//		S_IRGRP 	00040 	group has read permission
+	//		S_IWGRP 	00020 	group has write permission
+	//		S_IXGRP 	00010 	group has execute permission
+	//		S_IRWXO 	00007 	mask for permissions for others (not in group)
+	//		S_IROTH 	00004 	others have read permission
+	//		S_IWOTH 	00002 	others have write permission
+	//		S_IXOTH 	00001 	others have execute permission
+	delete sbufptr;
+	mutexinfo.Unlock();
 }
 
 DisassemblerPanelGUI::DisassemblerPanelGUI(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name) : wxPanel(parent, id, pos, size, style, name)

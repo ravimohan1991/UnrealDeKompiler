@@ -171,9 +171,10 @@ public:
 	wxCaret* m_Mycaret;
 };
 
-
-///Wrapper for Portable vs Registry configbase.
-//if there are wxHexEditor.cfg file exits on current path, wxHexEditor switches to portable version.
+///<summary>
+/// Wrapper for Portable vs Registry configbase.\n
+/// if there are wxHexEditor.cfg file exits on current path, wxHexEditor switches to portable version.
+/// </summary>
 class MyConfigBase
 {
 public:

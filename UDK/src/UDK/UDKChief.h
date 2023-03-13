@@ -38,7 +38,7 @@
 // Forward declarations
 class UDKHalo;
 class wxAuiManager;
-
+class InfoPanel;
 class DisassemblerPanel;
 
 /// <summary>
@@ -162,9 +162,10 @@ private:
 	 * @brief Disassembler pane
 	 *
 	 * The lookand(partial)feel of UDK's disassembler pane 
-	 *
 	 */
 	DisassemblerPanel* m_DisassemblerPanel;
+
+	InfoPanel* m_FileInfoPanel;
 };
 
 enum
@@ -173,8 +174,7 @@ enum
 };
 
 /// <summary>
-/// Super class of InfoPanel class which displays relevant information of a file \n
-/// including name, path, size, and access
+/// Super class of InfoPanel
 /// </summary>
 class InfoPanelGui : public wxPanel
 {
@@ -188,6 +188,19 @@ public:
 	InfoPanelGui(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize(140, 111), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString);
 	~InfoPanelGui();
 
+};
+
+/// <summary>
+/// Class which displays relevant information of a file \n
+/// including name, path, size, and access
+/// </summary>
+class InfoPanel : public InfoPanelGui
+{
+public:
+	InfoPanel(wxWindow* parent, int id = -1, wxPoint pos = wxDefaultPosition, wxSize size = wxSize(-1, -1), int style = wxTAB_TRAVERSAL)
+		:InfoPanelGui(parent, id, pos, size, style) {}
+	void Set(wxFileName flnm, uint64_t lenght, wxString AccessMode, int FD, wxString XORKey);
+	void OnUpdate(wxCommandEvent& event) {}
 };
 
 /// <summary>
