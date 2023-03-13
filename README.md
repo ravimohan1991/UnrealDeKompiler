@@ -11,6 +11,7 @@ For online API visit [doxy-docs](https://ravimohan1991.github.io/UnrealDeKompile
 -  [Talk by Tsviatko](https://www.youtube.com/watch?v=uYZZbteb8Gc)
 -  [Wikipedia](https://en.wikipedia.org/wiki/Decompiler)
 -  [wxWidgets cmake](https://github.com/Ravbug/UnityHubNative/tree/master)
+-  [Vivek's disassembler](https://github.com/vmt/udis86)
 
 ## Crash course on gh-pages
 
