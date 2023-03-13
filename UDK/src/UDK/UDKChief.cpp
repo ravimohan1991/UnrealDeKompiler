@@ -48,12 +48,12 @@ bool UDKApplication::OnInit()
 {
 	m_Frame = new UDKHalo();
 	m_Frame->Show(true);
-	m_Frame->SetSize(wxDefaultPosition.x, wxDefaultPosition.y, 900, 500);
+
 	return true;
 }
 
 UDKHalo::UDKHalo()
-	: wxFrame(nullptr, wxID_ANY, "Unreal DeKompiler")
+	: wxFrame(nullptr, wxID_ANY, "Unreal DeKompiler", wxDefaultPosition, wxSize(900, 500), wxDEFAULT_FRAME_STYLE)
 {
 	wxMenu* menuFile = new wxMenu;
 	menuFile->Append(ID_Hello, "&Hello...\tCtrl-H",
@@ -70,10 +70,10 @@ UDKHalo::UDKHalo()
 	menuBar->Append(menuFile, "&File");
 	menuBar->Append(menuHelp, "&Help");
 
+	SetMenuBar(menuBar);
+
 	// Set panes and panels
 	PrepareAUI();
-
-	SetMenuBar(menuBar);
 
 	CreateStatusBar();
 	SetStatusText("Welcome to Unreal DeKompiler!");
@@ -124,6 +124,7 @@ void UDKHalo::OnOpenFile(wxCommandEvent& event)
 void UDKHalo::PrepareAUI(void)
 {
 	m_PaneManager = new wxAuiManager(this);
+	m_PaneManager->SetManagedWindow(this);
 
 	m_DisassemblerPanel = new DisassemblerPanel(this, -1);
 	m_PaneManager->AddPane(m_DisassemblerPanel, wxAuiPaneInfo().
@@ -131,9 +132,10 @@ void UDKHalo::PrepareAUI(void)
 		Caption(_("The Disassembler")).
 		TopDockable(true).
 		BottomDockable(true).
-		MinSize(wxSize(70, 100)).
-		BestSize(wxSize(140, 100)).
-		Show(false).
+		CloseButton(true).
+		MinSize(wxSize(180, 200)).
+		BestSize(wxSize(240, 200)).
+		Show(true).
 		Right().Layer(1));
 
 	m_FileInfoPanel = new InfoPanel(this, -1);
@@ -141,6 +143,7 @@ void UDKHalo::PrepareAUI(void)
 		Name(_("InfoPanel")).
 		Caption(_("InfoPanel")).
 		TopDockable(false).
+		CloseButton(true).
 		BottomDockable(false).
 		BestSize(wxSize(140, 140)).
 		Show(true).
@@ -150,6 +153,7 @@ void UDKHalo::PrepareAUI(void)
 	wxString tempStr;
 	MyConfigBase::Get()->Read(_T("LastPerspective"), &tempStr, wxEmptyString);
 	m_PaneManager->LoadPerspective(tempStr);
+	m_PaneManager->Update();
 }
 
 InfoPanelGui::InfoPanelGui(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name) : wxPanel(parent, id, pos, size, style, name)
@@ -322,7 +326,7 @@ DisassemblerPanelGUI::~DisassemblerPanelGUI()
 
 void DisassemblerPanel::Set(wxMemoryBuffer buff)
 {
-	mybuff = buff;
+	m_Buffer = buff;
 	wxCommandEvent event;
 	OnUpdate(event);
 }
@@ -336,7 +340,7 @@ void DisassemblerPanel::OnUpdate(wxCommandEvent& event)
 {
 	ud_t ud_obj;
 	ud_init(&ud_obj);
-	ud_set_input_buffer(&ud_obj, reinterpret_cast<uint8_t*>(mybuff.GetData()), mybuff.GetDataLen());
+	ud_set_input_buffer(&ud_obj, reinterpret_cast<uint8_t*>(m_Buffer.GetData()), m_Buffer.GetDataLen());
 	ud_set_vendor(&ud_obj, (m_ChoiceVendor->GetSelection()) ? UD_VENDOR_AMD : UD_VENDOR_INTEL);
 	ud_set_mode(&ud_obj, (m_ChoiceBitMode->GetSelection() + 1) * 16);
 	ud_set_syntax(&ud_obj, (m_ChoiceASMType->GetSelection() ? UD_SYN_ATT : UD_SYN_INTEL));

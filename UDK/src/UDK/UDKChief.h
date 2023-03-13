@@ -238,5 +238,5 @@ public:
 	void Set(wxMemoryBuffer buffer);
 	void OnUpdate(wxCommandEvent& event);
 	void Clear(void);
-	wxMemoryBuffer mybuff;
+	wxMemoryBuffer m_Buffer;
 };
