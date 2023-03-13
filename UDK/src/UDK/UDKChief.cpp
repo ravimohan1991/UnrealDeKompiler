@@ -69,6 +69,9 @@ UDKHalo::UDKHalo()
 	menuBar->Append(menuFile, "&File");
 	menuBar->Append(menuHelp, "&Help");
 
+	// Set panes and panels
+	PrepareAUI();
+
 	SetMenuBar(menuBar);
 
 	CreateStatusBar();
@@ -120,6 +123,17 @@ void UDKHalo::OnOpenFile(wxCommandEvent& event)
 void UDKHalo::PrepareAUI(void)
 {
 	m_PaneManager = new wxAuiManager(this);
+
+	m_DisassemblerPanel = new DisassemblerPanel(this, -1);
+	m_PaneManager->AddPane(m_DisassemblerPanel, wxAuiPaneInfo().
+		Name(_("Disassembler Panel")).
+		Caption(_("The Disassembler")).
+		TopDockable(false).
+		BottomDockable(false).
+		MinSize(wxSize(70, 100)).
+		BestSize(wxSize(140, 100)).
+		Show(false).
+		Right().Layer(1));
 }
 
 InfoPanelGui::InfoPanelGui(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name) : wxPanel(parent, id, pos, size, style, name)

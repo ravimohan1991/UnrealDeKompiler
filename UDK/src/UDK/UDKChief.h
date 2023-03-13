@@ -35,9 +35,15 @@
  * Contains the main() and associated code for UDKApplication.
  */
 
+// Forward declarations
 class UDKHalo;
 class wxAuiManager;
 
+class DisassemblerPanel;
+
+/// <summary>
+/// The class corresponding to the main UDK application instance
+/// </summary>
 class UDKApplication : public wxApp
 {
 public:
@@ -70,6 +76,9 @@ private:
 	static UDKHalo* m_Frame;
 };
 
+/// <summary>
+/// The UDK main window frame class
+/// </summary>
 class UDKHalo : public wxFrame
 {
 public:
@@ -148,6 +157,14 @@ private:
 	 * once by calling Update().
 	 */
 	wxAuiManager* m_PaneManager;
+
+	/**
+	 * @brief Disassembler pane
+	 *
+	 * The lookand(partial)feel of UDK's disassembler pane 
+	 *
+	 */
+	DisassemblerPanel* m_DisassemblerPanel;
 };
 
 enum
@@ -155,9 +172,10 @@ enum
 	ID_Hello = 1
 };
 
-///////////////////////////////////////////////////////////////////////////////
-/// Class InfoPanelGui
-///////////////////////////////////////////////////////////////////////////////
+/// <summary>
+/// Super class of InfoPanel class which displays relevant information of a file \n
+/// including name, path, size, and access
+/// </summary>
 class InfoPanelGui : public wxPanel
 {
 private:
@@ -172,9 +190,9 @@ public:
 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-/// Class DisassemblerPanelGUI
-///////////////////////////////////////////////////////////////////////////////
+/// <summary>
+/// Super class of DisassemblerPanel
+/// </summary>
 class DisassemblerPanelGUI : public wxPanel
 {
 private:
@@ -196,10 +214,13 @@ public:
 
 };
 
+/// <summary>
+/// Class whose instance is the disassembler panel
+/// </summary>
 class DisassemblerPanel : public DisassemblerPanelGUI
 {
 public:
-	DisassemblerPanel(class HexEditorFrame* parent_, int id = -1, wxPoint pos = wxDefaultPosition, wxSize size = wxSize(-1, -1), int style = wxTAB_TRAVERSAL)
+	DisassemblerPanel(UDKHalo* parent_, int id = -1, wxPoint pos = wxDefaultPosition, wxSize size = wxSize(-1, -1), int style = wxTAB_TRAVERSAL)
 		:DisassemblerPanelGUI((wxWindow*)parent_, id) {};
 	void Set(wxMemoryBuffer buffer);
 	void OnUpdate(wxCommandEvent& event);
