@@ -3,6 +3,10 @@ project(udis86)
 
 set (CMAKE_C_STANDARD 11)
 
+if(APPLE)
+add_compile_definitions(HAVE_STRING_H)
+endif()
+
 file(GLOB udis_lib_sources libudis86/*.c libudis86/*.h)
 add_library(udis STATIC ${udis_lib_sources})
 
