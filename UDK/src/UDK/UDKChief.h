@@ -36,6 +36,7 @@
  */
 
 class UDKHalo;
+class wxAuiManager;
 
 class UDKApplication : public wxApp
 {
@@ -91,7 +92,7 @@ private:
 	 *
 	 * Opens up a modal message window with desired hello message.
 	 *
-	 * @see UDKHalo::MyFrame()
+	 * @see UDKHalo::UDKHalo()
 	 */
 	void OnHello(wxCommandEvent& event);
 
@@ -100,7 +101,7 @@ private:
 	 *
 	 * Closes the application.
 	 *
-	 * @see UDKHalo::MyFrame()
+	 * @see UDKHalo::UDKHalo()
 	 */
 	void OnExit(wxCommandEvent& event);
 
@@ -109,7 +110,7 @@ private:
 	 *
 	 * Opens up a modal message window with desired application information.
 	 *
-	 * @see UDKHalo::MyFrame()
+	 * @see UDKHalo::UDKHalo()
 	 */
 	void OnAbout(wxCommandEvent& event);
 
@@ -118,12 +119,90 @@ private:
 	 *
 	 * Opens up OpenFile dialog window 
 	 *
-	 * @see UDKHalo::MyFrame()
+	 * @see UDKHalo::UDKHalo()
 	 */
 	void OnOpenFile(wxCommandEvent& event);
+
+	/**
+	 * @brief Prepare the manager for various supported features panes
+	 *
+	 * Do the necessary adding and modification of feature panes
+	 *
+	 * @see UDKHalo::UDKHalo()
+	 */
+	void PrepareAUI(void);
+
+private:
+	/**
+	 * @brief For managing varitey of panes or panels
+	 *
+	 * Chiefly used for adding, handling resizing, docking, and more \n
+	 * of utility panes (to be) present in UDKHalo.\n
+	 *
+	 * wxAuiManager works as follows: the programmer adds panes to the \n
+	 * class, or makes changes to existing pane properties (dock \n
+	 * position, floating state, show state, etc.). To apply these \n
+	 * changes, wxAuiManager's Update() function is called. This batch \n 
+	 * processing can be used to avoid flicker, by modifying more than \n 
+	 * one pane at a time, and then "committing" all of the changes at \n
+	 * once by calling Update().
+	 */
+	wxAuiManager* m_PaneManager;
 };
 
 enum
 {
 	ID_Hello = 1
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class InfoPanelGui
+///////////////////////////////////////////////////////////////////////////////
+class InfoPanelGui : public wxPanel
+{
+private:
+
+protected:
+	wxStaticText* m_InfoPanelText;
+
+public:
+
+	InfoPanelGui(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize(140, 111), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString);
+	~InfoPanelGui();
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class DisassemblerPanelGUI
+///////////////////////////////////////////////////////////////////////////////
+class DisassemblerPanelGUI : public wxPanel
+{
+private:
+
+protected:
+	wxChoice* m_ChoiceVendor;
+	wxChoice* m_ChoiceASMType;
+	wxChoice* m_ChoiceBitMode;
+	wxTextCtrl* m_DasmCtrl;
+
+	// Virtual event handlers, overide them in your derived class
+	virtual void OnUpdate(wxCommandEvent& event) { event.Skip(); }
+
+
+public:
+
+	DisassemblerPanelGUI(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize(273, 310), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString);
+	~DisassemblerPanelGUI();
+
+};
+
+class DisassemblerPanel : public DisassemblerPanelGUI
+{
+public:
+	DisassemblerPanel(class HexEditorFrame* parent_, int id = -1, wxPoint pos = wxDefaultPosition, wxSize size = wxSize(-1, -1), int style = wxTAB_TRAVERSAL)
+		:DisassemblerPanelGUI((wxWindow*)parent_, id) {};
+	void Set(wxMemoryBuffer buffer);
+	void OnUpdate(wxCommandEvent& event);
+	void Clear(void);
+	wxMemoryBuffer mybuff;
 };
