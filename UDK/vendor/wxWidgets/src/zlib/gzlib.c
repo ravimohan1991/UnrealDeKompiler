@@ -11,7 +11,11 @@
 #if defined(_LARGEFILE64_SOURCE) && _LFS64_LARGEFILE-0
 #  define LSEEK lseek64
 #else
-#  define LSEEK lseek
+   #ifdef UDK_LINUX_PLATFORM
+	#define LSEEK fseek
+   #else
+	#define LSEEK lseek
+   #endif
 #endif
 #endif
 

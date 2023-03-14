@@ -3,16 +3,14 @@ project(udis86)
 
 set (CMAKE_C_STANDARD 11)
 
-if(APPLE)
 add_compile_definitions(HAVE_STRING_H)
-endif()
 
 file(GLOB udis_lib_sources libudis86/*.c libudis86/*.h)
 add_library(udis STATIC ${udis_lib_sources})
 
 target_include_directories(
 	udis
-	PRIVATE 
+	PRIVATE
 		${CMAKE_CURRENT_SOURCE_DIR}/libudis86
 	PUBLIC
         # where top-level project will look for the library's public headers

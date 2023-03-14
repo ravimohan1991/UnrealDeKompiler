@@ -5,6 +5,10 @@
 
 #include "gzguts.h"
 
+#ifdef UDK_LINUX_PLATFORM
+#include <unistd.h>
+#endif
+
 /* Local functions */
 local int gz_load OF((gz_statep, unsigned char *, unsigned, unsigned *));
 local int gz_avail OF((gz_statep));
@@ -646,7 +650,7 @@ int ZEXPORT gzclose_r(file)
     err = state->err == Z_BUF_ERROR ? Z_BUF_ERROR : Z_OK;
     gz_error(state, Z_OK, NULL);
     free(state->path);
-    ret = close(state->fd);
+    ret = pclose(state->fd);
     free(state);
     return ret ? Z_ERRNO : err;
 }
