@@ -18,7 +18,7 @@
  *   along with Unreal DeKompiler.  If not, see <https://www.gnu.org/licenses/>.
  *
  *   Timeline:
- *   March, 2023: Bringing in code from wxHexEditor.
+ *   March, 2023: Bringing in code from wxHexEditor
  */
 
 #pragma once

@@ -24,6 +24,7 @@
 #pragma once
 
 #include <wx/wxprec.h>
+#include <wx/spinbutt.h>
 
 #ifndef WX_PRECOMP
 #include <wx/wx.h>
@@ -40,6 +41,9 @@ class UDKHalo;
 class wxAuiManager;
 class InfoPanel;
 class DisassemblerPanel;
+class wxAuiNotebook;
+class wxCollapsiblePane;
+class wxSpinCtrl;
 
 /// <summary>
 /// The class corresponding to the main UDK application instance
@@ -141,6 +145,15 @@ private:
 	 */
 	void PrepareAUI(void);
 
+	/**
+	 * @brief Prepare the manager for various supported features panes
+	 *
+	 * Do the necessary adding and modification of feature panes
+	 *
+	 * @see UDKHalo::UDKHalo()
+	 */
+	//class
+
 private:
 	/**
 	 * @brief For managing varitey of panes or panels
@@ -165,7 +178,23 @@ private:
 	 */
 	DisassemblerPanel* m_DisassemblerPanel;
 
+	/**
+	 * @brief Pane for file information
+	 *
+	 * All the useful information about the .u file package is \n
+	 * 
+	 * @see InfoPanel
+	 */
 	InfoPanel* m_FileInfoPanel;
+
+	/**
+	 * @brief Container for multiple related tabs
+	 *
+	 * We use this container for displaying (flashing?) of hex \n
+	 * and related data (bytecode basically) which may represent \n
+	 * Instructructions or Data, hence IDA
+	 */
+	wxAuiNotebook* m_IDANotebook;
 };
 
 enum
@@ -239,4 +268,189 @@ public:
 	void OnUpdate(wxCommandEvent& event);
 	void Clear(void);
 	wxMemoryBuffer m_Buffer;
+};
+
+#define ID_DEFAULT wxID_ANY // Default
+#define idClose 1000
+#define idImportTAGs 1001
+#define idExportTAGs 1002
+#define idImportTemplate 1003
+#define wxID_QUIT 1004
+#define idCopyAs 1005
+#define idSaveAsDump 1006
+#define idFillSelection 1007
+#define idInsert 1008
+#define idGotoOffset 1009
+#define idInterpreter 1010
+#define idToolbar 1011
+#define idInfoPanel 1012
+#define idTagPanel 1013
+#define idDisassemblerPanel 1014
+#define idSearchPanel 1015
+#define idComparePanel 1016
+#define idZebraStriping 1017
+#define idShowOffset 1018
+#define idShowHex 1019
+#define idShowText 1020
+#define idChecksum 1021
+#define idCompare 1022
+#define idXORView 1023
+#define idHex2Color 1024
+#define idDeviceRam 1025
+#define idDeviceMemorySPD 1026
+#define idProcessRAM 1027
+#define idDeviceBackup 1028
+#define idDeviceRestore 1029
+#define idDeviceErase 1030
+#define idFileRO 1031
+#define idFileRW 1032
+#define idFileDW 1033
+#define idDonate 1034
+#define idWiki 1035
+#define idBugReport 1036
+#define wxNEW 1037
+#define ID_CHK_UNSIGNED 1038
+#define ID_CHK_BIGENDIAN 1039
+
+/// <summary>
+/// Base class for DataInterpreter
+/// </summary>
+class InterpreterGui : public wxPanel
+{
+protected:
+	wxCheckBox* m_CheckUnsigned;
+	wxCheckBox* m_CheckBigEndian;
+	wxStaticText* m_StaticBin;
+	wxTextCtrl* m_TextctrlBinary;
+	wxCheckBox* m_CheckEdit;
+	wxStaticText* m_StaticAscii;
+	wxTextCtrl* m_TextctrlAscii;
+	wxStaticText* m_Static8bit;
+	wxTextCtrl* m_Textctrl8bit;
+	wxStaticText* m_Static16bit;
+	wxTextCtrl* m_Textctrl16bit;
+	wxStaticText* m_Static32bit;
+	wxTextCtrl* m_Textctrl32bit;
+	wxStaticText* m_Static64bit;
+	wxTextCtrl* m_Textctrl64bit;
+	wxStaticText* m_Staticfloat;
+	wxTextCtrl* m_Textctrlfloat;
+	wxStaticText* m_Staticdouble;
+	wxTextCtrl* m_Textctrldouble;
+	wxCollapsiblePane* m_CollapsiblePaneTimeMachine;
+	wxCheckBox* m_CheckBoxLocal;
+	wxPanel* m_PanelTime;
+	wxStaticText* m_StaticTimeUTC;
+	wxSpinCtrl* m_SpinCtrlTimeUTC;
+	wxStaticText* m_StaticTimeUnix;
+	wxTextCtrl* m_TextctrlTimeUnix;
+	wxStaticText* m_StaticTimeUnix64;
+	wxTextCtrl* m_TextctrlTimeUnix64;
+	wxStaticText* m_StaticTimeFAT;
+	wxTextCtrl* m_TextctrlTimeFAT;
+	wxStaticText* m_StaticTimeNTFS;
+	wxTextCtrl* m_TextctrlTimeNTFS;
+	wxStaticText* m_StaticTimeHFSp;
+	wxTextCtrl* m_TextctrlTimeHFSp;
+	wxStaticText* m_StaticTimeAPFS;
+	wxTextCtrl* m_TextctrlTimeAPFS;
+	wxCollapsiblePane* m_CollapsiblePaneExFAT;
+	wxStaticText* m_StaticTimeExFATCreation;
+	wxTextCtrl* m_TextctrlTimeExFATCreation;
+	wxStaticText* m_StaticTimeExFATModification;
+	wxTextCtrl* m_TextctrlTimeExFATModification;
+	wxStaticText* m_StaticTimeExFATAccess;
+	wxTextCtrl* m_TextctrlTimeExFATAccess;
+
+	// Virtual event handlers, overide them in your derived class
+	virtual void OnUpdate(wxCommandEvent& event) { event.Skip(); }
+	virtual void OnTextEdit(wxKeyEvent& event) { event.Skip(); }
+	virtual void OnTextMouse(wxMouseEvent& event) { event.Skip(); }
+	virtual void OnCheckEdit(wxCommandEvent& event) { event.Skip(); }
+	virtual void OnSpin(wxSpinEvent& event) { event.Skip(); }
+
+public:
+
+	InterpreterGui(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxPoint(-1, -1), const wxSize& size = wxSize(-1, -1), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString);
+	~InterpreterGui();
+};
+
+/// <summary>
+/// The rightful interpreter of data
+/// </summary>
+class DataInterpreter : public InterpreterGui
+{
+public:
+	DataInterpreter(wxWindow* parent, int id = -1, wxPoint pos = wxDefaultPosition, wxSize size = wxSize(-1, -1), int style = wxTAB_TRAVERSAL)
+		:InterpreterGui(parent, id, pos, size, style) {
+#if wxCHECK_VERSION( 2,9,0 ) && defined( __WXOSX__ )	//onOSX, 8 px too small.
+		wxFont f = GetFont();
+		f.SetPointSize(10);
+		m_textctrl_binary->SetFont(f);
+		m_textctrl_ascii->SetFont(f);
+		m_textctrl_8bit->SetFont(f);
+		m_textctrl_16bit->SetFont(f);
+		m_textctrl_32bit->SetFont(f);
+		m_textctrl_64bit->SetFont(f);
+		m_textctrl_float->SetFont(f);
+		m_textctrl_double->SetFont(f);
+#endif
+#ifdef HAS_A_TIME_MACHINE
+		m_collapsiblePane_TimeMachine->Enable(true);
+		m_collapsiblePane_TimeMachine->Show(true);
+#ifdef HAS_A_EXFAT_TIME
+		m_collapsiblePaneExFAT->Enable(true);
+		m_collapsiblePaneExFAT->Show(true);
+#endif
+#endif
+
+		unidata.raw = unidata.mraw = NULL;
+	};
+	void Set(wxMemoryBuffer buffer);
+	void Clear(void);
+	void OnUpdate(wxCommandEvent& event);
+	void OnSpin(wxSpinEvent& event);
+	void OnTextEdit(wxKeyEvent& event);
+	void OnTextMouse(wxMouseEvent& event);
+	void OnCheckEdit(wxCommandEvent& event);
+	wxString AsciiSymbol(unsigned char a);
+
+protected:
+	struct unidata
+	{
+		char* raw, * mraw;	//big endian and little endian
+		struct endian {
+			int8_t* bit8;
+			int16_t* bit16;
+			int32_t* bit32;
+			int64_t* bit64;
+			uint8_t* ubit8;
+			uint16_t* ubit16;
+			uint32_t* ubit32;
+			uint64_t* ubit64;
+			float* bitfloat;
+			double* bitdouble;
+			//_Float128 *bitf128;
+			char* raw;
+		} little, big;
+		short size;
+		char* mirrorbfr;
+	}unidata;
+
+#ifdef HAS_A_TIME_MACHINE
+#pragma pack (1)
+	struct FATDate_t {
+		unsigned Sec : 5;
+		unsigned Min : 6;
+		unsigned Hour : 5;
+		unsigned Day : 5;
+		unsigned Month : 4;
+		unsigned Year : 7;
+	}FATDate;
+
+
+	enum TimeFormats { UNIX32, UNIX64, FAT, NTFS, APFS, HFSp, exFAT_C, exFAT_M, exFAT_A, };
+
+	wxString FluxCapacitor(unidata::endian* unit, TimeFormats format);
+#endif //HAS_A_TIME_MACHINE
 };
