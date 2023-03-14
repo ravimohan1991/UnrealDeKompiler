@@ -116,11 +116,17 @@ Private Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a56205cbed43429f2fa5dea0d0d415f6f"><td class="memItemLeft" align="right" valign="top">wxAuiManager *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_halo.html#a56205cbed43429f2fa5dea0d0d415f6f">m_PaneManager</a></td></tr>
-<tr class="memdesc:a56205cbed43429f2fa5dea0d0d415f6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">For managing varitey of panes or panels.  <br /></td></tr>
+<tr class="memdesc:a56205cbed43429f2fa5dea0d0d415f6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepare the manager for various supported features panes.  <br /></td></tr>
 <tr class="separator:a56205cbed43429f2fa5dea0d0d415f6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39c8d036922174570e7ff7d92de70006"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_disassembler_panel.html">DisassemblerPanel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_halo.html#a39c8d036922174570e7ff7d92de70006">m_DisassemblerPanel</a></td></tr>
 <tr class="memdesc:a39c8d036922174570e7ff7d92de70006"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disassembler pane.  <br /></td></tr>
 <tr class="separator:a39c8d036922174570e7ff7d92de70006"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcf419354fa234b50de5f4de47de1aad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_info_panel.html">InfoPanel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_halo.html#afcf419354fa234b50de5f4de47de1aad">m_FileInfoPanel</a></td></tr>
+<tr class="memdesc:afcf419354fa234b50de5f4de47de1aad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pane for file information.  <br /></td></tr>
+<tr class="separator:afcf419354fa234b50de5f4de47de1aad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1af8d12edeeb4a2a861366c644f39c2c"><td class="memItemLeft" align="right" valign="top">wxAuiNotebook *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_halo.html#a1af8d12edeeb4a2a861366c644f39c2c">m_IDANotebook</a></td></tr>
+<tr class="memdesc:a1af8d12edeeb4a2a861366c644f39c2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Container for multiple related tabs.  <br /></td></tr>
+<tr class="separator:a1af8d12edeeb4a2a861366c644f39c2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The UDK main window frame class. </p>
@@ -328,6 +334,59 @@ is done for desired callback.</p>
 
 </div>
 </div>
+<a id="afcf419354fa234b50de5f4de47de1aad" name="afcf419354fa234b50de5f4de47de1aad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcf419354fa234b50de5f4de47de1aad">&#9670;&#160;</a></span>m_FileInfoPanel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_info_panel.html">InfoPanel</a>* UDKHalo::m_FileInfoPanel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pane for file information. </p>
+<p>All the useful information about the .u file package is <br  />
+ </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_info_panel.html" title="Class which displays relevant information of a file  including name, path, size, and access.">InfoPanel</a> </dd></dl>
+
+</div>
+</div>
+<a id="a1af8d12edeeb4a2a861366c644f39c2c" name="a1af8d12edeeb4a2a861366c644f39c2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1af8d12edeeb4a2a861366c644f39c2c">&#9670;&#160;</a></span>m_IDANotebook</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">wxAuiNotebook* UDKHalo::m_IDANotebook</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Container for multiple related tabs. </p>
+<p>We use this container for displaying (flashing?) of hex <br  />
+and related data (bytecode basically) which may represent <br  />
+Instructructions or Data, hence IDA </p>
+
+</div>
+</div>
 <a id="a56205cbed43429f2fa5dea0d0d415f6f" name="a56205cbed43429f2fa5dea0d0d415f6f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a56205cbed43429f2fa5dea0d0d415f6f">&#9670;&#160;</a></span>m_PaneManager</h2>
 
@@ -348,7 +407,10 @@ is done for desired callback.</p>
 </table>
 </div><div class="memdoc">
 
-<p>For managing varitey of panes or panels. </p>
+<p>Prepare the manager for various supported features panes. </p>
+<p>Do the necessary adding and modification of feature panes</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_u_d_k_halo.html#aff4ac2fa354f430e82a7837ac23ded00" title="Frame setup.">UDKHalo::UDKHalo()</a></dd></dl>
+<p>For managing varitey of panes or panels</p>
 <p>Chiefly used for adding, handling resizing, docking, and more <br  />
 of utility panes (to be) present in <a class="el" href="class_u_d_k_halo.html" title="The UDK main window frame class.">UDKHalo</a>.<br  />
  wxAuiManager works as follows: the programmer adds panes to the <br  />

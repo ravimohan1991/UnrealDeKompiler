@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['onabout_0',['OnAbout',['../class_u_d_k_halo.html#a91d96a9a1b93645b600ace2e218b1c59',1,'UDKHalo']]],
-  ['onexit_1',['OnExit',['../class_u_d_k_halo.html#aca1351915567907025e40093dc2aa15a',1,'UDKHalo']]],
-  ['onhello_2',['OnHello',['../class_u_d_k_halo.html#a334cb035aaf38922e348ee80f4f18a89',1,'UDKHalo']]],
-  ['oninit_3',['OnInit',['../class_u_d_k_application.html#a28650fecca90e1cc35aacaa3519480c7',1,'UDKApplication']]],
-  ['onopenfile_4',['OnOpenFile',['../class_u_d_k_halo.html#a7247e1cc2416d00b053fd1dcdb5c8cf4',1,'UDKHalo']]]
+  ['m_5fdisassemblerpanel_0',['m_DisassemblerPanel',['../class_u_d_k_halo.html#a39c8d036922174570e7ff7d92de70006',1,'UDKHalo']]],
+  ['m_5ffileinfopanel_1',['m_FileInfoPanel',['../class_u_d_k_halo.html#afcf419354fa234b50de5f4de47de1aad',1,'UDKHalo']]],
+  ['m_5fframe_2',['m_Frame',['../class_u_d_k_application.html#afdd5bbdb49b6836f1be406380bf8183d',1,'UDKApplication']]],
+  ['m_5fidanotebook_3',['m_IDANotebook',['../class_u_d_k_halo.html#a1af8d12edeeb4a2a861366c644f39c2c',1,'UDKHalo']]],
+  ['m_5fpanemanager_4',['m_PaneManager',['../class_u_d_k_halo.html#a56205cbed43429f2fa5dea0d0d415f6f',1,'UDKHalo']]],
+  ['myconfigbase_5',['MyConfigBase',['../class_my_config_base.html',1,'']]]
 ];
