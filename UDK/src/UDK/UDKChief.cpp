@@ -54,7 +54,7 @@ bool UDKApplication::OnInit()
 }
 
 UDKHalo::UDKHalo()
-	: wxFrame(nullptr, wxID_ANY, "Unreal DeKompiler", wxDefaultPosition, wxSize(900, 500), wxDEFAULT_FRAME_STYLE)
+	: wxFrame(nullptr, wxID_ANY, "Unreal DeKompiler", wxDefaultPosition, wxSize(1400, 800), wxDEFAULT_FRAME_STYLE)
 {
 	wxMenu* menuFile = new wxMenu;
 	menuFile->Append(ID_Hello, "&Hello...\tCtrl-H",
@@ -153,7 +153,7 @@ void UDKHalo::PrepareAUI(void)
 	m_FileInfoPanel = new InfoPanel(this, -1);
 	m_PaneManager->AddPane(m_FileInfoPanel, wxAuiPaneInfo().
 		Name(_("InfoPanel")).
-		Caption(_("InfoPanel")).
+		Caption(_("Information Panel")).
 		TopDockable(false).
 		CloseButton(true).
 		BottomDockable(false).
