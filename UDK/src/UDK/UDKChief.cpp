@@ -25,6 +25,8 @@
 #include <wx/filesys.h>
 #include <wx/aui/framemanager.h>
 #include <wx/aui/auibook.h>
+#include <wx/collpane.h>
+#include <wx/spinctrl.h>
 #include <types.h>
 #include <extern.h>
 
@@ -370,15 +372,15 @@ InterpreterGui::InterpreterGui(wxWindow* parent, wxWindowID id, const wxPoint& p
 	wxBoxSizer* optionSizer;
 	optionSizer = new wxBoxSizer(wxHORIZONTAL);
 
-	m_check_unsigned = new wxCheckBox(this, ID_CHK_UNSIGNED, wxT("Unsigned"), wxDefaultPosition, wxDefaultSize, 0);
-	m_check_unsigned->SetFont(wxFont(8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Sans")));
+	m_CheckUnsigned = new wxCheckBox(this, ID_CHK_UNSIGNED, wxT("Unsigned"), wxDefaultPosition, wxDefaultSize, 0);
+	m_CheckUnsigned->SetFont(wxFont(8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Sans")));
 
-	optionSizer->Add(m_check_unsigned, 0, wxALL, 5);
+	optionSizer->Add(m_CheckUnsigned, 0, wxALL, 5);
 
-	m_check_bigendian = new wxCheckBox(this, ID_CHK_BIGENDIAN, wxT("Big Endian"), wxDefaultPosition, wxDefaultSize, 0);
-	m_check_bigendian->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_CheckBigEndian = new wxCheckBox(this, ID_CHK_BIGENDIAN, wxT("Big Endian"), wxDefaultPosition, wxDefaultSize, 0);
+	m_CheckBigEndian->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	optionSizer->Add(m_check_bigendian, 0, wxALL, 5);
+	optionSizer->Add(m_CheckBigEndian, 0, wxALL, 5);
 
 
 	mainSizer->Add(optionSizer, 0, wxEXPAND, 4);
@@ -389,11 +391,11 @@ InterpreterGui::InterpreterGui(wxWindow* parent, wxWindowID id, const wxPoint& p
 	numSizer->SetFlexibleDirection(wxHORIZONTAL);
 	numSizer->SetNonFlexibleGrowMode(wxFLEX_GROWMODE_NONE);
 
-	m_static_bin = new wxStaticText(this, ID_DEFAULT, wxT("Binary"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
-	m_static_bin->Wrap(-1);
-	m_static_bin->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_StaticBin = new wxStaticText(this, ID_DEFAULT, wxT("Binary"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
+	m_StaticBin->Wrap(-1);
+	m_StaticBin->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	numSizer->Add(m_static_bin, 0, wxALIGN_CENTER, 2);
+	numSizer->Add(m_StaticBin, 0, wxALIGN_CENTER, 2);
 
 	wxFlexGridSizer* fgBinSizer;
 	fgBinSizer = new wxFlexGridSizer(1, 2, 0, 0);
@@ -401,114 +403,114 @@ InterpreterGui::InterpreterGui(wxWindow* parent, wxWindowID id, const wxPoint& p
 	fgBinSizer->SetFlexibleDirection(wxBOTH);
 	fgBinSizer->SetNonFlexibleGrowMode(wxFLEX_GROWMODE_SPECIFIED);
 
-	m_textctrl_binary = new wxTextCtrl(this, ID_DEFAULT, wxT("00000000"), wxDefaultPosition, wxSize(-1, -1), 0);
+	m_TextControlBinary = new wxTextCtrl(this, ID_DEFAULT, wxT("00000000"), wxDefaultPosition, wxSize(-1, -1), 0);
 #ifdef __WXGTK__
-	if (!m_textctrl_binary->HasFlag(wxTE_MULTILINE))
+	if (!m_TextControlBinary->HasFlag(wxTE_MULTILINE))
 	{
-		m_textctrl_binary->SetMaxLength(8);
+		m_TextControlBinary->SetMaxLength(8);
 	}
 #else
-	m_textctrl_binary->SetMaxLength(8);
+	m_TextControlBinary->SetMaxLength(8);
 #endif
-	m_textctrl_binary->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
-	m_textctrl_binary->SetToolTip(wxT("Press enter to make changes!"));
+	m_TextControlBinary->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_TextControlBinary->SetToolTip(wxT("Press enter to make changes!"));
 
-	fgBinSizer->Add(m_textctrl_binary, 0, wxEXPAND, 1);
+	fgBinSizer->Add(m_TextControlBinary, 0, wxEXPAND, 1);
 
-	m_check_edit = new wxCheckBox(this, wxID_ANY, wxT("Edit"), wxDefaultPosition, wxDefaultSize, 0);
-	m_check_edit->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
-	m_check_edit->SetToolTip(wxT("Allow editing by Data Interpreter Panel"));
+	m_CheckEdit = new wxCheckBox(this, wxID_ANY, wxT("Edit"), wxDefaultPosition, wxDefaultSize, 0);
+	m_CheckEdit->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_CheckEdit->SetToolTip(wxT("Allow editing by Data Interpreter Panel"));
 
-	fgBinSizer->Add(m_check_edit, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 1);
+	fgBinSizer->Add(m_CheckEdit, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 1);
 
 
 	numSizer->Add(fgBinSizer, 1, wxEXPAND, 5);
 
-	m_static_ascii = new wxStaticText(this, ID_DEFAULT, wxT("ASCII"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
-	m_static_ascii->Wrap(-1);
-	m_static_ascii->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_StaticAscii = new wxStaticText(this, ID_DEFAULT, wxT("ASCII"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
+	m_StaticAscii->Wrap(-1);
+	m_StaticAscii->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	numSizer->Add(m_static_ascii, 0, wxALIGN_CENTER, 5);
+	numSizer->Add(m_StaticAscii, 0, wxALIGN_CENTER, 5);
 
-	m_textctrl_ascii = new wxTextCtrl(this, ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxSize(-1, -1), wxTE_READONLY);
-	m_textctrl_ascii->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_TextControlAscii = new wxTextCtrl(this, ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxSize(-1, -1), wxTE_READONLY);
+	m_TextControlAscii->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	numSizer->Add(m_textctrl_ascii, 0, wxEXPAND, 1);
+	numSizer->Add(m_TextControlAscii, 0, wxEXPAND, 1);
 
-	m_static_8bit = new wxStaticText(this, ID_DEFAULT, wxT("8 bit"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
-	m_static_8bit->Wrap(-1);
-	m_static_8bit->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_Static8bit = new wxStaticText(this, ID_DEFAULT, wxT("8 bit"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
+	m_Static8bit->Wrap(-1);
+	m_Static8bit->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	numSizer->Add(m_static_8bit, 0, wxALIGN_CENTER, 0);
+	numSizer->Add(m_Static8bit, 0, wxALIGN_CENTER, 0);
 
-	m_textctrl_8bit = new wxTextCtrl(this, ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxSize(-1, -1), wxTE_READONLY);
-	m_textctrl_8bit->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_TextControl8bit = new wxTextCtrl(this, ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxSize(-1, -1), wxTE_READONLY);
+	m_TextControl8bit->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	numSizer->Add(m_textctrl_8bit, 0, wxEXPAND, 1);
+	numSizer->Add(m_TextControl8bit, 0, wxEXPAND, 1);
 
-	m_static_16bit = new wxStaticText(this, ID_DEFAULT, wxT("16 bit"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
-	m_static_16bit->Wrap(-1);
-	m_static_16bit->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_Static16bit = new wxStaticText(this, ID_DEFAULT, wxT("16 bit"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
+	m_Static16bit->Wrap(-1);
+	m_Static16bit->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	numSizer->Add(m_static_16bit, 0, wxALIGN_CENTER, 0);
+	numSizer->Add(m_Static16bit, 0, wxALIGN_CENTER, 0);
 
-	m_textctrl_16bit = new wxTextCtrl(this, ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxSize(-1, -1), wxTE_READONLY);
-	m_textctrl_16bit->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_TextControl16bit = new wxTextCtrl(this, ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxSize(-1, -1), wxTE_READONLY);
+	m_TextControl16bit->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	numSizer->Add(m_textctrl_16bit, 0, wxEXPAND, 1);
+	numSizer->Add(m_TextControl16bit, 0, wxEXPAND, 1);
 
-	m_static_32bit = new wxStaticText(this, ID_DEFAULT, wxT("32 bit"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
-	m_static_32bit->Wrap(-1);
-	m_static_32bit->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_Static32bit = new wxStaticText(this, ID_DEFAULT, wxT("32 bit"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
+	m_Static32bit->Wrap(-1);
+	m_Static32bit->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	numSizer->Add(m_static_32bit, 0, wxALIGN_CENTER, 2);
+	numSizer->Add(m_Static32bit, 0, wxALIGN_CENTER, 2);
 
-	m_textctrl_32bit = new wxTextCtrl(this, ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-	m_textctrl_32bit->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_TextControl32bit = new wxTextCtrl(this, ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+	m_TextControl32bit->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	numSizer->Add(m_textctrl_32bit, 0, wxEXPAND, 1);
+	numSizer->Add(m_TextControl32bit, 0, wxEXPAND, 1);
 
-	m_static_64bit = new wxStaticText(this, ID_DEFAULT, wxT("64 bit"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
-	m_static_64bit->Wrap(-1);
-	m_static_64bit->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_Static64bit = new wxStaticText(this, ID_DEFAULT, wxT("64 bit"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
+	m_Static64bit->Wrap(-1);
+	m_Static64bit->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	numSizer->Add(m_static_64bit, 0, wxALIGN_CENTER, 2);
+	numSizer->Add(m_Static64bit, 0, wxALIGN_CENTER, 2);
 
-	m_textctrl_64bit = new wxTextCtrl(this, ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-	m_textctrl_64bit->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_TextControl64bit = new wxTextCtrl(this, ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+	m_TextControl64bit->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	numSizer->Add(m_textctrl_64bit, 0, wxEXPAND, 1);
+	numSizer->Add(m_TextControl64bit, 0, wxEXPAND, 1);
 
-	m_static_float = new wxStaticText(this, ID_DEFAULT, wxT("Float"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
-	m_static_float->Wrap(-1);
-	m_static_float->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_Staticfloat = new wxStaticText(this, ID_DEFAULT, wxT("Float"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
+	m_Staticfloat->Wrap(-1);
+	m_Staticfloat->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	numSizer->Add(m_static_float, 0, wxALIGN_CENTER, 2);
+	numSizer->Add(m_Staticfloat, 0, wxALIGN_CENTER, 2);
 
-	m_textctrl_float = new wxTextCtrl(this, ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-	m_textctrl_float->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_TextCotrolfloat = new wxTextCtrl(this, ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+	m_TextCotrolfloat->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	numSizer->Add(m_textctrl_float, 0, wxEXPAND, 1);
+	numSizer->Add(m_TextCotrolfloat, 0, wxEXPAND, 1);
 
-	m_static_double = new wxStaticText(this, ID_DEFAULT, wxT("Double"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
-	m_static_double->Wrap(-1);
-	m_static_double->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_Staticdouble = new wxStaticText(this, ID_DEFAULT, wxT("Double"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
+	m_Staticdouble->Wrap(-1);
+	m_Staticdouble->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	numSizer->Add(m_static_double, 0, wxALIGN_CENTER, 3);
+	numSizer->Add(m_Staticdouble, 0, wxALIGN_CENTER, 3);
 
-	m_textctrl_double = new wxTextCtrl(this, ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-	m_textctrl_double->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_TextControldouble = new wxTextCtrl(this, ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+	m_TextControldouble->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	numSizer->Add(m_textctrl_double, 0, wxEXPAND, 1);
+	numSizer->Add(m_TextControldouble, 0, wxEXPAND, 1);
 
 
 	mainSizer->Add(numSizer, 0, wxEXPAND, 5);
 
-	m_collapsiblePane_TimeMachine = new wxCollapsiblePane(this, wxID_ANY, wxT("Time Machine"), wxDefaultPosition, wxDefaultSize, wxCP_DEFAULT_STYLE | wxCP_NO_TLW_RESIZE);
-	m_collapsiblePane_TimeMachine->Collapse(false);
+	m_CollapsiblePaneTimeMachine = new wxCollapsiblePane(this, wxID_ANY, wxT("Time Machine"), wxDefaultPosition, wxDefaultSize, wxCP_DEFAULT_STYLE | wxCP_NO_TLW_RESIZE);
+	m_CollapsiblePaneTimeMachine->Collapse(false);
 
-	m_collapsiblePane_TimeMachine->SetFont(wxFont(wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
-	m_collapsiblePane_TimeMachine->Hide();
+	m_CollapsiblePaneTimeMachine->SetFont(wxFont(wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_CollapsiblePaneTimeMachine->Hide();
 
 	wxBoxSizer* bSizerTimeMachine;
 	bSizerTimeMachine = new wxBoxSizer(wxVERTICAL);
@@ -518,20 +520,20 @@ InterpreterGui::InterpreterGui(wxWindow* parent, wxWindowID id, const wxPoint& p
 	fgSizerUTC->SetFlexibleDirection(wxBOTH);
 	fgSizerUTC->SetNonFlexibleGrowMode(wxFLEX_GROWMODE_SPECIFIED);
 
-	m_checkBoxLocal = new wxCheckBox(m_collapsiblePane_TimeMachine->GetPane(), wxID_ANY, wxT("Use local time"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
-	fgSizerUTC->Add(m_checkBoxLocal, 0, wxALL, 5);
+	m_CheckBoxLocal = new wxCheckBox(m_CollapsiblePaneTimeMachine->GetPane(), wxID_ANY, wxT("Use local time"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
+	fgSizerUTC->Add(m_CheckBoxLocal, 0, wxALL, 5);
 
-	m_panel_time = new wxPanel(m_collapsiblePane_TimeMachine->GetPane(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
-	fgSizerUTC->Add(m_panel_time, 1, wxEXPAND | wxALL, 5);
+	m_PanelTime = new wxPanel(m_CollapsiblePaneTimeMachine->GetPane(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
+	fgSizerUTC->Add(m_PanelTime, 1, wxEXPAND | wxALL, 5);
 
-	m_static_timeUTC = new wxStaticText(m_collapsiblePane_TimeMachine->GetPane(), ID_DEFAULT, wxT("UTC"), wxDefaultPosition, wxSize(-1, -1), wxALIGN_LEFT);
-	m_static_timeUTC->Wrap(-1);
-	m_static_timeUTC->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_StaticTimeUTC = new wxStaticText(m_CollapsiblePaneTimeMachine->GetPane(), ID_DEFAULT, wxT("UTC"), wxDefaultPosition, wxSize(-1, -1), wxALIGN_LEFT);
+	m_StaticTimeUTC->Wrap(-1);
+	m_StaticTimeUTC->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	fgSizerUTC->Add(m_static_timeUTC, 0, wxALIGN_CENTER | wxALL, 5);
+	fgSizerUTC->Add(m_StaticTimeUTC, 0, wxALIGN_CENTER | wxALL, 5);
 
-	m_spinCtrl_timeUTC = new wxSpinCtrl(m_collapsiblePane_TimeMachine->GetPane(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(60, -1), wxALIGN_RIGHT | wxSP_ARROW_KEYS, -12, 12, 0);
-	fgSizerUTC->Add(m_spinCtrl_timeUTC, 0, 0, 5);
+	m_SpinControlTimeUTC = new wxSpinCtrl(m_CollapsiblePaneTimeMachine->GetPane(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(60, -1), wxALIGN_RIGHT | wxSP_ARROW_KEYS, -12, 12, 0);
+	fgSizerUTC->Add(m_SpinControlTimeUTC, 0, 0, 5);
 
 
 	bSizerTimeMachine->Add(fgSizerUTC, 0, wxEXPAND, 5);
@@ -542,79 +544,79 @@ InterpreterGui::InterpreterGui(wxWindow* parent, wxWindowID id, const wxPoint& p
 	fgtimeSizer->SetFlexibleDirection(wxHORIZONTAL);
 	fgtimeSizer->SetNonFlexibleGrowMode(wxFLEX_GROWMODE_SPECIFIED);
 
-	m_static_timeUnix = new wxStaticText(m_collapsiblePane_TimeMachine->GetPane(), ID_DEFAULT, wxT("Unix32"), wxPoint(-1, -1), wxSize(-1, -1), wxALIGN_LEFT);
-	m_static_timeUnix->Wrap(-1);
-	m_static_timeUnix->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_StaticTimeUnix = new wxStaticText(m_CollapsiblePaneTimeMachine->GetPane(), ID_DEFAULT, wxT("Unix32"), wxPoint(-1, -1), wxSize(-1, -1), wxALIGN_LEFT);
+	m_StaticTimeUnix->Wrap(-1);
+	m_StaticTimeUnix->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	fgtimeSizer->Add(m_static_timeUnix, 1, wxALIGN_CENTER, 5);
+	fgtimeSizer->Add(m_StaticTimeUnix, 1, wxALIGN_CENTER, 5);
 
-	m_textctrl_timeUnix = new wxTextCtrl(m_collapsiblePane_TimeMachine->GetPane(), ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-	m_textctrl_timeUnix->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_TextControlTimeUnix = new wxTextCtrl(m_CollapsiblePaneTimeMachine->GetPane(), ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+	m_TextControlTimeUnix->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	fgtimeSizer->Add(m_textctrl_timeUnix, 0, wxEXPAND, 5);
+	fgtimeSizer->Add(m_TextControlTimeUnix, 0, wxEXPAND, 5);
 
-	m_static_timeUnix64 = new wxStaticText(m_collapsiblePane_TimeMachine->GetPane(), ID_DEFAULT, wxT("Unix64"), wxPoint(-1, -1), wxSize(-1, -1), wxALIGN_LEFT);
-	m_static_timeUnix64->Wrap(-1);
-	m_static_timeUnix64->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_StaticTimeUnix64 = new wxStaticText(m_CollapsiblePaneTimeMachine->GetPane(), ID_DEFAULT, wxT("Unix64"), wxPoint(-1, -1), wxSize(-1, -1), wxALIGN_LEFT);
+	m_StaticTimeUnix64->Wrap(-1);
+	m_StaticTimeUnix64->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	fgtimeSizer->Add(m_static_timeUnix64, 0, wxALIGN_CENTER, 5);
+	fgtimeSizer->Add(m_StaticTimeUnix64, 0, wxALIGN_CENTER, 5);
 
-	m_textctrl_timeUnix64 = new wxTextCtrl(m_collapsiblePane_TimeMachine->GetPane(), ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-	m_textctrl_timeUnix64->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_TextControlTimeUnix64 = new wxTextCtrl(m_CollapsiblePaneTimeMachine->GetPane(), ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+	m_TextControlTimeUnix64->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	fgtimeSizer->Add(m_textctrl_timeUnix64, 0, wxEXPAND, 5);
+	fgtimeSizer->Add(m_TextControlTimeUnix64, 0, wxEXPAND, 5);
 
-	m_static_timeFAT = new wxStaticText(m_collapsiblePane_TimeMachine->GetPane(), ID_DEFAULT, wxT("FAT"), wxDefaultPosition, wxSize(-1, -1), wxALIGN_LEFT);
-	m_static_timeFAT->Wrap(-1);
-	m_static_timeFAT->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_StaticTimeFAT = new wxStaticText(m_CollapsiblePaneTimeMachine->GetPane(), ID_DEFAULT, wxT("FAT"), wxDefaultPosition, wxSize(-1, -1), wxALIGN_LEFT);
+	m_StaticTimeFAT->Wrap(-1);
+	m_StaticTimeFAT->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	fgtimeSizer->Add(m_static_timeFAT, 0, wxALIGN_CENTER, 5);
+	fgtimeSizer->Add(m_StaticTimeFAT, 0, wxALIGN_CENTER, 5);
 
-	m_textctrl_timeFAT = new wxTextCtrl(m_collapsiblePane_TimeMachine->GetPane(), ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-	m_textctrl_timeFAT->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_TextControlTimeFAT = new wxTextCtrl(m_CollapsiblePaneTimeMachine->GetPane(), ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+	m_TextControlTimeFAT->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	fgtimeSizer->Add(m_textctrl_timeFAT, 0, wxEXPAND, 5);
+	fgtimeSizer->Add(m_TextControlTimeFAT, 0, wxEXPAND, 5);
 
-	m_static_timeNTFS = new wxStaticText(m_collapsiblePane_TimeMachine->GetPane(), ID_DEFAULT, wxT("NTFS"), wxDefaultPosition, wxSize(-1, -1), wxALIGN_LEFT);
-	m_static_timeNTFS->Wrap(-1);
-	m_static_timeNTFS->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_StaticTimeNTFS = new wxStaticText(m_CollapsiblePaneTimeMachine->GetPane(), ID_DEFAULT, wxT("NTFS"), wxDefaultPosition, wxSize(-1, -1), wxALIGN_LEFT);
+	m_StaticTimeNTFS->Wrap(-1);
+	m_StaticTimeNTFS->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	fgtimeSizer->Add(m_static_timeNTFS, 0, wxALIGN_CENTER, 5);
+	fgtimeSizer->Add(m_StaticTimeNTFS, 0, wxALIGN_CENTER, 5);
 
-	m_textctrl_timeNTFS = new wxTextCtrl(m_collapsiblePane_TimeMachine->GetPane(), ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-	m_textctrl_timeNTFS->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_TextControlTimeNTFS = new wxTextCtrl(m_CollapsiblePaneTimeMachine->GetPane(), ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+	m_TextControlTimeNTFS->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	fgtimeSizer->Add(m_textctrl_timeNTFS, 0, wxEXPAND, 5);
+	fgtimeSizer->Add(m_TextControlTimeNTFS, 0, wxEXPAND, 5);
 
-	m_static_timeHFSp = new wxStaticText(m_collapsiblePane_TimeMachine->GetPane(), ID_DEFAULT, wxT("HFS+"), wxDefaultPosition, wxSize(-1, -1), wxALIGN_LEFT);
-	m_static_timeHFSp->Wrap(-1);
-	m_static_timeHFSp->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_StaticTimeHFSp = new wxStaticText(m_CollapsiblePaneTimeMachine->GetPane(), ID_DEFAULT, wxT("HFS+"), wxDefaultPosition, wxSize(-1, -1), wxALIGN_LEFT);
+	m_StaticTimeHFSp->Wrap(-1);
+	m_StaticTimeHFSp->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	fgtimeSizer->Add(m_static_timeHFSp, 0, wxALIGN_CENTER, 5);
+	fgtimeSizer->Add(m_StaticTimeHFSp, 0, wxALIGN_CENTER, 5);
 
-	m_textctrl_timeHFSp = new wxTextCtrl(m_collapsiblePane_TimeMachine->GetPane(), ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-	m_textctrl_timeHFSp->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_TextControlTimeHFSp = new wxTextCtrl(m_CollapsiblePaneTimeMachine->GetPane(), ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+	m_TextControlTimeHFSp->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	fgtimeSizer->Add(m_textctrl_timeHFSp, 0, wxEXPAND, 5);
+	fgtimeSizer->Add(m_TextControlTimeHFSp, 0, wxEXPAND, 5);
 
-	m_static_timeAPFS = new wxStaticText(m_collapsiblePane_TimeMachine->GetPane(), ID_DEFAULT, wxT("APFS"), wxDefaultPosition, wxSize(-1, -1), wxALIGN_LEFT);
-	m_static_timeAPFS->Wrap(-1);
-	m_static_timeAPFS->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_StaticTimeAPFS = new wxStaticText(m_CollapsiblePaneTimeMachine->GetPane(), ID_DEFAULT, wxT("APFS"), wxDefaultPosition, wxSize(-1, -1), wxALIGN_LEFT);
+	m_StaticTimeAPFS->Wrap(-1);
+	m_StaticTimeAPFS->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	fgtimeSizer->Add(m_static_timeAPFS, 0, wxALIGN_CENTER, 5);
+	fgtimeSizer->Add(m_StaticTimeAPFS, 0, wxALIGN_CENTER, 5);
 
-	m_textctrl_timeAPFS = new wxTextCtrl(m_collapsiblePane_TimeMachine->GetPane(), ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-	m_textctrl_timeAPFS->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_TextControlTimeAPFS = new wxTextCtrl(m_CollapsiblePaneTimeMachine->GetPane(), ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+	m_TextControlTimeAPFS->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	fgtimeSizer->Add(m_textctrl_timeAPFS, 0, wxEXPAND, 5);
+	fgtimeSizer->Add(m_TextControlTimeAPFS, 0, wxEXPAND, 5);
 
 
 	bSizerTimeMachine->Add(fgtimeSizer, 0, wxEXPAND, 5);
 
-	m_collapsiblePaneExFAT = new wxCollapsiblePane(m_collapsiblePane_TimeMachine->GetPane(), wxID_ANY, wxT("exFAT Time & Date"), wxDefaultPosition, wxDefaultSize, wxCP_DEFAULT_STYLE | wxCP_NO_TLW_RESIZE);
-	m_collapsiblePaneExFAT->Collapse(false);
+	m_CollapsiblePaneExFAT = new wxCollapsiblePane(m_CollapsiblePaneTimeMachine->GetPane(), wxID_ANY, wxT("exFAT Time & Date"), wxDefaultPosition, wxDefaultSize, wxCP_DEFAULT_STYLE | wxCP_NO_TLW_RESIZE);
+	m_CollapsiblePaneExFAT->Collapse(false);
 
-	m_collapsiblePaneExFAT->Hide();
+	m_CollapsiblePaneExFAT->Hide();
 
 	wxFlexGridSizer* fgtimeSizer1;
 	fgtimeSizer1 = new wxFlexGridSizer(0, 2, 0, 0);
@@ -622,50 +624,50 @@ InterpreterGui::InterpreterGui(wxWindow* parent, wxWindowID id, const wxPoint& p
 	fgtimeSizer1->SetFlexibleDirection(wxHORIZONTAL);
 	fgtimeSizer1->SetNonFlexibleGrowMode(wxFLEX_GROWMODE_SPECIFIED);
 
-	m_static_timeExFAT_Creation = new wxStaticText(m_collapsiblePaneExFAT->GetPane(), ID_DEFAULT, wxT("Creation"), wxPoint(-1, -1), wxSize(-1, -1), wxALIGN_LEFT);
-	m_static_timeExFAT_Creation->Wrap(-1);
-	m_static_timeExFAT_Creation->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_StaticTimeExFATCreation = new wxStaticText(m_CollapsiblePaneExFAT->GetPane(), ID_DEFAULT, wxT("Creation"), wxPoint(-1, -1), wxSize(-1, -1), wxALIGN_LEFT);
+	m_StaticTimeExFATCreation->Wrap(-1);
+	m_StaticTimeExFATCreation->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	fgtimeSizer1->Add(m_static_timeExFAT_Creation, 1, wxALIGN_CENTER, 5);
+	fgtimeSizer1->Add(m_StaticTimeExFATCreation, 1, wxALIGN_CENTER, 5);
 
-	m_textctrl_timeExFAT_Creation = new wxTextCtrl(m_collapsiblePaneExFAT->GetPane(), ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-	m_textctrl_timeExFAT_Creation->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_TextControlTimeExFATCreation = new wxTextCtrl(m_CollapsiblePaneExFAT->GetPane(), ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+	m_TextControlTimeExFATCreation->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	fgtimeSizer1->Add(m_textctrl_timeExFAT_Creation, 0, wxEXPAND, 5);
+	fgtimeSizer1->Add(m_TextControlTimeExFATCreation, 0, wxEXPAND, 5);
 
-	m_static_timeExFAT_Modification = new wxStaticText(m_collapsiblePaneExFAT->GetPane(), ID_DEFAULT, wxT("Modification"), wxPoint(-1, -1), wxSize(-1, -1), wxALIGN_LEFT);
-	m_static_timeExFAT_Modification->Wrap(-1);
-	m_static_timeExFAT_Modification->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_StaticTimeExFATModification = new wxStaticText(m_CollapsiblePaneExFAT->GetPane(), ID_DEFAULT, wxT("Modification"), wxPoint(-1, -1), wxSize(-1, -1), wxALIGN_LEFT);
+	m_StaticTimeExFATModification->Wrap(-1);
+	m_StaticTimeExFATModification->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	fgtimeSizer1->Add(m_static_timeExFAT_Modification, 0, wxALIGN_CENTER, 5);
+	fgtimeSizer1->Add(m_StaticTimeExFATModification, 0, wxALIGN_CENTER, 5);
 
-	m_textctrl_timeExFAT_Modification = new wxTextCtrl(m_collapsiblePaneExFAT->GetPane(), ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-	m_textctrl_timeExFAT_Modification->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_TextControlTimeExFATModification = new wxTextCtrl(m_CollapsiblePaneExFAT->GetPane(), ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+	m_TextControlTimeExFATModification->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	fgtimeSizer1->Add(m_textctrl_timeExFAT_Modification, 0, wxEXPAND, 5);
+	fgtimeSizer1->Add(m_TextControlTimeExFATModification, 0, wxEXPAND, 5);
 
-	m_static_timeExFAT_Access = new wxStaticText(m_collapsiblePaneExFAT->GetPane(), ID_DEFAULT, wxT("Access"), wxDefaultPosition, wxSize(-1, -1), wxALIGN_LEFT);
-	m_static_timeExFAT_Access->Wrap(-1);
-	m_static_timeExFAT_Access->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_StaticTimeExFATAccess = new wxStaticText(m_CollapsiblePaneExFAT->GetPane(), ID_DEFAULT, wxT("Access"), wxDefaultPosition, wxSize(-1, -1), wxALIGN_LEFT);
+	m_StaticTimeExFATAccess->Wrap(-1);
+	m_StaticTimeExFATAccess->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	fgtimeSizer1->Add(m_static_timeExFAT_Access, 0, wxALIGN_CENTER, 5);
+	fgtimeSizer1->Add(m_StaticTimeExFATAccess, 0, wxALIGN_CENTER, 5);
 
-	m_textctrl_timeExFAT_Access = new wxTextCtrl(m_collapsiblePaneExFAT->GetPane(), ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-	m_textctrl_timeExFAT_Access->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_TextControlTimeExFATAccess = new wxTextCtrl(m_CollapsiblePaneExFAT->GetPane(), ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+	m_TextControlTimeExFATAccess->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	fgtimeSizer1->Add(m_textctrl_timeExFAT_Access, 0, wxEXPAND, 5);
-
-
-	m_collapsiblePaneExFAT->GetPane()->SetSizer(fgtimeSizer1);
-	m_collapsiblePaneExFAT->GetPane()->Layout();
-	fgtimeSizer1->Fit(m_collapsiblePaneExFAT->GetPane());
-	bSizerTimeMachine->Add(m_collapsiblePaneExFAT, 1, wxEXPAND | wxALL, 5);
+	fgtimeSizer1->Add(m_TextControlTimeExFATAccess, 0, wxEXPAND, 5);
 
 
-	m_collapsiblePane_TimeMachine->GetPane()->SetSizer(bSizerTimeMachine);
-	m_collapsiblePane_TimeMachine->GetPane()->Layout();
-	bSizerTimeMachine->Fit(m_collapsiblePane_TimeMachine->GetPane());
-	mainSizer->Add(m_collapsiblePane_TimeMachine, 1, wxEXPAND, 5);
+	m_CollapsiblePaneExFAT->GetPane()->SetSizer(fgtimeSizer1);
+	m_CollapsiblePaneExFAT->GetPane()->Layout();
+	fgtimeSizer1->Fit(m_CollapsiblePaneExFAT->GetPane());
+	bSizerTimeMachine->Add(m_CollapsiblePaneExFAT, 1, wxEXPAND | wxALL, 5);
+
+
+	m_CollapsiblePaneTimeMachine->GetPane()->SetSizer(bSizerTimeMachine);
+	m_CollapsiblePaneTimeMachine->GetPane()->Layout();
+	bSizerTimeMachine->Fit(m_CollapsiblePaneTimeMachine->GetPane());
+	mainSizer->Add(m_CollapsiblePaneTimeMachine, 1, wxEXPAND, 5);
 
 
 	this->SetSizer(mainSizer);
@@ -673,34 +675,34 @@ InterpreterGui::InterpreterGui(wxWindow* parent, wxWindowID id, const wxPoint& p
 	mainSizer->Fit(this);
 
 	// Connect Events
-	m_check_unsigned->Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(InterpreterGui::OnUpdate), NULL, this);
-	m_check_bigendian->Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(InterpreterGui::OnUpdate), NULL, this);
-	m_textctrl_binary->Connect(wxEVT_CHAR, wxKeyEventHandler(InterpreterGui::OnTextEdit), NULL, this);
-	m_textctrl_binary->Connect(wxEVT_MIDDLE_DCLICK, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
-	m_textctrl_binary->Connect(wxEVT_MIDDLE_DOWN, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
-	m_textctrl_binary->Connect(wxEVT_MIDDLE_UP, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
-	m_textctrl_binary->Connect(wxEVT_RIGHT_DCLICK, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
-	m_textctrl_binary->Connect(wxEVT_RIGHT_DOWN, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
-	m_textctrl_binary->Connect(wxEVT_RIGHT_UP, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
-	m_check_edit->Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(InterpreterGui::OnCheckEdit), NULL, this);
-	m_checkBoxLocal->Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(InterpreterGui::OnUpdate), NULL, this);
-	m_spinCtrl_timeUTC->Connect(wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler(InterpreterGui::OnSpin), NULL, this);
+	m_CheckUnsigned->Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(InterpreterGui::OnUpdate), NULL, this);
+	m_CheckBigEndian->Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(InterpreterGui::OnUpdate), NULL, this);
+	m_TextControlBinary->Connect(wxEVT_CHAR, wxKeyEventHandler(InterpreterGui::OnTextEdit), NULL, this);
+	m_TextControlBinary->Connect(wxEVT_MIDDLE_DCLICK, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
+	m_TextControlBinary->Connect(wxEVT_MIDDLE_DOWN, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
+	m_TextControlBinary->Connect(wxEVT_MIDDLE_UP, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
+	m_TextControlBinary->Connect(wxEVT_RIGHT_DCLICK, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
+	m_TextControlBinary->Connect(wxEVT_RIGHT_DOWN, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
+	m_TextControlBinary->Connect(wxEVT_RIGHT_UP, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
+	m_CheckEdit->Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(InterpreterGui::OnCheckEdit), NULL, this);
+	m_CheckBoxLocal->Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(InterpreterGui::OnUpdate), NULL, this);
+	m_SpinControlTimeUTC->Connect(wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler(InterpreterGui::OnSpin), NULL, this);
 }
 
 InterpreterGui::~InterpreterGui()
 {
 	// Disconnect Events
-	m_check_unsigned->Disconnect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(InterpreterGui::OnUpdate), NULL, this);
-	m_check_bigendian->Disconnect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(InterpreterGui::OnUpdate), NULL, this);
-	m_textctrl_binary->Disconnect(wxEVT_CHAR, wxKeyEventHandler(InterpreterGui::OnTextEdit), NULL, this);
-	m_textctrl_binary->Disconnect(wxEVT_MIDDLE_DCLICK, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
-	m_textctrl_binary->Disconnect(wxEVT_MIDDLE_DOWN, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
-	m_textctrl_binary->Disconnect(wxEVT_MIDDLE_UP, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
-	m_textctrl_binary->Disconnect(wxEVT_RIGHT_DCLICK, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
-	m_textctrl_binary->Disconnect(wxEVT_RIGHT_DOWN, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
-	m_textctrl_binary->Disconnect(wxEVT_RIGHT_UP, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
-	m_check_edit->Disconnect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(InterpreterGui::OnCheckEdit), NULL, this);
-	m_checkBoxLocal->Disconnect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(InterpreterGui::OnUpdate), NULL, this);
-	m_spinCtrl_timeUTC->Disconnect(wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler(InterpreterGui::OnSpin), NULL, this);
+	m_CheckUnsigned->Disconnect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(InterpreterGui::OnUpdate), NULL, this);
+	m_CheckBigEndian->Disconnect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(InterpreterGui::OnUpdate), NULL, this);
+	m_TextControlBinary->Disconnect(wxEVT_CHAR, wxKeyEventHandler(InterpreterGui::OnTextEdit), NULL, this);
+	m_TextControlBinary->Disconnect(wxEVT_MIDDLE_DCLICK, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
+	m_TextControlBinary->Disconnect(wxEVT_MIDDLE_DOWN, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
+	m_TextControlBinary->Disconnect(wxEVT_MIDDLE_UP, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
+	m_TextControlBinary->Disconnect(wxEVT_RIGHT_DCLICK, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
+	m_TextControlBinary->Disconnect(wxEVT_RIGHT_DOWN, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
+	m_TextControlBinary->Disconnect(wxEVT_RIGHT_UP, wxMouseEventHandler(InterpreterGui::OnTextMouse), NULL, this);
+	m_CheckEdit->Disconnect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(InterpreterGui::OnCheckEdit), NULL, this);
+	m_CheckBoxLocal->Disconnect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(InterpreterGui::OnUpdate), NULL, this);
+	m_SpinControlTimeUTC->Disconnect(wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler(InterpreterGui::OnSpin), NULL, this);
 
 }

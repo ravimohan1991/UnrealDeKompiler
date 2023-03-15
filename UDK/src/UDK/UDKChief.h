@@ -192,7 +192,7 @@ private:
 	 *
 	 * We use this container for displaying (flashing?) of hex \n
 	 * and related data (bytecode basically) which may represent \n
-	 * Instructructions or Data, hence IDA
+	 * Instructions or Data, hence IDA
 	 */
 	wxAuiNotebook* m_IDANotebook;
 };
@@ -321,46 +321,46 @@ protected:
 	wxCheckBox* m_CheckUnsigned;
 	wxCheckBox* m_CheckBigEndian;
 	wxStaticText* m_StaticBin;
-	wxTextCtrl* m_TextctrlBinary;
+	wxTextCtrl* m_TextControlBinary;
 	wxCheckBox* m_CheckEdit;
 	wxStaticText* m_StaticAscii;
-	wxTextCtrl* m_TextctrlAscii;
+	wxTextCtrl* m_TextControlAscii;
 	wxStaticText* m_Static8bit;
-	wxTextCtrl* m_Textctrl8bit;
+	wxTextCtrl* m_TextControl8bit;
 	wxStaticText* m_Static16bit;
-	wxTextCtrl* m_Textctrl16bit;
+	wxTextCtrl* m_TextControl16bit;
 	wxStaticText* m_Static32bit;
-	wxTextCtrl* m_Textctrl32bit;
+	wxTextCtrl* m_TextControl32bit;
 	wxStaticText* m_Static64bit;
-	wxTextCtrl* m_Textctrl64bit;
+	wxTextCtrl* m_TextControl64bit;
 	wxStaticText* m_Staticfloat;
-	wxTextCtrl* m_Textctrlfloat;
+	wxTextCtrl* m_TextCotrolfloat;
 	wxStaticText* m_Staticdouble;
-	wxTextCtrl* m_Textctrldouble;
+	wxTextCtrl* m_TextControldouble;
 	wxCollapsiblePane* m_CollapsiblePaneTimeMachine;
 	wxCheckBox* m_CheckBoxLocal;
 	wxPanel* m_PanelTime;
 	wxStaticText* m_StaticTimeUTC;
-	wxSpinCtrl* m_SpinCtrlTimeUTC;
+	wxSpinCtrl* m_SpinControlTimeUTC;
 	wxStaticText* m_StaticTimeUnix;
-	wxTextCtrl* m_TextctrlTimeUnix;
+	wxTextCtrl* m_TextControlTimeUnix;
 	wxStaticText* m_StaticTimeUnix64;
-	wxTextCtrl* m_TextctrlTimeUnix64;
+	wxTextCtrl* m_TextControlTimeUnix64;
 	wxStaticText* m_StaticTimeFAT;
-	wxTextCtrl* m_TextctrlTimeFAT;
+	wxTextCtrl* m_TextControlTimeFAT;
 	wxStaticText* m_StaticTimeNTFS;
-	wxTextCtrl* m_TextctrlTimeNTFS;
+	wxTextCtrl* m_TextControlTimeNTFS;
 	wxStaticText* m_StaticTimeHFSp;
-	wxTextCtrl* m_TextctrlTimeHFSp;
+	wxTextCtrl* m_TextControlTimeHFSp;
 	wxStaticText* m_StaticTimeAPFS;
-	wxTextCtrl* m_TextctrlTimeAPFS;
+	wxTextCtrl* m_TextControlTimeAPFS;
 	wxCollapsiblePane* m_CollapsiblePaneExFAT;
 	wxStaticText* m_StaticTimeExFATCreation;
-	wxTextCtrl* m_TextctrlTimeExFATCreation;
+	wxTextCtrl* m_TextControlTimeExFATCreation;
 	wxStaticText* m_StaticTimeExFATModification;
-	wxTextCtrl* m_TextctrlTimeExFATModification;
+	wxTextCtrl* m_TextControlTimeExFATModification;
 	wxStaticText* m_StaticTimeExFATAccess;
-	wxTextCtrl* m_TextctrlTimeExFATAccess;
+	wxTextCtrl* m_TextControlTimeExFATAccess;
 
 	// Virtual event handlers, overide them in your derived class
 	virtual void OnUpdate(wxCommandEvent& event) { event.Skip(); }
@@ -382,22 +382,23 @@ class DataInterpreter : public InterpreterGui
 {
 public:
 	DataInterpreter(wxWindow* parent, int id = -1, wxPoint pos = wxDefaultPosition, wxSize size = wxSize(-1, -1), int style = wxTAB_TRAVERSAL)
-		:InterpreterGui(parent, id, pos, size, style) {
+		:InterpreterGui(parent, id, pos, size, style)
+	{
 #if wxCHECK_VERSION( 2,9,0 ) && defined( __WXOSX__ )	//onOSX, 8 px too small.
 		wxFont f = GetFont();
 		f.SetPointSize(10);
-		m_textctrl_binary->SetFont(f);
-		m_textctrl_ascii->SetFont(f);
-		m_textctrl_8bit->SetFont(f);
-		m_textctrl_16bit->SetFont(f);
-		m_textctrl_32bit->SetFont(f);
-		m_textctrl_64bit->SetFont(f);
-		m_textctrl_float->SetFont(f);
-		m_textctrl_double->SetFont(f);
+		m_TextControlBinary->SetFont(f);
+		m_TextControlAscii->SetFont(f);
+		m_TextControl8bit->SetFont(f);
+		m_TextControl16bit->SetFont(f);
+		m_TextControl32bit->SetFont(f);
+		m_TextControl64bit->SetFont(f);
+		m_TextCotrolfloat->SetFont(f);
+		m_TextControldouble->SetFont(f);
 #endif
 #ifdef HAS_A_TIME_MACHINE
-		m_collapsiblePane_TimeMachine->Enable(true);
-		m_collapsiblePane_TimeMachine->Show(true);
+		m_CollapsiblePaneTimeMachine->Enable(true);
+		m_CollapsiblePaneTimeMachine->Show(true);
 #ifdef HAS_A_EXFAT_TIME
 		m_collapsiblePaneExFAT->Enable(true);
 		m_collapsiblePaneExFAT->Show(true);
