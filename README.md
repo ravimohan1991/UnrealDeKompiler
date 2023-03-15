@@ -12,6 +12,7 @@ For online API visit [doxy-docs](https://ravimohan1991.github.io/UnrealDeKompile
 -  [Wikipedia](https://en.wikipedia.org/wiki/Decompiler)
 -  [wxWidgets cmake](https://github.com/Ravbug/UnityHubNative/tree/master)
 -  [Vivek's disassembler](https://github.com/vmt/udis86)
+-  [UT Package File Format](https://github.com/ravimohan1991/UnrealDeKompiler/files/10984062/UT_Package_File_Format.pdf) (from Unknown source)
 
 ## Crash course on gh-pages
 
