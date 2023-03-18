@@ -37,6 +37,43 @@
 #include <wx/window.h>
 #include <wx/popupwin.h>
 
+class UDKOffsetControl;
+class UDKElementControl;
+
+class UDKTextControl;
+
+#define ID_DEFAULT wxID_ANY // Default
+#define ID_HEXBOX 1000
+#define ID_TEXTBOX 1001
+
+/// <summary>
+/// The controller class for UDKHalo frame (written in UDKChief.h)
+/// </summary>
+class UDKHexEditorControl : public wxPanel
+{
+private:
+
+protected:
+	wxStaticText* m_StaticOffset;
+	wxStaticText* m_StaticAddress;
+	wxStaticText* m_StaticByteview;
+	wxStaticText* m_StaticNull;
+	UDKElementControl* m_HexControl;
+	UDKOffsetControl* m_OffsetControl;
+	UDKTextControl* m_TextControl;
+
+	// Virtual event handlers, overide them in your derived class
+	virtual void OnKeyboardChar(wxKeyEvent& event) { event.Skip(); }
+	virtual void OnResize(wxSizeEvent& event) { event.Skip(); }
+	virtual void OnOffsetScroll(wxScrollEvent& event) { event.Skip(); }
+
+public:
+	wxScrollBar* m_OffsetScrollReal;
+
+	UDKHexEditorControl(wxWindow* parent, wxWindowID id = ID_DEFAULT, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize(-1, -1), long style = wxTAB_TRAVERSAL);
+	~UDKHexEditorControl();
+};
+
 #define __idTagAddSelect__ 1500
 #define __idTagEdit__ 1501
 #define __idOffsetHex__ 1502
@@ -73,13 +110,20 @@ public:
 
 WX_DEFINE_ARRAY(TagElement*, ArrayOfTAG);
 
-class UDKControl : public wxScrolledWindow
+enum ControlTypes
+{ 
+	HexControl, 
+	TextControl, 
+	OffsetControl 
+};
+
+class UDKElementControl : public wxScrolledWindow
 {
 public:
-	UDKControl(wxWindow* parent)
+	UDKElementControl(wxWindow* parent)
 	{}
 
-	UDKControl(wxWindow* parent,
+	UDKElementControl(wxWindow* parent,
 		wxWindowID id,
 		const wxString& value = wxEmptyString,
 		const wxPoint& pos = wxDefaultPosition,
@@ -87,7 +131,7 @@ public:
 		long style = 0,
 		const wxValidator& validator = wxDefaultValidator);
 
-	~UDKControl();
+	~UDKElementControl();
 
 	wxChar CharAt(unsigned offset);
 	int LineCount(void)
@@ -99,7 +143,6 @@ public:
 	void DoMoveCaret();		// move the caret to m_Caret.x, m_Caret.y
 
 	void OnTagHideAll(void);
-	void ClearSelection(bool RePaint = true);
 
 	// Movement Support
 	virtual int CharacterPerLine(bool NoCache = false);
@@ -117,11 +160,36 @@ public:
 	virtual bool IsDenied(int x);
 	virtual bool IsDenied_NoCache(int x);
 	virtual bool IsAllowedChar(const char& chr);
-	//virtual	const char Filter(const char& ch);
 	int xCountDenied(int x);
 	void Clear(bool ClearDC = true, bool cursor_reset = true);
 	virtual void SetInsertionPoint(unsigned int pos);
 	virtual int ToVisiblePosition(int InternalPosition);
+
+	virtual int GetByteCount(void)
+	{
+		return m_Text.Length() / 2;
+	}
+
+	int GetInsertionPoint(void) 
+	{
+		return (m_Caret.x - xCountDenied(m_Caret.x)) + CharacterPerLine() * m_Caret.y;
+	}
+
+	virtual int ByteCapacity(void)
+	{
+		return m_Window.y * BytePerLine();
+	}
+
+	virtual int BytePerLine(void)
+	{
+		return CharacterPerLine() / 2;
+	}
+
+	void SetBinValue(wxString buffer, bool repaint = true);
+	void SetBinValue(char* buffer, int byte_count, bool repaint = true);
+
+	void SetSelection(unsigned start, unsigned end);
+	void ClearSelection(bool RePaint = true);
 
 public:
 	struct Selector : public TagElement 
@@ -131,19 +199,20 @@ public:
 	} m_Select;
 
 	// TAG Support and Selection
-	ArrayOfTAG m_TagArray;
+	ArrayOfTAG		m_TagArray;
+	wxArrayInt		m_ThinSeparationLines;
 
 protected:
 	wxPoint				m_Margin;	// the margin around the text (looks nicer)
 	wxPoint				m_Caret;	// position (in text coords) of the caret
 	wxPoint				m_Window;	// the size (in text coords) of the window
-	wxString			m_text;
 	wxTextAttr			m_HexDefaultAttr;
 	wxMutex				m_PaintMutex;
 	wxPoint				m_LastRightClickPosition;	//Holds last right click for TagEdit function
 	wxString			m_HexFormat;
 	wxString			m_Text;
 	wxSize				m_CharSize;	// size (in pixels) of one character
+	ControlTypes		m_ControlType;
 
 protected:
 	void ShowContextMenu(wxPoint pos);
@@ -158,14 +227,6 @@ public:
 	wxMemoryDC* m_InternalBufferDC;
 	wxBitmap* m_InternalBufferBMP;
 	bool		m_DrawCharByChar;
-
-	enum CtrlTypes 
-	{
-		HexControl, 
-		TextControl, 
-		OffsetControl 
-	};
-	CtrlTypes m_CtrlType;
 
 	// Caret Movement
 	wxCaret* m_Mycaret;
@@ -192,10 +253,10 @@ public:
 	}
 };
 
-class UDKOffsetControl : public UDKControl
+class UDKOffsetControl : public UDKElementControl
 {
 public:
-	UDKOffsetControl(wxWindow* parent) : UDKControl(parent)
+	UDKOffsetControl(wxWindow* parent) : UDKElementControl(parent)
 	{
 		m_OffsetMode = 'u';
 		m_OffsetPosition = 0;
@@ -209,7 +270,7 @@ public:
 		const wxSize& size = wxDefaultSize,
 		long style = 0,
 		const wxValidator& validator = wxDefaultValidator) :
-		UDKControl(parent, id, value, pos, size, style, validator)
+		UDKElementControl(parent, id, value, pos, size, style, validator)
 	{
 		wxCaret* caret = GetCaret();
 		if (caret)
@@ -217,7 +278,7 @@ public:
 		SetCaret(NULL);
 
 		//offset_mode='u';
-		m_CtrlType = OffsetControl;
+		m_ControlType = OffsetControl;
 		m_OffsetMode = MyConfigBase::Get()->Read(_T("LastOffsetMode"), wxT("u"))[0];
 		if (m_OffsetMode == 's')	// No force to sector mode at startup.
 		{
@@ -263,10 +324,87 @@ public:
 	char m_OffsetMode;
 	uint64_t m_OffsetPosition;
 	int m_BytePerLine;
-	int m_SectorSize;
+	int m_SectorSize;// don't do this? Write appropriate getter and setter
 
 private:
 	uint64_t m_OffsetLimit;
 	unsigned m_DigitCount;
 	inline void DrawCursorShadow(wxDC* dcTemp) {}
+};
+
+class UDKTextControl : public UDKElementControl
+{
+public:
+	//		wxHexTextCtrl():wxHexCtrl(){}
+	UDKTextControl(wxWindow * parent) : UDKElementControl(parent)
+	{
+		m_ControlType = TextControl;
+	}
+	UDKTextControl(wxWindow * parent,
+		wxWindowID id,
+		const wxString & value = wxEmptyString,
+		const wxPoint & pos = wxDefaultPosition,
+		const wxSize & size = wxDefaultSize,
+		long style = 0,
+		const wxValidator & validator = wxDefaultValidator) :
+		UDKElementControl(parent, id, value, pos, size, style, validator) 
+	{
+		m_ControlType = TextControl;
+		wxWindow::SetCursor(wxCURSOR_CHAR);
+
+		m_FontEnc = wxFONTENCODING_ALTERNATIVE;
+
+		wxString cp;
+		MyConfigBase::Get()->Read(_T("CharacterEncoding"), &cp, wxT("DOS CP437"));
+		PrepareCodepageTable(cp);
+	};
+
+	//wxArrayString GetSupportedEncodings(void);
+	wxString PrepareCodepageTable(wxString);
+	inline bool IsDenied()
+	{
+		return false;
+	}
+	inline bool IsDenied(int x)
+	{
+		return false;
+	}
+	inline int CharacterPerLine(void)
+	{
+		return m_Window.x;
+	}
+	inline int BytePerLine(void) 
+	{
+		return CharacterPerLine();
+	}
+	inline int GetByteCount(void) override
+	{
+		return m_Text.Length();
+	}
+	//void Replace(unsigned text_location, const wxChar & value, bool paint);
+	//void ChangeValue(const wxString & value, bool paint);
+	//void SetBinValue(char* buffer, int len, bool paint);
+	//void SetDefaultStyle(wxTextAttr & new_attr);		//For caret diet (to 1 pixel)
+	//int PixelCoordToInternalPosition(wxPoint mouse);
+	int ToVisiblePosition(int InternalPosition)
+	{
+		return InternalPosition;
+	}
+	int ToInternalPosition(int VisiblePosition)
+	{
+		return VisiblePosition;
+	}
+	//		bool IsAllowedChar(const unsigned char& chr);
+	//int GetInsertionPoint(void);
+	//void SetInsertionPoint(unsigned int pos);
+	//void ChangeSize();
+	//wxChar Filter(const unsigned char& chr);
+	//wxString FilterMBBuffer(const char* str, int len, int fontenc);
+	//virtual void DrawCursorShadow(wxDC * dcTemp);
+
+public:
+	wxString m_CodepageTable;
+	wxString m_Codepage;
+
+	wxFontEncoding m_FontEnc;
 };

@@ -37,6 +37,8 @@
 #include "UDKChief.h"
 #include "UDKControl.h"
 
+#include "UDKHexEditor.h"
+
 /** @file
  * @brief UDKApplication code
  *
@@ -46,6 +48,9 @@
 UDKHalo* UDKApplication::m_Frame = nullptr;
 
 wxIMPLEMENT_APP_CONSOLE(UDKApplication);
+
+// Global variable(s)
+int FakeBlockSize = 0;
 
 bool UDKApplication::OnInit()
 {
@@ -88,6 +93,13 @@ UDKHalo::UDKHalo()
 	Bind(wxEVT_MENU, &UDKHalo::OnAbout, this, wxID_ABOUT);
 	Bind(wxEVT_MENU, &UDKHalo::OnExit, this, wxID_EXIT);
 	Bind(wxEVT_MENU, &UDKHalo::OnOpenFile, this, wxID_OPEN);
+}
+
+UDKHexEditor* UDKHalo::GetActiveHexEditor(void)
+{
+	// TODO (death#1#): BUG : MyNotebook = warning RTTI symbol not found for class wxAuiFloatingFrame
+	int x = m_IDANotebook->GetSelection();
+	return x == wxNOT_FOUND ? NULL : static_cast<UDKHexEditor*>(m_IDANotebook->GetPage(x));
 }
 
 void UDKHalo::OnExit(wxCommandEvent& event)
@@ -487,10 +499,10 @@ InterpreterGui::InterpreterGui(wxWindow* parent, wxWindowID id, const wxPoint& p
 
 	numSizer->Add(m_Staticfloat, 0, wxALIGN_CENTER, 2);
 
-	m_TextCotrolfloat = new wxTextCtrl(this, ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-	m_TextCotrolfloat->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
+	m_TextControlfloat = new wxTextCtrl(this, ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+	m_TextControlfloat->SetFont(wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
 
-	numSizer->Add(m_TextCotrolfloat, 0, wxEXPAND, 1);
+	numSizer->Add(m_TextControlfloat, 0, wxEXPAND, 1);
 
 	m_Staticdouble = new wxStaticText(this, ID_DEFAULT, wxT("Double"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
 	m_Staticdouble->Wrap(-1);
@@ -704,5 +716,262 @@ InterpreterGui::~InterpreterGui()
 	m_CheckEdit->Disconnect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(InterpreterGui::OnCheckEdit), NULL, this);
 	m_CheckBoxLocal->Disconnect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(InterpreterGui::OnUpdate), NULL, this);
 	m_SpinControlTimeUTC->Disconnect(wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler(InterpreterGui::OnSpin), NULL, this);
+}
 
+void DataInterpreter::Set(wxMemoryBuffer buffer)
+{
+	// TODO (death#1#): Add exception if size smaller than expected
+	static wxMutex mutexset;
+#ifdef _DEBUG_MUTEX_
+	std::cout << "DataInterpeter Set() Mutex Locked" << std::endl;
+#endif
+	mutexset.Lock();
+
+	int size = buffer.GetDataLen();
+	if (size == 0)
+	{
+		wxBell();
+		Clear();
+		mutexset.Unlock();
+#ifdef _DEBUG_MUTEX_
+		std::cout << "DataInterpeter Set() Mutex UnLocked" << std::endl;
+#endif
+		return;
+	}
+	if (unidata.raw != NULL)
+		delete[] unidata.raw;
+	if (unidata.mraw != NULL)
+		delete[] unidata.mraw;
+	unidata.raw = new char[size];
+	unidata.mraw = new char[size];
+	memcpy(unidata.raw, buffer.GetData(), size);
+	memcpy(unidata.mraw, buffer.GetData(), size);
+	unidata.size = size;
+	for (int i = 0; i < unidata.size; i++)	// make mirror image of mydata
+		unidata.mraw[i] = unidata.raw[unidata.size - i - 1];
+
+	unidata.little.bit8 = reinterpret_cast<int8_t*>(unidata.raw);
+	unidata.little.ubit8 = reinterpret_cast<uint8_t*>(unidata.raw);
+	unidata.little.bit16 = reinterpret_cast<int16_t*>(unidata.raw);
+	unidata.little.ubit16 = reinterpret_cast<uint16_t*>(unidata.raw);
+	unidata.little.bit32 = reinterpret_cast<int32_t*>(unidata.raw);
+	unidata.little.ubit32 = reinterpret_cast<uint32_t*>(unidata.raw);
+	unidata.little.bit64 = reinterpret_cast<int64_t*>(unidata.raw);
+	unidata.little.ubit64 = reinterpret_cast<uint64_t*>(unidata.raw);
+	unidata.little.bitfloat = reinterpret_cast<float*>(unidata.raw);
+	unidata.little.bitdouble = reinterpret_cast<double*>(unidata.raw);
+	//unidata.little.bitf128 = reinterpret_cast< _Float128* >(unidata.raw);
+	unidata.little.raw = reinterpret_cast<char*>(unidata.raw);
+
+	unidata.big.bit8 = reinterpret_cast<int8_t*>(unidata.mraw + (size - 1));
+	unidata.big.ubit8 = reinterpret_cast<uint8_t*>(unidata.mraw + (size - 1));
+	unidata.big.bit16 = reinterpret_cast<int16_t*>(unidata.mraw + (size - 2));
+	unidata.big.ubit16 = reinterpret_cast<uint16_t*>(unidata.mraw + (size - 2));
+	unidata.big.bit32 = reinterpret_cast<int32_t*>(unidata.mraw + (size - 4));
+	unidata.big.ubit32 = reinterpret_cast<uint32_t*>(unidata.mraw + (size - 4));
+	unidata.big.bit64 = reinterpret_cast<int64_t*>(unidata.mraw + (size - 8));
+	unidata.big.ubit64 = reinterpret_cast<uint64_t*>(unidata.mraw + (size - 8));
+	unidata.big.bitfloat = reinterpret_cast<float*>(unidata.mraw + (size - 4));
+	unidata.big.bitdouble = reinterpret_cast<double*>(unidata.mraw + (size - 8));
+	//unidata.big.bitf128 = reinterpret_cast< _Float128* >(unidata.mraw+(size - 16));
+	unidata.big.raw = reinterpret_cast<char*>(unidata.raw);
+
+	wxCommandEvent event;
+	OnUpdate(event);
+
+	mutexset.Unlock();
+#ifdef _DEBUG_MUTEX_
+	std::cout << "DataInterpeter Set() Mutex UnLocked" << std::endl;
+#endif
+}
+
+void DataInterpreter::Clear(void)
+{
+	m_TextControlBinary->Clear();
+	m_TextControl8bit->Clear();
+	m_TextControl16bit->Clear();
+	m_TextControl32bit->Clear();
+	m_TextControl64bit->Clear();
+	m_TextControlfloat->Clear();
+	m_TextControldouble->Clear();
+}
+
+void DataInterpreter::OnUpdate(wxCommandEvent& event)
+{
+	unidata::endian* X = m_CheckBigEndian->GetValue() ? &unidata.big : &unidata.little;
+	int number = *X->ubit8;
+	wxString bn;
+
+	for (int i = 8; i > 0; i--)
+	{
+		(((number >> (i - 1)) & 0x01) == 1) ? bn << wxT("1") : bn << wxT("0");
+		//		Disabled shaping due edit function.
+		//			if( i == 5 )
+		//				bn.append(wxT(" "));
+	}
+	m_TextControlBinary->ChangeValue(bn);
+	if (m_CheckUnsigned->GetValue())
+	{
+		m_TextControlAscii->ChangeValue(AsciiSymbol(*X->ubit8));
+		m_TextControl8bit->ChangeValue(wxString::Format(wxT("%u"), *X->ubit8));
+		m_TextControl16bit->ChangeValue(wxString::Format(wxT("%u"), *X->ubit16));
+		m_TextControl32bit->ChangeValue(wxString::Format(wxT("%u"), *X->ubit32));
+		m_TextControl64bit->ChangeValue(wxString::Format("%" wxLongLongFmtSpec "u", *X->ubit64));
+	}
+	else
+	{
+		m_TextControlAscii->ChangeValue(AsciiSymbol(*X->ubit8));
+		m_TextControl8bit->ChangeValue(wxString::Format(wxT("%i"), *X->bit8));
+		m_TextControl16bit->ChangeValue(wxString::Format(wxT("%i"), *X->bit16));
+		m_TextControl32bit->ChangeValue(wxString::Format(wxT("%i"), *X->bit32));
+		m_TextControl64bit->ChangeValue(wxString::Format("%" wxLongLongFmtSpec "d", *X->bit64));
+	}
+	m_TextControlfloat->ChangeValue(wxString::Format(wxT("%.14g"), *X->bitfloat));
+	m_TextControldouble->ChangeValue(wxString::Format(wxT("%.14g"), *X->bitdouble));
+
+#ifdef HAS_A_TIME_MACHINE
+	m_textctrl_timeUnix->ChangeValue(FluxCapacitor(X, UNIX32));
+	m_textctrl_timeUnix64->ChangeValue(FluxCapacitor(X, UNIX64));
+	m_textctrl_timeNTFS->ChangeValue(FluxCapacitor(X, NTFS));
+	m_textctrl_timeAPFS->ChangeValue(FluxCapacitor(X, APFS));
+	m_textctrl_timeHFSp->ChangeValue(FluxCapacitor(X, HFSp));
+	m_textctrl_timeFAT->ChangeValue(FluxCapacitor(X, FAT));
+#ifdef HAS_A_EXFAT_TIME
+	m_textctrl_timeExFAT_Creation->ChangeValue(FluxCapacitor(X, exFAT_C));
+	m_textctrl_timeExFAT_Modification->ChangeValue(FluxCapacitor(X, exFAT_M));
+	m_textctrl_timeExFAT_Access->ChangeValue(FluxCapacitor(X, exFAT_A));
+#endif //exfat
+#endif // HAS_A_TIME_MACHINE
+}
+
+// TODO (death#1#): Enable Local need to disable UTC ...
+//Hide UTC +03's ?
+//UTC , Local Time Machine state need to remember
+//Silence those assertions!
+//Disable resize issue with Time Machine
+void DataInterpreter::OnSpin(wxSpinEvent& event)
+{
+	OnUpdate(event);
+}
+
+void DataInterpreter::OnTextEdit(wxKeyEvent& event)
+{
+	if ((event.GetKeyCode() == '0'
+		|| event.GetKeyCode() == '1'
+		|| event.GetKeyCode() == WXK_INSERT
+		//|| event.GetKeyCode() == WXK_DELETE
+		|| event.GetKeyCode() == WXK_END
+		|| event.GetKeyCode() == WXK_HOME
+		|| event.GetKeyCode() == WXK_LEFT
+		|| event.GetKeyCode() == WXK_RIGHT
+		//|| event.GetKeyCode() == WXK_BACK
+		)
+		&& m_CheckEdit->IsChecked())
+	{
+
+		event.Skip(); //make updates on binary text control
+
+		//if binary data filled properly, update other text controls
+		if (m_TextControlBinary->GetLineLength(0) == 8 && (event.GetKeyCode() == '1' || event.GetKeyCode() == '0'))
+		{
+			int cursorat = m_TextControlBinary->GetInsertionPoint();
+			if (event.GetKeyCode() == '1')
+				unidata.raw[0] |= (1 << (7 - cursorat));
+			else
+				unidata.raw[0] &= ~(1 << (7 - cursorat));
+
+			//unsigned long newlongbyte=0;
+			//char newbyte = static_cast<char>(newlongbyte & 0xFF);
+			wxMemoryBuffer buffer;
+			//buffer.AppendByte( newbyte );
+			buffer.AppendData(unidata.raw, unidata.size);
+			//if(unidata.size > 1)
+			//	buffer.AppendData( unidata.raw+1, unidata.size-1 );
+			Set(buffer);
+			m_TextControlBinary->SetInsertionPoint(cursorat);
+		}
+	}
+	else if (event.GetKeyCode() == WXK_RETURN && m_TextControlBinary->GetLineLength(0) == 8)
+	{
+		//Validation
+		unsigned long newlongbyte = 0;
+		m_TextControlBinary->GetValue().ToULong(&newlongbyte, 2);
+		char newbyte = static_cast<char>(newlongbyte & 0xFF);
+
+		UDKHexEditor* hx = static_cast<UDKHalo*>(GetParent())->GetActiveHexEditor();
+
+		hx->FileAddDiff(hx->CursorOffset(), &newbyte, 1);						// add write node to file
+		hx->Reload();	//Updates hex editor to show difference.
+
+		wxUpdateUIEvent eventx(UNREDO_EVENT);
+		GetEventHandler()->ProcessEvent(eventx);
+	}
+	else
+	{
+		wxBell();
+	}
+}
+
+void DataInterpreter::OnTextMouse(wxMouseEvent& event)
+{
+	if (event.ButtonDown()) //Just allowed left mouse, setted up by wxFormBuilder.
+	{
+		wxBell();
+	}
+	else
+	{
+		event.Skip();
+	}
+}
+
+wxString DataInterpreter::AsciiSymbol(unsigned char ch)
+{
+	static wxString AsciiTable[] = { "NUL","SOH","STX","ETX","EOT","ENQ","ACK","BEL","BS","HT","LF","VT",
+								"FF","CR","SO","SI","DLE","DC1","DC2","DC3","DC4","NAK","SYN","ETB",
+								"CAN","EM","SUB","ESC","FS","GS","RS","US","SP" };//32 SP means SPACE
+	if (ch <= 32)
+	{
+		return AsciiTable[ch];
+	}
+	else if (ch > 32 && ch < 127)
+	{
+		return wxString((char)ch);
+	}
+	else if (ch == 127)
+	{
+		return wxString("DEL");
+	}
+	return wxEmptyString;
+}
+
+void DataInterpreter::OnCheckEdit(wxCommandEvent& event)
+{
+	if (event.IsChecked())
+	{
+		m_TextControlBinary->SetFocus();
+		//m_textctrl_binary->SetInsertionPoint(0); //I think this is not needd
+
+// TODO (death#1#): Needed to activate INSERT mode when pressed to Edit check
+// TODO (death#1#): Instead change bits by mouse click!
+		wxKeyEvent emulate_insert(WXK_INSERT);
+		OnTextEdit(emulate_insert);
+
+		///Requires wxTE_MULTILINE!
+
+//		wxTextAttr at;
+//		m_textctrl_binary->GetStyle( 0, at );
+//		at.SetTextColour( *wxGREEN );
+//		m_textctrl_binary->SetStyle( 0,8, at );
+//		m_textctrl_binary->SetDefaultStyle( at );
+//		m_textctrl_binary->SetValue(m_textctrl_binary->GetValue());
+	}
+	else
+	{
+		//		wxTextAttr at;
+		//		m_textctrl_binary->GetStyle( 0, at );
+		//		at.SetBackgroundColour( *wxRED );
+		//		m_textctrl_binary->SetStyle( 0,8, at );
+		//		m_textctrl_binary->SetDefaultStyle( at );
+		//		m_textctrl_binary->SetValue(m_textctrl_binary->GetValue());
+	}
 }

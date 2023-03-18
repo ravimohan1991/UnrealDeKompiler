@@ -44,6 +44,7 @@ class DisassemblerPanel;
 class wxAuiNotebook;
 class wxCollapsiblePane;
 class wxSpinCtrl;
+class UDKHexEditor;
 
 /// <summary>
 /// The class corresponding to the main UDK application instance
@@ -98,6 +99,14 @@ public:
 	 * @see UDKHalo::OnAbout(wxCommandEvent& event)
 	 */
 	UDKHalo();
+
+	/**
+	 * @brief Get the active hex page
+	 *
+	 * From the variety of opened hex pages in m_IDANotebook \n
+	 * get the active one.
+	 */
+	UDKHexEditor* GetActiveHexEditor();
 
 private:
 	/**
@@ -312,6 +321,8 @@ public:
 #define ID_CHK_UNSIGNED 1038
 #define ID_CHK_BIGENDIAN 1039
 
+#define UNREDO_EVENT 50006
+
 /// <summary>
 /// Base class for DataInterpreter
 /// </summary>
@@ -334,7 +345,7 @@ protected:
 	wxStaticText* m_Static64bit;
 	wxTextCtrl* m_TextControl64bit;
 	wxStaticText* m_Staticfloat;
-	wxTextCtrl* m_TextCotrolfloat;
+	wxTextCtrl* m_TextControlfloat;
 	wxStaticText* m_Staticdouble;
 	wxTextCtrl* m_TextControldouble;
 	wxCollapsiblePane* m_CollapsiblePaneTimeMachine;
@@ -376,7 +387,7 @@ public:
 };
 
 /// <summary>
-/// The rightful interpreter of data
+/// The rightful interpreter of hex data
 /// </summary>
 class DataInterpreter : public InterpreterGui
 {
@@ -420,7 +431,8 @@ protected:
 	struct unidata
 	{
 		char* raw, * mraw;	//big endian and little endian
-		struct endian {
+		struct endian
+		{
 			int8_t* bit8;
 			int16_t* bit16;
 			int32_t* bit32;
