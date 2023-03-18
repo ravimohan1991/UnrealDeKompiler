@@ -419,7 +419,7 @@ void UDKElementControl::OnTagHideAll(void)
 	}
 }
 
-void UDKElementControl::SetInsertionPoint(unsigned int pos)
+void UDKElementControl::SetInsertionPoint(size_t pos)
 {
 	if (pos > m_Text.Length())
 	{
@@ -430,7 +430,7 @@ void UDKElementControl::SetInsertionPoint(unsigned int pos)
 	MoveCaret(wxPoint(pos % m_Window.x, pos / m_Window.x));
 }
 
-int UDKElementControl::ToVisiblePosition(int InternalPosition)
+size_t UDKElementControl::ToVisiblePosition(size_t InternalPosition)
 {
 	// I mean for this string on hex editor  "00 FC 05 C[C]" , while [] is cursor
 	if (CharacterPerLine() == 0)
@@ -438,8 +438,8 @@ int UDKElementControl::ToVisiblePosition(int InternalPosition)
 		return 0;					// Visible position is 8 but internal position is 11
 	}
 	
-	int y = InternalPosition / CharacterPerLine();
-	int x = InternalPosition - y * CharacterPerLine();
+	size_t y = InternalPosition / CharacterPerLine();
+	size_t x = InternalPosition - y * CharacterPerLine();
 	
 	for (int i = 0, denied = 0; i < m_Window.x; i++)
 	{
@@ -486,19 +486,19 @@ UDKHexEditorControl::UDKHexEditorControl(wxWindow* parent, wxWindowID id, const 
 
 	m_StaticOffset = new wxStaticText(this, ID_DEFAULT, _("Offset"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE);
 	m_StaticOffset->Wrap(-1);
-	m_StaticOffset->SetFont(wxFont(10, 70, 90, 90, false, wxT("sans")));
+	m_StaticOffset->SetFont(wxFont(10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("sans")));
 
 	fgSizerMain->Add(m_StaticOffset, 1, wxALIGN_CENTER_HORIZONTAL | wxALL, 0);
 
 	m_StaticAddress = new wxStaticText(this, ID_DEFAULT, _("Address"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
 	m_StaticAddress->Wrap(-1);
-	m_StaticAddress->SetFont(wxFont(10, 70, 90, 90, false, wxT("sans")));
+	m_StaticAddress->SetFont(wxFont(10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("sans")));
 
 	fgSizerMain->Add(m_StaticAddress, 1, wxALIGN_CENTER_HORIZONTAL | wxLEFT, 2);
 
 	m_StaticByteview = new wxStaticText(this, ID_DEFAULT, _("Byte View"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE);
 	m_StaticByteview->Wrap(-1);
-	m_StaticByteview->SetFont(wxFont(10, 70, 90, 90, false, wxT("sans")));
+	m_StaticByteview->SetFont(wxFont(10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("sans")));
 
 	fgSizerMain->Add(m_StaticByteview, 1, wxALIGN_CENTER_HORIZONTAL | wxALL, 0);
 
@@ -507,7 +507,7 @@ UDKHexEditorControl::UDKHexEditorControl(wxWindow* parent, wxWindowID id, const 
 	fgSizerMain->Add(m_StaticNull, 0, 0, 5);
 
 	m_OffsetControl = new UDKOffsetControl(this, ID_DEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0);
-	m_OffsetControl->SetFont(wxFont(10, 70, 90, 90, false, wxT("sans")));
+	m_OffsetControl->SetFont(wxFont(10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("sans")));
 	m_OffsetControl->SetMinSize(wxSize(104, 100));
 
 	fgSizerMain->Add(m_OffsetControl, 1, wxEXPAND | wxLEFT, 0);
@@ -518,7 +518,7 @@ UDKHexEditorControl::UDKHexEditorControl(wxWindow* parent, wxWindowID id, const 
 	fgSizerMain->Add(m_HexControl, 1, wxEXPAND, 2);
 
 	m_TextControl = new UDKTextControl(this, ID_TEXTBOX, wxEmptyString, wxDefaultPosition, wxSize(-1, -1), 0);
-	m_TextControl->SetFont(wxFont(10, 70, 90, 90, false, wxT("sans")));
+	m_TextControl->SetFont(wxFont(10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("sans")));
 	m_TextControl->SetMinSize(wxSize(45, 100));
 
 	fgSizerMain->Add(m_TextControl, 1, wxRIGHT | wxEXPAND, 2);

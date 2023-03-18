@@ -727,7 +727,7 @@ void DataInterpreter::Set(wxMemoryBuffer buffer)
 #endif
 	mutexset.Lock();
 
-	int size = buffer.GetDataLen();
+	size_t size = buffer.GetDataLen();
 	if (size == 0)
 	{
 		wxBell();
@@ -874,7 +874,7 @@ void DataInterpreter::OnTextEdit(wxKeyEvent& event)
 		//if binary data filled properly, update other text controls
 		if (m_TextControlBinary->GetLineLength(0) == 8 && (event.GetKeyCode() == '1' || event.GetKeyCode() == '0'))
 		{
-			int cursorat = m_TextControlBinary->GetInsertionPoint();
+			long cursorat = m_TextControlBinary->GetInsertionPoint();
 			if (event.GetKeyCode() == '1')
 				unidata.raw[0] |= (1 << (7 - cursorat));
 			else

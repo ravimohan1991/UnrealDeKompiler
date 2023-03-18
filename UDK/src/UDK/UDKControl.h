@@ -162,8 +162,8 @@ public:
 	virtual bool IsAllowedChar(const char& chr);
 	int xCountDenied(int x);
 	void Clear(bool ClearDC = true, bool cursor_reset = true);
-	virtual void SetInsertionPoint(unsigned int pos);
-	virtual int ToVisiblePosition(int InternalPosition);
+	virtual void SetInsertionPoint(size_t pos);
+	virtual size_t ToVisiblePosition(size_t InternalPosition);
 
 	virtual int GetByteCount(void)
 	{
@@ -361,11 +361,11 @@ public:
 
 	//wxArrayString GetSupportedEncodings(void);
 	wxString PrepareCodepageTable(wxString);
-	inline bool IsDenied()
+	inline bool IsDenied() override
 	{
 		return false;
 	}
-	inline bool IsDenied(int x)
+	inline bool IsDenied(int x) override
 	{
 		return false;
 	}
@@ -373,7 +373,7 @@ public:
 	{
 		return m_Window.x;
 	}
-	inline int BytePerLine(void) 
+	inline int BytePerLine(void) override
 	{
 		return CharacterPerLine();
 	}
