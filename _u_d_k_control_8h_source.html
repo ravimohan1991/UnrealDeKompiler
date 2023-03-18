@@ -237,8 +237,8 @@ $(function() {
 <div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> IsAllowedChar(<span class="keyword">const</span> <span class="keywordtype">char</span>&amp; chr);</div>
 <div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>    <span class="keywordtype">int</span> xCountDenied(<span class="keywordtype">int</span> x);</div>
 <div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    <span class="keywordtype">void</span> Clear(<span class="keywordtype">bool</span> ClearDC = <span class="keyword">true</span>, <span class="keywordtype">bool</span> cursor_reset = <span class="keyword">true</span>);</div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetInsertionPoint(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> pos);</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    <span class="keyword">virtual</span> <span class="keywordtype">int</span> ToVisiblePosition(<span class="keywordtype">int</span> InternalPosition);</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetInsertionPoint(<span class="keywordtype">size_t</span> pos);</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> ToVisiblePosition(<span class="keywordtype">size_t</span> InternalPosition);</div>
 <div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span> </div>
 <div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>    <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetByteCount(<span class="keywordtype">void</span>)</div>
 <div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>    {</div>
@@ -432,20 +432,20 @@ $(function() {
 <div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span> </div>
 <div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>    <span class="comment">//wxArrayString GetSupportedEncodings(void);</span></div>
 <div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>    wxString <a class="code hl_function" href="class_u_d_k_text_control.html#af491935e1fa6156ac433c247bf0855b6">PrepareCodepageTable</a>(wxString);</div>
-<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>    <span class="keyword">inline</span> <span class="keywordtype">bool</span> IsDenied()</div>
-<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>    {</div>
+<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>    <span class="keyword">inline</span> <span class="keywordtype">bool</span> IsDenied()<span class="keyword"> override</span></div>
+<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span><span class="keyword">    </span>{</div>
 <div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>    }</div>
-<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>    <span class="keyword">inline</span> <span class="keywordtype">bool</span> IsDenied(<span class="keywordtype">int</span> x)</div>
-<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>    {</div>
+<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>    <span class="keyword">inline</span> <span class="keywordtype">bool</span> IsDenied(<span class="keywordtype">int</span> x)<span class="keyword"> override</span></div>
+<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span><span class="keyword">    </span>{</div>
 <div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>    }</div>
 <div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>    <span class="keyword">inline</span> <span class="keywordtype">int</span> CharacterPerLine(<span class="keywordtype">void</span>)</div>
 <div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>    {</div>
 <div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>        <span class="keywordflow">return</span> m_Window.x;</div>
 <div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>    }</div>
-<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>    <span class="keyword">inline</span> <span class="keywordtype">int</span> BytePerLine(<span class="keywordtype">void</span>) </div>
-<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>    {</div>
+<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>    <span class="keyword">inline</span> <span class="keywordtype">int</span> BytePerLine(<span class="keywordtype">void</span>)<span class="keyword"> override</span></div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span><span class="keyword">    </span>{</div>
 <div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>        <span class="keywordflow">return</span> CharacterPerLine();</div>
 <div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span>    }</div>
 <div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>    <span class="keyword">inline</span> <span class="keywordtype">int</span> GetByteCount(<span class="keywordtype">void</span>)<span class="keyword"> override</span></div>
