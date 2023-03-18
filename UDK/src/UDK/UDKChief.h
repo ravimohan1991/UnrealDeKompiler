@@ -404,7 +404,7 @@ public:
 		m_TextControl16bit->SetFont(f);
 		m_TextControl32bit->SetFont(f);
 		m_TextControl64bit->SetFont(f);
-		m_TextCotrolfloat->SetFont(f);
+		m_TextControlfloat->SetFont(f);
 		m_TextControldouble->SetFont(f);
 #endif
 #ifdef HAS_A_TIME_MACHINE

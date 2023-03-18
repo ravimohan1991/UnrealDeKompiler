@@ -1,6 +1,21 @@
 #include "UDKFile.h"
 #include <wx/arrimpl.cpp>
 
+#ifndef __WXMSW__
+	#include <sys/ptrace.h>
+#endif
+
+#if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
+	#include <sys/param.h>// defines BSD
+#endif
+
+#if defined(__WXMAC__) || defined(BSD)
+	#define PTRACE_ATTACH PT_ATTACH
+	#define PTRACE_DETACH PT_DETACH
+	#define PTRACE_PEEKTEXT PT_READ_I
+	#define PTRACE_POKETEXT PT_WRITE_I
+#endif
+
 WX_DEFINE_OBJARRAY(ArrayOfNode);
 
 int FDtoBlockSize(int FD)
@@ -425,20 +440,22 @@ bool FAL::OSDependedOpen(wxFileName& myfilename, FileAccessMode FAM, unsigned Fo
 }
 
 #elif defined( __WXOSX__ )
-bool FAL::OSDependedOpen(wxFileName& myfilename, FileAccessMode FAM, unsigned ForceBlockRW) {
+bool UDKFile::OSDependedOpen(wxFileName& myfilename, FileAccessMode FAM, unsigned ForceBlockRW)
+{
 	//Handling Memory Process Debugging Here
 	if (myfilename.GetFullPath().Lower().StartsWith(wxT("-pid="))) {
 		long int a;
 		myfilename.GetFullPath().Mid(5).ToLong(&a);
-		ProcessID = a;
-		RAMProcess = true;
-		if ((ptrace(PTRACE_ATTACH, ProcessID, NULL, NULL)) < 0) {
-			wxMessageBox(wxString::Format(_("Process ID:%d cannot be open."), ProcessID), _("Error"), wxOK | wxICON_ERROR);
-			ProcessID = -1;
+		m_ProcessID = a;
+		m_RAMProcess = true;
+		if ((ptrace(PTRACE_ATTACH, m_ProcessID, NULL, NULL)) < 0)
+		{
+			wxMessageBox(wxString::Format(_("Process ID:%d cannot be open."), m_ProcessID), _("Error"), wxOK | wxICON_ERROR);
+			m_ProcessID = -1;
 			return false;
 		}
-		waitpid(ProcessID, NULL, WUNTRACED);
-		BlockRWSize = 4;
+		waitpid(m_ProcessID, NULL, WUNTRACED);
+		m_BlockRWSize = 4;
 		FAM == ReadOnly;
 		return true;
 	}
@@ -447,7 +464,7 @@ bool FAL::OSDependedOpen(wxFileName& myfilename, FileAccessMode FAM, unsigned Fo
 		wxMessageBox(wxString(_("File is not readable by permissions.")) + wxT("\n") + _("Please change file permissons or run this program with root privileges"), _("Error"), wxOK | wxICON_ERROR);
 		return false;
 	}
-	return FALOpen(myfilename, FAM, ForceBlockRW);
+	return UDKFileOpen(myfilename, FAM, ForceBlockRW);
 }
 #endif
 
@@ -589,7 +606,7 @@ long UDKFile::ReadR(unsigned char* buffer, unsigned size, uint64_t from, ArrayOf
 #ifdef __WXMSW__
 					ReadProcessMemory(m_HDevice, addr, &word, sizeof(word), &written);
 #else
-					word = ptrace(PTRACE_PEEKTEXT, ProcessID, addr, 0);
+					word = ptrace(PTRACE_PEEKTEXT, m_ProcessID, addr, 0);
 #endif
 					memcpy(bfr + rd, &word, 4);
 					rd += 4;
@@ -654,12 +671,14 @@ wxFileOffset UDKFile::Length(int PatchIndice)
 		return m_BlockRWSize * m_BlockRWCount;
 
 #ifdef __WXGTK__
-	if (the_file.GetFullPath() == wxT("/dev/mem")) {
+	if (the_file.GetFullPath() == wxT("/dev/mem"))
+	{
 		return 512 * MB;
 	}
 #endif
 #ifdef __WXMAC__
-	if (the_file.GetFullPath().StartsWith(wxT("/dev/disk"))) {
+	if (m_TheFile.GetFullPath().StartsWith(wxT("/dev/disk")))
+	{
 		int block_size = 0;
 		int64_t block_count = 0;
 		if (ioctl(fd(), DKIOCGETBLOCKSIZE, &block_size) || ioctl(fd(), DKIOCGETBLOCKCOUNT, &block_count))
@@ -900,7 +919,7 @@ bool UDKFile::Apply(void)
 #ifdef __WXMSW__
 							ReadProcessMemory(m_HDevice, addr, &word, sizeof(word), &written);
 #else
-							word = ptrace(PTRACE_PEEKTEXT, ProcessID, addr, 0);
+							word = ptrace(PTRACE_PEEKTEXT, m_ProcessID, addr, 0);
 #endif
 							memcpy(bfr + rd, &word, 4);
 							rd += 4;
@@ -938,7 +957,7 @@ bool UDKFile::Apply(void)
 #ifdef __WXMSW__
 							if (WriteProcessMemory(m_HDevice, addr, &word, sizeof(word), &written) == 0)
 #else
-							if (ptrace(PTRACE_POKETEXT, ProcessID, addr, word) == -1)
+							if (ptrace(PTRACE_POKETEXT, m_ProcessID, addr, word) == -1)
 #endif
 								wxMessageBox(_("Error on Write operation to Process RAM"), _("FATAL ERROR"));
 							wr += 4;

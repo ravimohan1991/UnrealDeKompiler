@@ -31,11 +31,13 @@
 #include <wx/dynarray.h>
 #include <stdint.h>
 
- //this utility uses old ECS format.
+//this utility uses old ECS format.
 #define KB 1024LL
 #define MB 1048576LL
 #define GB 1073741824LL
 #define TB 1099511627776LL
+
+//defines for Mac
 
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
 #include <sys/param.h>		// for BSD

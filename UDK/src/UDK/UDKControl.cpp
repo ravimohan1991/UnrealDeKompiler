@@ -1,4 +1,4 @@
-﻿#include "UDKControl.h"
+#include "UDKControl.h"
 
 #include <wx/encconv.h>
 #include <wx/fontmap.h>
@@ -1016,7 +1016,7 @@ wxString UDKTextControl::PrepareCodepageTable(wxString codepage)
 				"\xAE\xA9\x2122\x266A\xAC\xA6....\x215B\x215C\x215D\x215E\x2126\xC6\x0110\xAA"\
 				"\x0126.\x0132\x013F\x0141\xD8\x0152\xBA\xDE\x0166\x014A\x0149\x0138\xE6\x0111"\
 				"\xF0\x0127\x0131\x0133\x0140\x0142\xF8\x0153\xDF\xFE\x0167\x014B.");
-			return CodepageTable = newCP;
+			return m_CodepageTable = newCP;
 		}
 
 
@@ -1085,11 +1085,12 @@ wxString UDKTextControl::PrepareCodepageTable(wxString codepage)
 			for (int i = 0; i < 9; i++)
 				newCP[a[i]] = b[i];
 		}
-		else if (codepage.Find(wxT("CP932")) != wxNOT_FOUND) FontEnc = wxFONTENCODING_CP932;//ShiftJS
-		else if (codepage.Find(wxT("CP936")) != wxNOT_FOUND) FontEnc = wxFONTENCODING_CP936;//GBK
-		else if (codepage.Find(wxT("CP949")) != wxNOT_FOUND) FontEnc = wxFONTENCODING_CP949; //EUC-KR
-		else if (codepage.Find(wxT("CP950")) != wxNOT_FOUND) FontEnc = wxFONTENCODING_CP950;//BIG5
-		else {
+		else if (codepage.Find(wxT("CP932")) != wxNOT_FOUND) m_FontEnc = wxFONTENCODING_CP932;//ShiftJS
+		else if (codepage.Find(wxT("CP936")) != wxNOT_FOUND) m_FontEnc = wxFONTENCODING_CP936;//GBK
+		else if (codepage.Find(wxT("CP949")) != wxNOT_FOUND) m_FontEnc = wxFONTENCODING_CP949; //EUC-KR
+		else if (codepage.Find(wxT("CP950")) != wxNOT_FOUND) m_FontEnc = wxFONTENCODING_CP950;//BIG5
+		else
+		{
 			for (unsigned i = 0; i <= 0xFF; i++)
 				bf[i] = (i < 0x20 || i == 0x7F || i == 0xAD) ? '.' : i;
 
@@ -1447,19 +1448,19 @@ wxString UDKTextControl::PrepareCodepageTable(wxString codepage)
 		newCP[0xF7] = wxChar(0x0153);
 	}
 
-	else if (codepage.Find(wxT("UTF8 ")) != wxNOT_FOUND)		FontEnc = wxFONTENCODING_UTF8;
-	else if (codepage.Find(wxT("UTF16 ")) != wxNOT_FOUND)		FontEnc = wxFONTENCODING_UTF16;
-	else if (codepage.Find(wxT("UTF16LE")) != wxNOT_FOUND)	FontEnc = wxFONTENCODING_UTF16LE;
-	else if (codepage.Find(wxT("UTF16BE")) != wxNOT_FOUND)	FontEnc = wxFONTENCODING_UTF16BE;
-	else if (codepage.Find(wxT("UTF32 ")) != wxNOT_FOUND)		FontEnc = wxFONTENCODING_UTF32;
-	else if (codepage.Find(wxT("UTF32LE")) != wxNOT_FOUND)	FontEnc = wxFONTENCODING_UTF32LE;
-	else if (codepage.Find(wxT("UTF32BE")) != wxNOT_FOUND)	FontEnc = wxFONTENCODING_UTF32BE;
-	else if (codepage.Find(wxT("GB2312")) != wxNOT_FOUND)	FontEnc = wxFONTENCODING_GB2312;
-	else if (codepage.Find(wxT("GBK")) != wxNOT_FOUND)		FontEnc = wxFONTENCODING_CP936;
-	else if (codepage.Find(wxT("Shift JIS")) != wxNOT_FOUND)FontEnc = wxFONTENCODING_SHIFT_JIS;//CP932
-	else if (codepage.Find(wxT("Big5")) != wxNOT_FOUND)		FontEnc = wxFONTENCODING_BIG5;//CP950
-	else if (codepage.Find(wxT("EUC-JP")) != wxNOT_FOUND)	FontEnc = wxFONTENCODING_EUC_JP;
-	else if (codepage.Find(wxT("EUC-KR")) != wxNOT_FOUND)	FontEnc = wxFONTENCODING_CP949; //EUC-KR
+	else if (codepage.Find(wxT("UTF8 ")) != wxNOT_FOUND)		m_FontEnc = wxFONTENCODING_UTF8;
+	else if (codepage.Find(wxT("UTF16 ")) != wxNOT_FOUND)		m_FontEnc = wxFONTENCODING_UTF16;
+	else if (codepage.Find(wxT("UTF16LE")) != wxNOT_FOUND)	m_FontEnc = wxFONTENCODING_UTF16LE;
+	else if (codepage.Find(wxT("UTF16BE")) != wxNOT_FOUND)	m_FontEnc = wxFONTENCODING_UTF16BE;
+	else if (codepage.Find(wxT("UTF32 ")) != wxNOT_FOUND)		m_FontEnc = wxFONTENCODING_UTF32;
+	else if (codepage.Find(wxT("UTF32LE")) != wxNOT_FOUND)	m_FontEnc = wxFONTENCODING_UTF32LE;
+	else if (codepage.Find(wxT("UTF32BE")) != wxNOT_FOUND)	m_FontEnc = wxFONTENCODING_UTF32BE;
+	else if (codepage.Find(wxT("GB2312")) != wxNOT_FOUND)	m_FontEnc = wxFONTENCODING_GB2312;
+	else if (codepage.Find(wxT("GBK")) != wxNOT_FOUND)		m_FontEnc = wxFONTENCODING_CP936;
+	else if (codepage.Find(wxT("Shift JIS")) != wxNOT_FOUND)m_FontEnc = wxFONTENCODING_SHIFT_JIS;//CP932
+	else if (codepage.Find(wxT("Big5")) != wxNOT_FOUND)		m_FontEnc = wxFONTENCODING_BIG5;//CP950
+	else if (codepage.Find(wxT("EUC-JP")) != wxNOT_FOUND)	m_FontEnc = wxFONTENCODING_EUC_JP;
+	else if (codepage.Find(wxT("EUC-KR")) != wxNOT_FOUND)	m_FontEnc = wxFONTENCODING_CP949; //EUC-KR
 	//	else if(codepage.StartsWith(wxT("EUC-CN")))		FontEnc=wxFONTENCODING_GB2312;
 	//else if(codepage.Find(wxT("Linux Bulgarian")) != wxNOT_FOUND )		FontEnc=wxFONTENCODING_BULGARIAN;
 #endif // !_MSC_VER
