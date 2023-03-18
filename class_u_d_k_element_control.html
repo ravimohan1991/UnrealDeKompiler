@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.6"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>UnrealDeKompiler: UDKControl::Selector Struct Reference</title>
+<title>UnrealDeKompiler: UDKElementControl Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -67,28 +67,65 @@ $(function() {
 </div>
 </div>
 
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><a class="el" href="class_u_d_k_control.html">UDKControl</a></li><li class="navelem"><a class="el" href="struct_u_d_k_control_1_1_selector.html">Selector</a></li>  </ul>
-</div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="struct_u_d_k_control_1_1_selector-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">UDKControl::Selector Struct Reference</div></div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_u_d_k_element_control-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">UDKElementControl Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="_u_d_k_control_8h_source.html">UDKControl.h</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for UDKControl::Selector:</div>
+Inheritance diagram for UDKElementControl:</div>
 <div class="dyncontent">
  <div class="center">
-  <img src="struct_u_d_k_control_1_1_selector.png" usemap="#UDKControl::Selector_map" alt=""/>
-  <map id="UDKControl::Selector_map" name="UDKControl::Selector_map">
-<area href="class_tag_element.html" alt="TagElement" shape="rect" coords="0,0,131,24"/>
+  <img src="class_u_d_k_element_control.png" usemap="#UDKElementControl_map" alt=""/>
+  <map id="UDKElementControl_map" name="UDKElementControl_map">
+<area href="class_u_d_k_offset_control.html" alt="UDKOffsetControl" shape="rect" coords="0,112,122,136"/>
+<area href="class_u_d_k_text_control.html" alt="UDKTextControl" shape="rect" coords="132,112,254,136"/>
   </map>
 </div></div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_u_d_k_element_control_1_1_selector.html">Selector</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ab770c494a9c18fbb777168c07725c82c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_element_control.html#ab770c494a9c18fbb777168c07725c82c">RePaint</a> (void)</td></tr>
+<tr class="separator:ab770c494a9c18fbb777168c07725c82c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>summary&gt; Wrapper for Portable vs Registry configbase.<br  />
+if there are wxHexEditor.cfg file exits on current path, wxHexEditor switches to portable version. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab770c494a9c18fbb777168c07725c82c" name="ab770c494a9c18fbb777168c07725c82c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab770c494a9c18fbb777168c07725c82c">&#9670;&#160;</a></span>RePaint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UDKElementControl::RePaint </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Directly creating contentx at dc creates flicker!</p>
+<p>delete dcTemp;</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>UDK/src/UDK/<a class="el" href="_u_d_k_control_8h_source.html">UDKControl.h</a></li>
+<li>UDK/src/UDK/UDKControl.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

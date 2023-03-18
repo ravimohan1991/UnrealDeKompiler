@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['getmainframe_0',['GetMainFrame',['../class_u_d_k_application.html#a94d2822927a8814ff2c2327f73b44d4e',1,'UDKApplication']]]
+  ['clear_0',['Clear',['../class_u_d_k_hex_editor.html#ad393ee612d52bc9e24571defa9f9bef0',1,'UDKHexEditor']]]
 ];

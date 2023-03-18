@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['infopanel_0',['InfoPanel',['../class_info_panel.html',1,'']]],
-  ['infopanelgui_1',['InfoPanelGui',['../class_info_panel_gui.html',1,'']]],
-  ['interpretergui_2',['InterpreterGui',['../class_interpreter_gui.html',1,'']]]
+  ['fileadddiff_0',['FileAddDiff',['../class_u_d_k_hex_editor.html#a928d5bb96952458217bec698b489b025',1,'UDKHexEditor']]]
 ];

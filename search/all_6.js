@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['prepareaui_0',['PrepareAUI',['../class_u_d_k_halo.html#a17e477ee2d35d3ad05af572007f90e65',1,'UDKHalo']]]
+  ['loadfromoffset_0',['LoadFromOffset',['../class_u_d_k_hex_editor.html#ad12aaa00f1e2159ba85ab27125712f88',1,'UDKHexEditor']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['setvalue_0',['SetValue',['../class_u_d_k_offset_control.html#a157053af33513c8c0f9b0cb6533b7fb4',1,'UDKOffsetControl']]]
+  ['injectionpatcher_0',['InjectionPatcher',['../class_u_d_k_file.html#ac9ed4c7e786c15483a9f73bc0ede3ab2',1,'UDKFile']]]
 ];
