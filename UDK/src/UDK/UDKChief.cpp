@@ -139,6 +139,73 @@ void UDKHalo::OnOpenFile(wxCommandEvent& event)
 	}
 }
 
+UDKHexEditor* UDKHalo::OpenFile(wxFileName filename, bool openAtRight)
+{
+	UDKHexEditor *x = new UDKHexEditor(m_IDANotebook, -1, nullptr, nullptr, m_FileInfoPanel, nullptr, m_DisassemblerPanel, nullptr);
+	x->Hide();//Hiding hex editor for avoiding visual artifacts on loading file...
+
+	if(!filename.GetName().StartsWith(wxT("-buf")) && !filename.GetName().StartsWith(wxT("-pid")))
+		if(filename.IsRelative()) //Make Relative path to Absolute
+			filename.Normalize();
+
+	if(x->FileOpen(filename))
+	{
+		MyNotebook->AddPage( x, x->GetFileName().GetFullName(), true );
+		x->Show();
+		if(openAtRight)
+			MyNotebook->Split( MyNotebook->GetSelection(), wxRIGHT);
+
+		bool autoShowTagsSwitch;
+		myConfigBase::Get()->Read( _T("AutoShowTagPanel"), &autoShowTagsSwitch, true );
+
+		//Detect from file name if we are opening a RAM Process:
+		if( (x->MainTagArray.Count() > 0 && autoShowTagsSwitch) || filename.GetFullPath().Lower().StartsWith( wxT("-pid=")) ) {
+			MyAUI->GetPane(MyTagPanel).Show( true );
+			MyAUI->Update();
+			}
+
+		int found = -1;
+		//For loop updates Open Recent Menu properly.
+		for( unsigned i=0; i < MyFileHistory->GetCount() ; i++)
+			if( MyFileHistory->GetHistoryFile( i ) == filename.GetFullPath() )
+				found = i;
+
+		if( found != -1 )
+			MyFileHistory->RemoveFileFromHistory( found );
+		MyFileHistory->AddFileToHistory( filename.GetFullPath() );
+		MyFileHistory->Save( *(myConfigBase::Get()) );
+		myConfigBase::Get()->Flush();
+//		mbar->Check(idFileRO, x->GetFileAccessMode()==FAL::FileAccessMode::ReadOnly);
+
+		if( wxFileExists( filename.GetFullPath().Append(wxT(".md5")) ) )
+			if(wxYES==wxMessageBox(_("MD5 File detected. Do you request MD5 verification?"), _("Checksum File Detected"), wxYES_NO|wxNO_DEFAULT, this ) )
+				x->HashVerify( filename.GetFullPath().Append(wxT(".md5")) );
+		if( wxFileExists( filename.GetFullPath().Append(wxT(".sha1")) ) )
+			if(wxYES==wxMessageBox(_("SHA1 File detected. Do you request SHA1 verification?"), _("Checksum File Detected"), wxYES_NO|wxNO_DEFAULT, this ))
+				x->HashVerify( filename.GetFullPath().Append(wxT(".sha1")) );
+		if( wxFileExists( filename.GetFullPath().Append(wxT(".sha256")) ) )
+			if(wxYES==wxMessageBox(_("SHA256 File detected. Do you request SHA256 verification?"), _("Checksum File Detected"), wxYES_NO|wxNO_DEFAULT, this ))
+				x->HashVerify( filename.GetFullPath().Append(wxT(".sha256")) );
+
+#if _FSWATCHER_
+		if(x->GetFileType()==FAL::FAL_File) {
+			//file_watcher->Add( filename );
+			file_watcher->Add( filename, wxFSW_EVENT_MODIFY );
+			file_watcher->Connect(wxEVT_FSWATCHER, wxFileSystemWatcherEventHandler(HexEditor::OnFileModify), NULL, x);
+			}
+		else {
+			std::cout << "File_watcher event is null! File Watcher is not working!" << std::endl;
+			}
+#endif // _FSWATCHER_
+		ActionEnabler();
+		return x;
+		}
+	else {
+		x->Destroy();
+		return NULL;
+		}
+	}
+
 void UDKHalo::PrepareAUI(void)
 {
 	m_PaneManager = new wxAuiManager(this);

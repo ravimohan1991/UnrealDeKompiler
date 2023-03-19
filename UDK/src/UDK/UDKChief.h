@@ -108,6 +108,13 @@ public:
 	 */
 	UDKHexEditor* GetActiveHexEditor();
 
+	/**
+	 * @brief Opens the specified file for analysis
+	 *
+	 * @see UDKHalo::OnOpenFile(wxCommandEvent& event)
+	 */
+	UDKHexEditor* OpenFile(wxFileName filename, bool openAtRight);
+
 private:
 	/**
 	 * @brief Hello entry callback

@@ -3,6 +3,51 @@
 
 extern int FakeBlockSize;
 
+UDKHexEditor::UDKHexEditor(wxWindow* parent,
+						int id,
+						wxStatusBar *statbar_,
+						DataInterpreter *interpreter_,
+						InfoPanel *infopanel_,
+						TagPanel *tagpanel_,
+						DisassemblerPanel *dasmpanel_,
+						CopyMaker *copy_mark_,
+						wxFileName* myfilename_,
+						const wxPoint& pos,
+						const wxSize& size,
+						long style ):
+	UDKHexEditorControl(parent, id, pos, size, wxTAB_TRAVERSAL),
+	//statusbar(statbar_),
+	m_DataInterpreter(interpreter_),
+	m_PanelOfInformation(infopanel_),
+	//tagpanel(tagpanel_),
+	m_DisassemblerPanel(dasmpanel_)
+	//copy_mark(copy_mark_)
+{
+	m_ComparatorHexEditor = nullptr;
+
+	// Here, code praying to the GOD for protecting our open file from wxHexEditor's bugs and other things.
+	// This is really crucial step! Be adviced to not remove it, even if you don't believer.
+	printf("Rahman ve Rahim olan Allah'ın adıyla.\n");
+
+	m_FileInMicroscope = nullptr;
+
+#ifndef DO_NOT_USE_THREAD_FOR_SCROLL
+	//myscrollthread = NULL;
+#endif
+
+	if( myfilename_ != NULL )
+	{
+		if(!FileOpen(*myfilename_ ))
+		{
+		}
+	}
+
+	//offset_scroll->Enable( true );
+	//Dynamic_Connector();
+	//BlockSelectOffset = -1;
+	//MouseCapture = false;
+}
+
 bool UDKHexEditor::FileAddDiff(int64_t start_byte, const char* data, int64_t size, bool injection)
 {
 	if (m_FileInMicroscope->m_FileLock)
@@ -51,6 +96,156 @@ void UDKHexEditor::Clear(bool RePaint, bool cursor_reset)
 	m_HexControl->Clear(RePaint, cursor_reset);
 	m_TextControl->Clear(RePaint, cursor_reset);
 	m_OffsetControl->Clear(RePaint, cursor_reset);
+}
+
+bool UDKHexEditor::FileOpen(wxFileName& myfilename)
+{
+	if(m_FileInMicroscope != nullptr)
+	{
+		wxLogError(_("Critical Error. File pointer is not empty!"));
+		return false;
+	}
+
+	//Windows Device Loader
+#ifdef __WXMSW__
+	//if File is Windows device file! Let pass it and process under FAM
+	if( m_FileInMicroscope.GetFullPath().StartsWith( wxT(".:"))
+		  || m_FileInMicroscope.GetFullPath().StartsWith( wxT("\\Device\\Harddisk") ))
+	{
+		m_FileInMicroscope = new FAL( myfilename ); //OpenDevice
+		if(m_FileInMicroscope->IsOpened())
+		{
+#ifndef DO_NOT_USE_THREAD_FOR_SCROLL
+			//myscrollthread = new scrollthread(0,this);
+#endif
+//			copy_mark = new copy_maker();
+			offset_ctrl->SetOffsetLimit( FileLength() );
+			sector_size = FDtoBlockSize( GetFD() );//myfile->GetBlockSize();
+			LoadFromOffset(0, true);
+			SetLocalHexInsertionPoint(0);
+			return true;
+		}
+		else
+		{
+			wxMessageBox(_("File cannot open."),_("Error"), wxOK|wxICON_ERROR, this);
+			return false;
+		}
+	}
+	else
+#endif
+	if (myfilename.GetSize( ) < 50*MB && myfilename.IsFileWritable())
+	{
+		m_FileInMicroscope = new UDKFile(myfilename, FileAccessMode::ReadWrite, 0);
+	}
+	else
+	{
+		m_FileInMicroscope = new UDKFile(myfilename, FileAccessMode::ReadOnly, 0);
+	}
+
+	if(m_FileInMicroscope->IsOpened())
+	{
+#ifndef DO_NOT_USE_THREAD_FOR_SCROLL
+		//myscrollthread = new scrollthread(0,this);
+#endif
+//		copy_mark = new copy_maker();
+
+		if(m_FileInMicroscope->IsProcess())
+		{
+			///autogenerate Memory Map as Tags...
+#ifdef __WXGTK__
+			//offset_scroll->Enable(false);
+			std::cout << "PID MAPS loading..." << std::endl;
+			wxString command( wxT("cat /proc/") );
+			command << myfile->GetPID() << wxT("/maps");
+			std::cout << command.ToAscii() << std::endl;
+			wxArrayString output;
+
+			wxExecute( command, output);
+			//output has Count() lines process it
+
+			for( unsigned i=0; i < output.Count() ; i++) {
+				TagElement *tmp = new TagElement();
+				long long unsigned int x;
+				output[i].BeforeFirst('-').ToULongLong(&x, 16);
+				tmp->start = x;
+				tmp->end = x;
+				ProcessRAMMap.Add(x);
+				output[i].AfterFirst('-').BeforeFirst(' ').ToULongLong(&x,16);
+				ProcessRAMMap.Add(x);
+				tmp->tag = output[i].AfterLast( wxT(' '));
+				tmp->FontClrData.SetColour( *wxBLACK );
+				tmp->NoteClrData.SetColour( *wxCYAN );
+				MainTagArray.Add(tmp);
+				}
+#endif
+#ifdef __WXMSW__
+			MEMORY_BASIC_INFORMATION mymeminfo;
+			const uint8_t *addr, *addr_old;
+			addr=addr_old=0;
+			wxChar bfrx[200];
+			memset( bfrx, 0, 200);
+			wxString name, name_old;
+			while( true ) {
+				if( addr_old > addr )
+					break;
+				addr_old=addr;
+				VirtualQueryEx( myfile->GetHandle(), addr, &mymeminfo, sizeof( MEMORY_BASIC_INFORMATION));
+				GetMappedFileName(myfile->GetHandle(), (LPVOID)addr, bfrx, 200);
+				name=wxString(bfrx);
+				/*
+				std::cout << "Addr :" << addr << " - " << mymeminfo.RegionSize << "   \t State: " << \
+				(mymeminfo.State & MEM_COMMIT  ? "Commit" : "") << \
+				(mymeminfo.State & MEM_FREE  ? "Free" : "") << \
+				(mymeminfo.State & MEM_RESERVE  ? "Reserve" : "") << \
+				"  Type: " << \
+				(mymeminfo.Type & MEM_IMAGE  ? "Image   " : "") << \
+				(mymeminfo.Type & MEM_IMAGE  ? "Mapped  " : "") << \
+				(mymeminfo.Type & MEM_IMAGE  ? "Private " : "") << \
+				"\tName: " << wxString(bfrx).c_str() << std::endl;
+				*/
+				if( name!=name_old) {
+					name_old=name;
+					TagElement *tmp = new TagElement();
+					long long unsigned int x;
+					tmp->start = reinterpret_cast<uint64_t>(addr);
+
+					//tmp->end = reinterpret_cast<uint64_t>(addr+mymeminfo.RegionSize);
+					//Just for indicate start of the DLL.
+					tmp->end = reinterpret_cast<uint64_t>(addr+1);
+
+					ProcessRAMMap.Add(x);
+					tmp->tag = name;
+
+					tmp->FontClrData.SetColour( *wxBLACK );
+					tmp->NoteClrData.SetColour( *wxCYAN );
+					MainTagArray.Add(tmp);
+					}
+				addr+=mymeminfo.RegionSize;
+				}
+#endif
+			}
+
+		//LoadTAGS( myfilename.GetFullPath().Append(wxT(".tags")) ); //Load tags to wxHexEditorCtrl
+
+		//tagpanel->Set(MainTagArray); //Sets Tags to Tag panel
+
+		//if(MainTagArray.Count() > 0) {
+			//TODO This tagpanel->Show() code doesn't working good
+			//tagpanel->Show();
+		//	}
+
+		m_OffsetControl->SetOffsetLimit(FileLength());
+		m_SectorSize = m_FileInMicroscope->GetBlockSize();
+		LoadFromOffset(0, true);
+		SetLocalHexInsertionPoint(0);
+		return true;
+	}
+	else
+	{
+		///Handled on FAM Layer...
+		///wxMessageBox(_("File cannot open."),_("Error"), wxOK|wxICON_ERROR, this);
+		return false;
+	}
 }
 
 void UDKHexEditor::ReadFromBuffer(uint64_t position, unsigned lenght, char* buffer, bool cursor_reset, bool paint) 

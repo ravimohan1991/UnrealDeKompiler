@@ -298,6 +298,14 @@ public:
 	}
 
 	void PreparePaintTAGs();
+
+	/**
+	 * @brief Returns position of Text Cursor
+	 *
+	 * @return true on successful opening
+	 * @see UDKHalo::OpenFile(wxFileName filename, bool openAtRight)
+	 */
+	bool FileOpen(wxFileName& filename);
 public:
 	/**
 	 * @brief Reference to our dear hexeditor
@@ -333,6 +341,18 @@ protected:
 	 * @brief The file currently being analyzed
 	 */
 	UDKFile* m_FileInMicroscope;
+
+	/**
+	 * @brief Reference to the pane holding file information
+	 */
+	InfoPanel* m_PanelOfInformation;
+
+	DataInterpreter* m_DataInterpreter;
+
+	// TagPanel *tagpanel;
+
+	DisassemblerPanel *m_DisassemblerPanel;
+	//copy_maker *copy_mark;
 
 protected:
 	void PaintSelection();
