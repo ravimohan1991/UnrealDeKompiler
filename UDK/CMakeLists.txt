@@ -81,6 +81,7 @@ set(wxUSE_ZLIB builtin CACHE INTERNAL "")
 # Involved libraries and essentials
 add_subdirectory(vendor/wxWidgets)
 add_subdirectory(vendor/udis86)
+add_subdirectory(vendor/mhash)
 
 # UDK's personal code
 file(GLOB_RECURSE CPPFILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
@@ -113,7 +114,7 @@ elseif(XCODE)
 endif()
 
 # Linking to our UDK application
-target_link_libraries(UDK PUBLIC wx::core wx::aui udis)
+target_link_libraries(UDK PUBLIC wx::core wx::aui udis mhash)
 
 # Cluster UDK's libraries into a single folder for project/solution visualization
 # set_property(TARGET wxWidgets PROPERTY FOLDER "${UDKLIBRARYFOLDER}")

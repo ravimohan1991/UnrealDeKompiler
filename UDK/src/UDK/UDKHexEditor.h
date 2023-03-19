@@ -107,12 +107,12 @@ public:
 	{
 		return m_State;
 	}
-	
+
 	inline uint64_t GetStart(void) const
 	{
 		return m_StartOffset < m_EndOffset ? m_StartOffset : m_EndOffset;
 	}
-	
+
 	inline uint64_t GetEnd(void) const
 	{
 		return m_StartOffset > m_EndOffset ? m_StartOffset : m_EndOffset;
@@ -137,7 +137,7 @@ public:
 	uint64_t m_Size;		//size of copy
 	wxMemoryBuffer m_Buffer; //uses RAM, for small data
 	UDKFile* m_Sourcefile;	//uses HDD File and NOT delete after.
-	
+
 	CopyMaker()
 	{
 		m_Copied = false;
@@ -242,18 +242,25 @@ public:
 	void Clear(bool RePaint, bool cursor_reset);
 
 	//----File Functions----//
-	
+
+	/**
+	 * @brief Returns the size of the file
+	 *
+	 * @return the total length of file on disk
+	 */
+	int64_t FileLength( void );
+
 	/**
 	 * @brief Usual constructor for UDKHexEditor
-	 * 
+	 *
 	 * This routine is called whilst hex editing.
-	 * 
+	 *
 	 * @see DataInterpreter::OnTextEdit(wxKeyEvent& event)
 	 */
 	bool FileAddDiff(int64_t start_byte, const char* data, int64_t size, bool extension = false); //adds new node
 
-	
-	inline int64_t CursorOffset(void) 
+
+	inline int64_t CursorOffset(void)
 	{
 		return GetLocalInsertionPoint() + m_PageOffset;
 	}
@@ -264,14 +271,14 @@ public:
 	 * The position where the edit needs be inserted
 	 *
 	 * @return position of text cursor
-	 * @see 
+	 * @see
 	 */
 	inline int GetLocalInsertionPoint()
 	{
 		return (FindFocus() == m_TextControl ? m_TextControl->GetInsertionPoint() * (GetCharToHexSize() / 2) : m_HexControl->GetInsertionPoint() / 2);
 	}
 
-	inline uint8_t GetCharToHexSize(void) 
+	inline uint8_t GetCharToHexSize(void)
 	{
 		if (m_TextControl->m_FontEnc == wxFONTENCODING_UTF16LE ||
 			m_TextControl->m_FontEnc == wxFONTENCODING_UTF16BE)
@@ -306,6 +313,12 @@ public:
 	 * @see UDKHalo::OpenFile(wxFileName filename, bool openAtRight)
 	 */
 	bool FileOpen(wxFileName& filename);
+
+	void UpdateCursorLocation(bool force = false);
+
+	wxFileName GetFileName(void);
+
+	int HashVerify(wxString hash_file, UDKFile* File = NULL);
 public:
 	/**
 	 * @brief Reference to our dear hexeditor
@@ -327,6 +340,7 @@ public:
 
 	Select* m_Select;
 
+	ArrayOfTAG m_MainTagArray;
 protected:
 	/**
 	 * @brief Holds current start offset of file
@@ -354,6 +368,8 @@ protected:
 	DisassemblerPanel *m_DisassemblerPanel;
 	//copy_maker *copy_mark;
 
+	wxStatusBar* m_StatusBar;
+
 protected:
 	void PaintSelection();
 
@@ -362,6 +378,10 @@ protected:
 		m_HexControl->ClearSelection();
 		m_TextControl->ClearSelection();
 	}
+
+	void SetLocalHexInsertionPoint(int hex_location, bool from_comparator=false);
+
+	void SetLocalHexControlInsertionPoint(int hex_location);
 };
 
 // Reroute all the function calls to UDKHalo

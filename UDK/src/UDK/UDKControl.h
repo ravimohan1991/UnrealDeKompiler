@@ -105,16 +105,16 @@ public:
 	uint64_t				m_Start;
 	uint64_t				m_End;
 	bool					m_Visible;
-	wxPopupWindow*			m_WxP;
+	wxPopupWindow*				m_WxP;
 };
 
 WX_DEFINE_ARRAY(TagElement*, ArrayOfTAG);
 
 enum ControlTypes
-{ 
-	HexControl, 
-	TextControl, 
-	OffsetControl 
+{
+	HexControl,
+	TextControl,
+	OffsetControl
 };
 
 class UDKElementControl : public wxScrolledWindow
@@ -170,7 +170,7 @@ public:
 		return m_Text.Length() / 2;
 	}
 
-	int GetInsertionPoint(void) 
+	int GetInsertionPoint(void)
 	{
 		return (m_Caret.x - xCountDenied(m_Caret.x)) + CharacterPerLine() * m_Caret.y;
 	}
@@ -191,8 +191,10 @@ public:
 	void SetSelection(unsigned start, unsigned end);
 	void ClearSelection(bool RePaint = true);
 
+	static wxMemoryBuffer HexToBin(const wxString& HexValue);
+
 public:
-	struct Selector : public TagElement 
+	struct Selector : public TagElement
 	{
 		//select
 		bool m_Selected;		//select available variable
@@ -347,7 +349,7 @@ public:
 		const wxSize & size = wxDefaultSize,
 		long style = 0,
 		const wxValidator & validator = wxDefaultValidator) :
-		UDKElementControl(parent, id, value, pos, size, style, validator) 
+		UDKElementControl(parent, id, value, pos, size, style, validator)
 	{
 		m_ControlType = TextControl;
 		wxWindow::SetCursor(wxCURSOR_CHAR);

@@ -136,12 +136,12 @@ WX_DECLARE_OBJARRAY(DiffNode*, ArrayOfNode);
 /// All the relevant modes
 /// </summary>
 enum FileAccessMode
-{ 
-	ReadOnly, 
-	ReadWrite, 
-	DirectWrite, 
-	ForcedReadOnly, 
-	AccessInvalid 
+{
+	ReadOnly,
+	ReadWrite,
+	DirectWrite,
+	ForcedReadOnly,
+	AccessInvalid
 };
 
 /// <summary>
@@ -231,7 +231,7 @@ public:
 	bool UDKFileOpen(wxFileName& myfilename, FileAccessMode FAM = ReadOnly, unsigned ForceBlockRW = 0);
 	bool Close();
 	inline bool IsProcess()
-	{	
+	{
 		//For detect if this is RAM Process device
 		return (m_ProcessID >= 0);
 	}
@@ -260,7 +260,12 @@ public:
 	bool IsAvailable_Redo(void);
 	bool IsInjected(void);
 	const DiffNode* GetFirstUndoNodeOrLast(void);
-	int GetBlockSize(void);
+	inline int GetBlockSize(void)
+	{
+		return m_BlockRWSize;
+	}
+
+
 #ifdef __WXMSW__
 	HANDLE GetHandle(void)
 	{

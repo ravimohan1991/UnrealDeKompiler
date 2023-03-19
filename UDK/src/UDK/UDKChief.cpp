@@ -27,6 +27,7 @@
 #include <wx/aui/auibook.h>
 #include <wx/collpane.h>
 #include <wx/spinctrl.h>
+#include <wx/filehistory.h>
 #include <types.h>
 #include <extern.h>
 
@@ -86,7 +87,7 @@ UDKHalo::UDKHalo()
 	// Set panes and panels
 	PrepareAUI();
 
-	CreateStatusBar();
+	m_StatusBar = CreateStatusBar();
 	SetStatusText("Welcome to Unreal DeKompiler!");
 
 	Bind(wxEVT_MENU, &UDKHalo::OnHello, this, ID_Hello);
@@ -141,51 +142,78 @@ void UDKHalo::OnOpenFile(wxCommandEvent& event)
 
 UDKHexEditor* UDKHalo::OpenFile(wxFileName filename, bool openAtRight)
 {
-	UDKHexEditor *x = new UDKHexEditor(m_IDANotebook, -1, nullptr, nullptr, m_FileInfoPanel, nullptr, m_DisassemblerPanel, nullptr);
+	UDKHexEditor *x = new UDKHexEditor(m_IDANotebook, -1, m_StatusBar, nullptr, m_FileInfoPanel, nullptr, m_DisassemblerPanel, nullptr);
 	x->Hide();//Hiding hex editor for avoiding visual artifacts on loading file...
 
 	if(!filename.GetName().StartsWith(wxT("-buf")) && !filename.GetName().StartsWith(wxT("-pid")))
+	{
 		if(filename.IsRelative()) //Make Relative path to Absolute
+		{
 			filename.Normalize();
+		}
+	}
 
 	if(x->FileOpen(filename))
 	{
-		MyNotebook->AddPage( x, x->GetFileName().GetFullName(), true );
+		m_IDANotebook->AddPage(x, x->GetFileName().GetFullName(), true);
 		x->Show();
 		if(openAtRight)
-			MyNotebook->Split( MyNotebook->GetSelection(), wxRIGHT);
+		{
+			m_IDANotebook->Split(m_IDANotebook->GetSelection(), wxRIGHT);
+		}
 
 		bool autoShowTagsSwitch;
-		myConfigBase::Get()->Read( _T("AutoShowTagPanel"), &autoShowTagsSwitch, true );
+		MyConfigBase::Get()->Read( _T("AutoShowTagPanel"), &autoShowTagsSwitch, true );
 
 		//Detect from file name if we are opening a RAM Process:
-		if( (x->MainTagArray.Count() > 0 && autoShowTagsSwitch) || filename.GetFullPath().Lower().StartsWith( wxT("-pid=")) ) {
-			MyAUI->GetPane(MyTagPanel).Show( true );
-			MyAUI->Update();
-			}
+		if((x->m_MainTagArray.Count() > 0 && autoShowTagsSwitch) || filename.GetFullPath().Lower().StartsWith( wxT("-pid=")))
+		{
+			//m_PaneManager->GetPane(MyTagPanel).Show( true );
+			m_PaneManager->Update();
+		}
 
 		int found = -1;
+
 		//For loop updates Open Recent Menu properly.
-		for( unsigned i=0; i < MyFileHistory->GetCount() ; i++)
-			if( MyFileHistory->GetHistoryFile( i ) == filename.GetFullPath() )
+		for( unsigned i=0; i < m_FileHistory->GetCount() ; i++)
+		{
+			if(m_FileHistory->GetHistoryFile( i ) == filename.GetFullPath())
+			{
 				found = i;
+			}
+		}
 
 		if( found != -1 )
-			MyFileHistory->RemoveFileFromHistory( found );
-		MyFileHistory->AddFileToHistory( filename.GetFullPath() );
-		MyFileHistory->Save( *(myConfigBase::Get()) );
-		myConfigBase::Get()->Flush();
-//		mbar->Check(idFileRO, x->GetFileAccessMode()==FAL::FileAccessMode::ReadOnly);
+		{
+			m_FileHistory->RemoveFileFromHistory( found );
+		}
 
-		if( wxFileExists( filename.GetFullPath().Append(wxT(".md5")) ) )
-			if(wxYES==wxMessageBox(_("MD5 File detected. Do you request MD5 verification?"), _("Checksum File Detected"), wxYES_NO|wxNO_DEFAULT, this ) )
-				x->HashVerify( filename.GetFullPath().Append(wxT(".md5")) );
-		if( wxFileExists( filename.GetFullPath().Append(wxT(".sha1")) ) )
+		m_FileHistory->AddFileToHistory( filename.GetFullPath() );
+		m_FileHistory->Save(*(MyConfigBase::Get()));
+
+		MyConfigBase::Get()->Flush();
+
+		if(wxFileExists(filename.GetFullPath().Append(wxT(".md5"))))
+		{
+			if(wxYES == wxMessageBox(_("MD5 File detected. Do you request MD5 verification?"), _("Checksum File Detected"), wxYES_NO|wxNO_DEFAULT, this))
+			{
+				x->HashVerify(filename.GetFullPath().Append(wxT(".md5")));
+			}
+		}
+		if(wxFileExists(filename.GetFullPath().Append(wxT(".sha1"))))
+		{
 			if(wxYES==wxMessageBox(_("SHA1 File detected. Do you request SHA1 verification?"), _("Checksum File Detected"), wxYES_NO|wxNO_DEFAULT, this ))
-				x->HashVerify( filename.GetFullPath().Append(wxT(".sha1")) );
-		if( wxFileExists( filename.GetFullPath().Append(wxT(".sha256")) ) )
+			{
+				x->HashVerify(filename.GetFullPath().Append(wxT(".sha1")));
+			}
+		}
+		if(wxFileExists( filename.GetFullPath().Append(wxT(".sha256"))))
+		{
 			if(wxYES==wxMessageBox(_("SHA256 File detected. Do you request SHA256 verification?"), _("Checksum File Detected"), wxYES_NO|wxNO_DEFAULT, this ))
-				x->HashVerify( filename.GetFullPath().Append(wxT(".sha256")) );
+			{
+				x->HashVerify(filename.GetFullPath().Append(wxT(".sha256")));
+			}
+		}
 
 #if _FSWATCHER_
 		if(x->GetFileType()==FAL::FAL_File) {
@@ -197,14 +225,15 @@ UDKHexEditor* UDKHalo::OpenFile(wxFileName filename, bool openAtRight)
 			std::cout << "File_watcher event is null! File Watcher is not working!" << std::endl;
 			}
 #endif // _FSWATCHER_
-		ActionEnabler();
+		//ActionEnabler();
 		return x;
-		}
-	else {
+	}
+	else
+	{
 		x->Destroy();
 		return NULL;
-		}
 	}
+}
 
 void UDKHalo::PrepareAUI(void)
 {
@@ -368,7 +397,7 @@ DisassemblerPanelGUI::DisassemblerPanelGUI(wxWindow* parent, wxWindowID id, cons
 
 	wxString m_choiceVendorChoices[] = { wxT("INTEL"), wxT("AMD") };
 	int m_choiceVendorNChoices = sizeof(m_choiceVendorChoices) / sizeof(wxString);
-	
+
 	m_ChoiceVendor = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceVendorNChoices, m_choiceVendorChoices, 0);
 	m_ChoiceVendor->SetSelection(0);
 	m_ChoiceVendor->SetFont(wxFont(wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString));
@@ -424,7 +453,7 @@ void DisassemblerPanel::Set(wxMemoryBuffer buff)
 	OnUpdate(event);
 }
 
-void DisassemblerPanel::Clear(void) 
+void DisassemblerPanel::Clear(void)
 {
 	m_DasmCtrl->Clear();
 }

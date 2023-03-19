@@ -140,7 +140,7 @@ bool UDKFile::OSDependedOpen(wxFileName& myfilename, FileAccessMode FAM, unsigne
 			m_devnm = m_szCFDevice;
 		}
 
-		if (FAM == ReadOnly) 
+		if (FAM == ReadOnly)
 		{
 			m_HDevice = CreateFile(m_devnm.c_str(), GENERIC_READ,
 				FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -315,7 +315,7 @@ void WindowsHDD::list_devices()
 		//Add logical Drives here directly.
 	uint32_t drives = GetLogicalDrives();
 	for (int i = 2; i < 32; i++)
-	{	
+	{
 		//i=2 drops A: and B: flopies if available
 		if ((drives >> i) & 0x01)
 		{
@@ -362,7 +362,8 @@ vector<string> WindowsHDD::getdevicenamevector()
 }
 #elif defined( __WXGTK__ )
 
-bool FAL::OSDependedOpen(wxFileName& myfilename, FileAccessMode FAM, unsigned ForceBlockRW) {
+bool UDKFile::OSDependedOpen(wxFileName& myfilename, FileAccessMode FAM, unsigned ForceBlockRW)
+{
 	struct stat fileStat;
 	bool DoFileExists = (stat((const char*)myfilename.GetFullPath().fn_str(), &fileStat) >= 0);
 
@@ -370,18 +371,19 @@ bool FAL::OSDependedOpen(wxFileName& myfilename, FileAccessMode FAM, unsigned Fo
 	if (myfilename.GetFullPath().Lower().StartsWith(wxT("-pid="))) {
 		long int a;
 		myfilename.GetFullPath().Mid(5).ToLong(&a);
-		ProcessID = a;
-		RAMProcess = true;
-		if ((ptrace(PTRACE_ATTACH, ProcessID, NULL, 0)) < 0) {
-			wxMessageBox(wxString::Format(_("Process ID:%d cannot be open."), ProcessID), _("Error"), wxOK | wxICON_ERROR);
-			ProcessID = -1;
+		m_ProcessID = a;
+		m_RAMProcess = true;
+		if ((ptrace(PTRACE_ATTACH, m_ProcessID, NULL, 0)) < 0)
+		{
+			wxMessageBox(wxString::Format(_("Process ID:%d cannot be open."), m_ProcessID), _("Error"), wxOK | wxICON_ERROR);
+			m_ProcessID = -1;
 			return false;
 		}
-		waitpid(ProcessID, NULL, WUNTRACED);
-		BlockRWSize = 4;
-		BlockRWCount = 0x800000000000LL / 4;
+		waitpid(m_ProcessID, NULL, WUNTRACED);
+		m_BlockRWSize = 4;
+		m_BlockRWCount = 0x800000000000LL / 4;
 		FAM = ReadOnly;
-		FileType = FAL_Process;
+		m_FileType = UDK_Process;
 		return true;
 	}
 
@@ -404,16 +406,21 @@ bool FAL::OSDependedOpen(wxFileName& myfilename, FileAccessMode FAM, unsigned Fo
 		//Save old owner to update at file close...
 		wxExecute(wxT("stat -c %U ") + myfilename.GetFullPath(), output, errors, wxEXEC_SYNC);
 		if (output.Count() > 0 && errors.Count() == 0)
-			oldOwner = output[0];//this return root generally :D
-		else {
+		{
+			m_OldOwner = output[0];//this return root generally :D
+		}
+		else
+		{
 			wxMessageBox(_("Unknown error on \"stat -c %U") + myfilename.GetFullPath() + wxT("\""), _("Error"), wxOK | wxCANCEL | wxICON_ERROR);
 			return false;
 		}
+
 		//Changing owner of file...
 		//I think it's better than changing permissions directly. Doesn't it?
 		//Will restore owner on file close.
 		wxString cmd, spacer = wxT(" ");
-		if (wxFile::Exists(wxT("/usr/bin/pkexec"))) {
+		if (wxFile::Exists(wxT("/usr/bin/pkexec")))
+		{
 			cmd = wxT("pkexec --user root chown \"");
 			spacer = wxT("\" \"");
 		}
@@ -423,7 +430,8 @@ bool FAL::OSDependedOpen(wxFileName& myfilename, FileAccessMode FAM, unsigned Fo
 			cmd = wxT("gksu -u root \"chown ");
 		else if (wxFile::Exists(wxT("/usr/bin/gksudo")))
 			cmd = wxT("gksudo -u root \"chown ");
-		else {
+		else
+		{
 			wxMessageBox(_("For using this function, please install \"pkexec\", \"gnomesu\" or \"gksu\" tools first."), _("Error"), wxOK | wxCANCEL | wxICON_ERROR);
 			return false;
 		}
@@ -435,8 +443,9 @@ bool FAL::OSDependedOpen(wxFileName& myfilename, FileAccessMode FAM, unsigned Fo
 		//wxExecute( cmd , output, errors, wxEXEC_SYNC);
 		wxShell(cmd);
 	}
-	FileType = FAL_File;
-	return FALOpen(myfilename, FAM, ForceBlockRW);
+
+	m_FileType = UDK_File;
+	return UDKFileOpen(myfilename, FAM, ForceBlockRW);
 }
 
 #elif defined( __WXOSX__ )
@@ -571,7 +580,7 @@ long UDKFile::ReadR(unsigned char* buffer, unsigned size, uint64_t from, ArrayOf
 		//Kernel handle the job...
 		//This hack increase reading speed from 164MB to 196MB on my SSD with using read 4MB buffer due use of memcmp.
 		//(Max disk rw is 230MB/s)
-		if (ProcessID >= 0)
+		if (m_ProcessID >= 0)
 #else
 		if (m_BlockRWSize > 0)
 #endif
@@ -671,7 +680,7 @@ wxFileOffset UDKFile::Length(int PatchIndice)
 		return m_BlockRWSize * m_BlockRWCount;
 
 #ifdef __WXGTK__
-	if (the_file.GetFullPath() == wxT("/dev/mem"))
+	if (m_TheFile.GetFullPath() == wxT("/dev/mem"))
 	{
 		return 512 * MB;
 	}
@@ -701,7 +710,7 @@ wxFileOffset UDKFile::Length(int PatchIndice)
 	///WorkAround for wxFile::Length() zero size bug
 	if (max_size == 0) { //This could be GIANT file like /proc/kcore = 128 TB -10MB +12KB
 		struct stat st;
-		stat(the_file.GetFullPath().To8BitData(), &st);
+		stat(m_TheFile.GetFullPath().To8BitData(), &st);
 		uint64_t sz = st.st_size;
 #ifdef _DEBUG_FILE_
 		printf("File Size by STD C is : %llu \r\n", sz);
@@ -719,6 +728,15 @@ wxFileOffset UDKFile::Length(int PatchIndice)
 			max_size += m_DiffArray[i]->size;
 
 	return max_size;
+}
+
+wxFileName UDKFile::GetFileName( void )
+{
+	if(m_ProcessID >= 0)
+	{
+		return wxFileNameFromPath( wxString::Format( wxT("PID:%u"), m_ProcessID));
+	}
+	return m_TheFile;
 }
 
 long UDKFile::InjectionPatcher(uint64_t current_location, unsigned char* data, int size, ArrayOfNode* PatchArray, int PatchIndice)

@@ -3,6 +3,14 @@
 #include <wx/encconv.h>
 #include <wx/fontmap.h>
 
+int atoh(const char hex)
+{
+	return ( hex >= '0' && hex <= '9' ) ? hex -'0' :
+		( hex >= 'a' && hex <= 'f' ) ? hex -'a' + 10:
+		( hex >= 'A' && hex <= 'F' ) ? hex -'A' + 10:
+		-1;
+}
+
 UDKElementControl::UDKElementControl(wxWindow* parent,
 	wxWindowID id,
 	const wxString& value,
@@ -33,9 +41,9 @@ UDKElementControl::UDKElementControl(wxWindow* parent,
 
 	//Wayland hack
 	wxString waylandStr;
-		
+
 	m_Waylander = wxGetEnv("WAYLAND_DISPLAY", &waylandStr);
-		
+
 	if (m_Waylander)
 		std::cout << "Wayland detected. You could have cosmetic cursor issues." << std::endl;
 
@@ -76,6 +84,38 @@ UDKElementControl::~UDKElementControl()
 {
 	Clear();
 	wxCaretSuspend cs(this);
+}
+
+wxMemoryBuffer UDKElementControl::HexToBin(const wxString& HexValue)
+{
+	wxMemoryBuffer memodata;
+	memodata.SetBufSize(HexValue.Length()/3 + 1);
+
+	char bfrL, bfrH;
+	for(unsigned int i=0 ; i < HexValue.Length() ; i += 2)
+	{
+		if( HexValue[i] == ' ' || HexValue[i] == ',' )
+		{	//Removes space and period chars.
+			i--; //Means +1 after loop increament of +2. Don't put i++ due HexValue.Length() check
+			continue;
+		}
+		else if ((HexValue[i] == '0' || HexValue[i] == '\\') && ( HexValue[i+1] == 'x' || HexValue[i+1] == 'X'))
+		{
+			//Removes "0x", "0X", "\x", "\X"  strings.
+			continue; //Means +2 by loop increament.
+		}
+		bfrH = atoh( HexValue[i] );
+		bfrL = atoh( HexValue[i+1] );
+		//Check for if it's Hexadecimal
+		if( !(bfrH < 16 && bfrL < 16 && bfrH >= 0 && bfrL >= 0 ))
+		{
+			wxBell();
+			return memodata;
+		}
+		bfrL = bfrH << 4 | bfrL;
+		memodata.AppendByte( bfrL );
+	}
+	return memodata;
 }
 
 void UDKElementControl::RePaint(void)
@@ -250,7 +290,7 @@ void UDKOffsetControl::OnMouseRight(wxMouseEvent& event)
 {
 	event.Skip();
 	m_LastRightClickPosition = event.GetPosition();
-	
+
 	ShowContextMenu(m_LastRightClickPosition);
 }
 
@@ -407,7 +447,7 @@ void UDKElementControl::Clear(bool RePaint, bool cursor_reset)
 
 	OnTagHideAll();
 	ClearSelection(RePaint);
-	
+
 	WX_CLEAR_ARRAY(m_TagArray);
 }
 
@@ -437,10 +477,10 @@ size_t UDKElementControl::ToVisiblePosition(size_t InternalPosition)
 	{
 		return 0;					// Visible position is 8 but internal position is 11
 	}
-	
+
 	size_t y = InternalPosition / CharacterPerLine();
 	size_t x = InternalPosition - y * CharacterPerLine();
-	
+
 	for (int i = 0, denied = 0; i < m_Window.x; i++)
 	{
 		if (IsDenied(i)) denied++;

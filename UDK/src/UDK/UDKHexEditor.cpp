@@ -1,22 +1,30 @@
 #include "UDKHexEditor.h"
 #include "UDKFile.h"
+#include "UDKChief.h"
+#include <wx/ffile.h>
+#include <wx/progdlg.h>
+#include <mutils/mglobal.h>
+#include <mhash.h>
+#include <wx/arrimpl.cpp>
 
 extern int FakeBlockSize;
 
+WX_DEFINE_OBJARRAY(wxArrayUINT64);
+
 UDKHexEditor::UDKHexEditor(wxWindow* parent,
-						int id,
-						wxStatusBar *statbar_,
-						DataInterpreter *interpreter_,
-						InfoPanel *infopanel_,
-						TagPanel *tagpanel_,
-						DisassemblerPanel *dasmpanel_,
-						CopyMaker *copy_mark_,
-						wxFileName* myfilename_,
-						const wxPoint& pos,
-						const wxSize& size,
-						long style ):
+		int id,
+		wxStatusBar *statbar_,
+		DataInterpreter *interpreter_,
+		InfoPanel *infopanel_,
+		TagPanel *tagpanel_,
+		DisassemblerPanel *dasmpanel_,
+		CopyMaker *copy_mark_,
+		wxFileName* myfilename_,
+		const wxPoint& pos,
+		const wxSize& size,
+		long style ):
 	UDKHexEditorControl(parent, id, pos, size, wxTAB_TRAVERSAL),
-	//statusbar(statbar_),
+	m_StatusBar(statbar_),
 	m_DataInterpreter(interpreter_),
 	m_PanelOfInformation(infopanel_),
 	//tagpanel(tagpanel_),
@@ -156,27 +164,29 @@ bool UDKHexEditor::FileOpen(wxFileName& myfilename)
 			//offset_scroll->Enable(false);
 			std::cout << "PID MAPS loading..." << std::endl;
 			wxString command( wxT("cat /proc/") );
-			command << myfile->GetPID() << wxT("/maps");
+			command << m_FileInMicroscope->GetPID() << wxT("/maps");
 			std::cout << command.ToAscii() << std::endl;
 			wxArrayString output;
 
 			wxExecute( command, output);
 			//output has Count() lines process it
 
-			for( unsigned i=0; i < output.Count() ; i++) {
+			/*
+			for( unsigned i=0; i < output.Count() ; i++)
+			{
 				TagElement *tmp = new TagElement();
 				long long unsigned int x;
 				output[i].BeforeFirst('-').ToULongLong(&x, 16);
-				tmp->start = x;
-				tmp->end = x;
-				ProcessRAMMap.Add(x);
+				tmp->m_Start = x;
+				tmp->m_End = x;
+				m_ProcessRAMMap.Add(x);
 				output[i].AfterFirst('-').BeforeFirst(' ').ToULongLong(&x,16);
-				ProcessRAMMap.Add(x);
-				tmp->tag = output[i].AfterLast( wxT(' '));
+				m_ProcessRAMMap.Add(x);
+				//tmp->tag = output[i].AfterLast( wxT(' '));
 				tmp->FontClrData.SetColour( *wxBLACK );
 				tmp->NoteClrData.SetColour( *wxCYAN );
 				MainTagArray.Add(tmp);
-				}
+			}*/
 #endif
 #ifdef __WXMSW__
 			MEMORY_BASIC_INFORMATION mymeminfo;
@@ -248,7 +258,226 @@ bool UDKHexEditor::FileOpen(wxFileName& myfilename)
 	}
 }
 
-void UDKHexEditor::ReadFromBuffer(uint64_t position, unsigned lenght, char* buffer, bool cursor_reset, bool paint) 
+void UDKHexEditor::SetLocalHexInsertionPoint(int hex_location, bool from_comparator)
+{
+	if(m_ComparatorHexEditor != nullptr && !from_comparator)
+	{
+		m_ComparatorHexEditor->SetLocalHexInsertionPoint( hex_location, true);
+	}
+
+	UDKHexEditor::SetLocalHexInsertionPoint(hex_location);
+	UpdateCursorLocation();
+}
+
+void UDKHexEditor::SetLocalHexControlInsertionPoint(int hex_location)
+{
+	//Sets position of Hex Cursor
+#ifdef _DEBUG_CARET_
+	std::cout<< "Caret at Hex:" << std::dec << hex_location << std::endl;
+#endif // _DEBUG_CARET_
+
+	m_TextControl->SetInsertionPoint(hex_location/GetCharToHexSize());
+	m_HexControl->SetInsertionPoint(hex_location);
+}
+
+wxFileName UDKHexEditor::GetFileName(void)
+{
+	return m_FileInMicroscope->GetFileName();
+}
+
+int UDKHexEditor::HashVerify(wxString hash_file, UDKFile* File)
+{
+	if(File == NULL)
+	{
+		File = m_FileInMicroscope;
+	}
+
+	wxFFile f( hash_file, wxT("rt") );
+	wxMemoryBuffer mbf;
+	hashid hash_alg;
+	if(hash_file.EndsWith( wxT(".md5")))
+	{
+		hash_alg = MHASH_MD5;
+	}
+	else if(hash_file.EndsWith( wxT(".sha1")))
+	{
+		hash_alg = MHASH_SHA1;
+	}
+	else//if( hash_file.EndsWith(wxT(".sha256" )) )
+	{
+		hash_alg = MHASH_SHA256;
+	}
+
+	unsigned hash_block_size = mhash_get_block_size(hash_alg);
+
+	if(hash_block_size*2 != f.Read( mbf.GetWriteBuf( hash_block_size*2 ), hash_block_size*2))
+	{
+		wxMessageBox(_("Cannot read hash file!"),_("Error!"));
+		return -1;
+	}
+
+	mbf.UngetWriteBuf(hash_block_size*2);
+	wxString MyHashStr = wxString::From8BitData(reinterpret_cast<char*>(mbf.GetData()), hash_block_size*2);
+	wxMemoryBuffer compare = m_HexControl->HexToBin(MyHashStr);
+
+	File->Seek(0);
+
+	wxString msg = _("Please wait while calculating checksum.");
+	wxString emsg = wxT("\n");
+	wxProgressDialog mypd(_("Calculating Checksum"), msg+emsg, 1000, this, wxPD_APP_MODAL|wxPD_AUTO_HIDE|wxPD_CAN_ABORT|wxPD_REMAINING_TIME);
+	mypd.Show();
+
+	MHASH myhash = mhash_init(hash_alg);
+
+	enum { rdBlockSz = 256*KB };
+	unsigned char buff[rdBlockSz];
+	int rd=rdBlockSz;
+
+	uint64_t readfrom = 0, readspeed = 0, range = File->Length();
+	time_t ts,te;
+	time (&ts);
+
+	while(rd == rdBlockSz)
+	{
+		rd = File->Read( buff, rdBlockSz );
+		readfrom+=rd;
+		mhash( myhash, buff, rd);
+		time(&te);
+		if(ts != te )
+		{
+			ts=te;
+			emsg = msg + wxT("\n") + _("Hash Speed : ") + wxString::Format( wxT("%.2f "), 1.0*(readfrom-readspeed)/MB) + _("MB/s");
+			readspeed=readfrom;
+		}
+		if(!mypd.Update((readfrom*1000)/range, emsg ))
+		{
+			return -1;
+		}
+	}
+
+	wxString results;
+	unsigned char *hash;
+
+	hash = static_cast<unsigned char *>( mhash_end(myhash) );
+	if(memcmp( compare.GetData(), hash, hash_block_size ))
+	{
+		wxBell();
+		wxString msg = wxString(_("File Corrupt!"))+wxT("\n")+_("File Hash:")+wxT("\t");
+		for (unsigned k = 0; k < hash_block_size; k++)
+		{
+			msg += wxString::Format( wxT("%.2x"), hash[k]);
+		}
+		msg += wxString( wxT("\n") ) +_("Hash File:")+wxT("\t") + MyHashStr;
+		wxMessageBox(msg, _("Hash Result") );
+		return 0;
+	}
+	else
+	{
+		wxMessageBox(_("File Verified."), _("Hash Result") );
+		return 1;
+	}
+}
+
+void UDKHexEditor::UpdateCursorLocation( bool force )
+{
+	static wxMutex update;
+
+// TODO (death#1#): Search if speedup available
+//	static int64_t lastPoint=-1;				//? Speed up Van goh
+//	if( !force )
+//		if( lastPoint == CursorOffset() )
+//			return;
+//	lastPoint = CursorOffset();
+#ifdef _DEBUG_MUTEX_
+	std::cout << "mutex Update Locking..." << std::endl;
+#endif
+	if(update.TryLock() != wxMUTEX_NO_ERROR)
+	{
+		std::cout << "mutex update cannot lock..." << std::endl;
+		return;
+	}
+
+// This leads recursion!
+//	if( GetLocalHexInsertionPoint()/2+page_offset > FileLength() )
+//	{
+//		SetLocalHexInsertionPoint( (FileLength() - page_offset)*2 - 1 );
+//	}
+
+	wxMemoryBuffer buffer;
+	m_FileInMicroscope->Seek(CursorOffset(), wxFromStart);
+
+#ifdef _DEBUG_FILE_
+	std::cout << "UpdateCursorLocation() read file for panels" << std::endl;
+#endif
+
+	int size = m_FileInMicroscope->Read(reinterpret_cast<char*>(buffer.GetWriteBuf( 17 )), 17);
+	if(size >0 )
+	{
+		buffer.UngetWriteBuf( size );
+	}
+
+	if(size > 0 )
+	{
+		if( m_DataInterpreter != nullptr)
+		{
+			m_DataInterpreter->Set(buffer);
+		}
+
+		if(m_DisassemblerPanel != nullptr)
+		{
+			if(!m_Select->GetState())
+			{
+				//If there is a NO selection, take 8 bytes from cursor location
+				m_DisassemblerPanel->Set(buffer);
+			}
+			else
+			{
+				//If there is a selection, use selection up to 100 bytes.
+				m_FileInMicroscope->Seek(m_Select->GetStart(), wxFromStart);
+				//Take just first 128 bytes!
+				int sz = m_Select->GetSize() > 128 ? 128 : m_Select->GetSize();
+#ifdef _DEBUG_FILE_
+				std::cout << "UpdateCursorLocation() read file for dasm" << std::endl;
+#endif
+				int size = m_FileInMicroscope->Read(reinterpret_cast<char*>(buffer.GetWriteBuf( sz )), sz);
+				buffer.UngetWriteBuf(size);
+				m_DisassemblerPanel->Set(buffer);
+			}
+		}
+	}
+
+#if wxUSE_STATUSBAR
+	if(m_StatusBar != nullptr)
+	{
+		m_StatusBar->SetStatusText(wxString::Format(_("Showing Page: %" wxLongLongFmtSpec "u"), m_PageOffset/wxMax(1,ByteCapacity()) ), 0);    //wxMax for avoid divide by zero
+		m_StatusBar->SetStatusText(wxString::Format(_("Cursor Offset: ") +  m_OffsetControl->GetFormatedOffsetString( CursorOffset(), true )), 1);
+		m_StatusBar->SetStatusText(wxString::Format(_("Cursor Value: %u"), reinterpret_cast<uint8_t*>(buffer.GetData())[0]), 2);
+		if(!m_Select->GetState())
+		{
+			m_StatusBar->SetStatusText(_("Selected Block: N/A"), 3);
+			m_StatusBar->SetStatusText(_("Block Size: N/A"),4);
+		}
+		else
+		{
+			m_StatusBar->SetStatusText(wxString::Format(_("Selected Block: %" wxLongLongFmtSpec "u -> %" wxLongLongFmtSpec "u"), m_Select->GetStart(), m_Select->GetEnd()), 3);
+			m_StatusBar->SetStatusText(wxString::Format(_("Block Size: %" wxLongLongFmtSpec "u"), m_Select->GetSize()), 4);
+		}
+	}
+#endif // wxUSE_STATUSBAR
+
+#ifdef _DEBUG_MUTEX_
+	std::cout << "mutex Update UnLocking..." << std::endl;
+#endif
+	update.Unlock();
+}
+
+
+int64_t UDKHexEditor::FileLength(void)
+{
+	return m_FileInMicroscope->Length();
+}
+
+void UDKHexEditor::ReadFromBuffer(uint64_t position, unsigned lenght, char* buffer, bool cursor_reset, bool paint)
 {
 	if (lenght == 4294967295LL)
 	{
@@ -399,7 +628,7 @@ void wxHugeScrollBar::SetScrollbar(int64_t Current_Position, int page_x, int64_t
 {
 	m_Range = new_range;
 	if (new_range <= 2147483647)
-	{ 
+	{
 		//if representable with 32 bit
 		m_ScrollBar->SetScrollbar(Current_Position, page_x, new_range, pagesize, repaint);
 	}

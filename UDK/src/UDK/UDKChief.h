@@ -45,6 +45,8 @@ class wxAuiNotebook;
 class wxCollapsiblePane;
 class wxSpinCtrl;
 class UDKHexEditor;
+class wxFileHistory;
+class wxFileName;
 
 /// <summary>
 /// The class corresponding to the main UDK application instance
@@ -146,7 +148,7 @@ private:
 	/**
 	 * @brief OpenFile entry callback
 	 *
-	 * Opens up OpenFile dialog window 
+	 * Opens up OpenFile dialog window
 	 *
 	 * @see UDKHalo::UDKHalo()
 	 */
@@ -180,8 +182,8 @@ private:
 	 * wxAuiManager works as follows: the programmer adds panes to the \n
 	 * class, or makes changes to existing pane properties (dock \n
 	 * position, floating state, show state, etc.). To apply these \n
-	 * changes, wxAuiManager's Update() function is called. This batch \n 
-	 * processing can be used to avoid flicker, by modifying more than \n 
+	 * changes, wxAuiManager's Update() function is called. This batch \n
+	 * processing can be used to avoid flicker, by modifying more than \n
 	 * one pane at a time, and then "committing" all of the changes at \n
 	 * once by calling Update().
 	 */
@@ -190,7 +192,7 @@ private:
 	/**
 	 * @brief Disassembler pane
 	 *
-	 * The lookand(partial)feel of UDK's disassembler pane 
+	 * The lookand(partial)feel of UDK's disassembler pane
 	 */
 	DisassemblerPanel* m_DisassemblerPanel;
 
@@ -198,7 +200,7 @@ private:
 	 * @brief Pane for file information
 	 *
 	 * All the useful information about the .u file package is \n
-	 * 
+	 *
 	 * @see InfoPanel
 	 */
 	InfoPanel* m_FileInfoPanel;
@@ -211,6 +213,13 @@ private:
 	 * Instructions or Data, hence IDA
 	 */
 	wxAuiNotebook* m_IDANotebook;
+
+	/**
+	 * @brief Reference to the status bar
+	 */
+	wxStatusBar* m_StatusBar;
+
+	wxFileHistory* m_FileHistory;
 };
 
 enum
