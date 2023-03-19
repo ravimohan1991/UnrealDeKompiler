@@ -117,6 +117,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Clear</b> (bool RePai
 <tr class="memitem:a04c7a891bf8933cf77cbd619d826e569"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_hex_editor.html#a04c7a891bf8933cf77cbd619d826e569">GetLocalInsertionPoint</a> ()</td></tr>
 <tr class="memdesc:a04c7a891bf8933cf77cbd619d826e569"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns position of Text Cursor.  <br /></td></tr>
 <tr class="separator:a04c7a891bf8933cf77cbd619d826e569"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b83bc72506b36e7f5d002ea5f6b0bd0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_hex_editor.html#a6b83bc72506b36e7f5d002ea5f6b0bd0">FileOpen</a> (wxFileName &amp;filename)</td></tr>
+<tr class="memdesc:a6b83bc72506b36e7f5d002ea5f6b0bd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns position of Text Cursor.  <br /></td></tr>
+<tr class="separator:a6b83bc72506b36e7f5d002ea5f6b0bd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -138,6 +141,10 @@ Protected Attributes</h2></td></tr>
 <a class="el" href="class_u_d_k_file.html">UDKFile</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>m_FileInMicroscope</b></td></tr>
 <tr class="memdesc:abdcc461c5cf9de7c3d3cf6faca01e47b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The file currently being analyzed. <br /></td></tr>
 <tr class="separator:abdcc461c5cf9de7c3d3cf6faca01e47b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1892c290093abe9519a2c5858925deae"><td class="memItemLeft" align="right" valign="top"><a id="a1892c290093abe9519a2c5858925deae" name="a1892c290093abe9519a2c5858925deae"></a>
+<a class="el" href="class_info_panel.html">InfoPanel</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>m_PanelOfInformation</b></td></tr>
+<tr class="memdesc:a1892c290093abe9519a2c5858925deae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reference to the pane holding file information. <br /></td></tr>
+<tr class="separator:a1892c290093abe9519a2c5858925deae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>UDK's Hex Editor class. </p>
@@ -183,6 +190,30 @@ Protected Attributes</h2></td></tr>
 <p>Usual constructor for <a class="el" href="class_u_d_k_hex_editor.html" title="UDK&#39;s Hex Editor class.">UDKHexEditor</a>. </p>
 <p>This routine is called whilst hex editing.</p>
 <dl class="section see"><dt>See also</dt><dd>DataInterpreter::OnTextEdit(wxKeyEvent&amp; event) </dd></dl>
+
+</div>
+</div>
+<a id="a6b83bc72506b36e7f5d002ea5f6b0bd0" name="a6b83bc72506b36e7f5d002ea5f6b0bd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b83bc72506b36e7f5d002ea5f6b0bd0">&#9670;&#160;</a></span>FileOpen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool UDKHexEditor::FileOpen </td>
+          <td>(</td>
+          <td class="paramtype">wxFileName &amp;&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns position of Text Cursor. </p>
+<dl class="section return"><dt>Returns</dt><dd>true on successful opening </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_u_d_k_halo.html#a65cb6c7357cf46135aa29f59dd1f810d" title="Opens the specified file for analysis.">UDKHalo::OpenFile(wxFileName filename, bool openAtRight)</a> </dd></dl>
+<p>autogenerate Memory Map as Tags...</p>
+<p>Handled on FAM Layer... wxMessageBox(_("File cannot open."),_("Error"), wxOK|wxICON_ERROR, this);</p>
 
 </div>
 </div>
