@@ -9,7 +9,8 @@ var searchData=
   ['m_5fpageoffset_6',['m_PageOffset',['../class_u_d_k_hex_editor.html#aaa5fe164e9b4f1ed62d2a6c171be7f6c',1,'UDKHexEditor']]],
   ['m_5fpanelofinformation_7',['m_PanelOfInformation',['../class_u_d_k_hex_editor.html#a1892c290093abe9519a2c5858925deae',1,'UDKHexEditor']]],
   ['m_5fpanemanager_8',['m_PaneManager',['../class_u_d_k_halo.html#a56205cbed43429f2fa5dea0d0d415f6f',1,'UDKHalo']]],
-  ['m_5fzebrastriping_9',['m_ZebraStriping',['../class_u_d_k_hex_editor.html#ae3f2d9a07ca07a6f9c43d1095983a9c8',1,'UDKHexEditor']]],
-  ['modificationpatcher_10',['ModificationPatcher',['../class_u_d_k_file.html#aba9adf40f2cc0eed7da1104a242a2e86',1,'UDKFile']]],
-  ['myconfigbase_11',['MyConfigBase',['../class_my_config_base.html',1,'']]]
+  ['m_5fstatusbar_9',['m_StatusBar',['../class_u_d_k_halo.html#a1f0cca61e069d5bd9992d13e16bf8cef',1,'UDKHalo']]],
+  ['m_5fzebrastriping_10',['m_ZebraStriping',['../class_u_d_k_hex_editor.html#ae3f2d9a07ca07a6f9c43d1095983a9c8',1,'UDKHexEditor']]],
+  ['modificationpatcher_11',['ModificationPatcher',['../class_u_d_k_file.html#aba9adf40f2cc0eed7da1104a242a2e86',1,'UDKFile']]],
+  ['myconfigbase_12',['MyConfigBase',['../class_my_config_base.html',1,'']]]
 ];
