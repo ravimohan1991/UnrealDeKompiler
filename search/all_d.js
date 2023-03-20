@@ -12,5 +12,6 @@ var searchData=
   ['udkoffsetcontrol_9',['UDKOffsetControl',['../class_u_d_k_offset_control.html',1,'']]],
   ['udktextcontrol_10',['UDKTextControl',['../class_u_d_k_text_control.html',1,'']]],
   ['unidata_11',['unidata',['../struct_data_interpreter_1_1unidata.html',1,'DataInterpreter']]],
-  ['unrealdekompiler_12',['UnrealDeKompiler',['../index.html',1,'']]]
+  ['unrealdekompiler_12',['UnrealDeKompiler',['../index.html',1,'']]],
+  ['updatedc_13',['UpdateDC',['../class_u_d_k_element_control.html#aa0a216e8cb6c7c7ac5e49b3a8cf78bd9',1,'UDKElementControl']]]
 ];
