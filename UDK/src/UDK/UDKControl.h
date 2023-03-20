@@ -133,7 +133,15 @@ public:
 
 	~UDKElementControl();
 
-	wxChar CharAt(unsigned offset);
+	inline wxChar CharAt(unsigned offset)
+	{
+		if(offset >= m_Text.Len())
+		{
+			//std::cout << "Buff lower for offset : " << offset << std::endl;
+			return 0;
+		}
+		return m_Text.GetChar(offset);
+	}
 	int LineCount(void)
 	{
 		return m_Window.y;
@@ -193,6 +201,13 @@ public:
 
 	static wxMemoryBuffer HexToBin(const wxString& HexValue);
 
+	// Movement
+	virtual void DrawCursorShadow(wxDC*);
+
+	inline void DrawSeperationLineAfterChar(wxDC* DC, int offset);
+
+	wxPoint InternalPositionToVisibleCoord(int position);
+
 public:
 	struct Selector : public TagElement
 	{
@@ -214,10 +229,13 @@ protected:
 	wxString			m_HexFormat;
 	wxString			m_Text;
 	wxSize				m_CharSize;	// size (in pixels) of one character
-	ControlTypes		m_ControlType;
+	ControlTypes			m_ControlType;
 
 protected:
 	void ShowContextMenu(wxPoint pos);
+	wxDC* UpdateDC(wxDC* dc = nullptr);
+
+	wxMemoryDC* CreateDC();
 
 public:
 	//inline void DrawSeperationLineAfterChar(wxDC* DC, int offset);
@@ -226,7 +244,14 @@ public:
 	int* m_ZebraStriping;
 	bool m_Hex2ColorMode;
 	bool m_Waylander;
+
+	/*
+	 * @brief reference to internal buffer wxMemoryDC
+	 *
+	 * @see UDKElementControl::CreateDC()
+	 */
 	wxMemoryDC* m_InternalBufferDC;
+
 	wxBitmap* m_InternalBufferBMP;
 	bool		m_DrawCharByChar;
 

@@ -31,13 +31,16 @@ UDKHexEditor::UDKHexEditor(wxWindow* parent,
 	m_DisassemblerPanel(dasmpanel_)
 	//copy_mark(copy_mark_)
 {
-	m_ComparatorHexEditor = nullptr;
-
 	// Here, code praying to the GOD for protecting our open file from wxHexEditor's bugs and other things.
 	// This is really crucial step! Be adviced to not remove it, even if you don't believer.
 	printf("Rahman ve Rahim olan Allah'ın adıyla.\n");
 
 	m_FileInMicroscope = nullptr;
+	m_ComparatorHexEditor = nullptr;
+
+	m_OffsetScroll = new wxHugeScrollBar(m_OffsetScrollReal);
+	m_Select = new class Select(GetEventHandler());
+
 
 #ifndef DO_NOT_USE_THREAD_FOR_SCROLL
 	//myscrollthread = NULL;
@@ -265,7 +268,7 @@ void UDKHexEditor::SetLocalHexInsertionPoint(int hex_location, bool from_compara
 		m_ComparatorHexEditor->SetLocalHexInsertionPoint( hex_location, true);
 	}
 
-	UDKHexEditor::SetLocalHexInsertionPoint(hex_location);
+	UDKHexEditor::SetLocalHexControlInsertionPoint(hex_location);
 	UpdateCursorLocation();
 }
 
@@ -448,7 +451,7 @@ void UDKHexEditor::UpdateCursorLocation( bool force )
 
 #if wxUSE_STATUSBAR
 	if(m_StatusBar != nullptr)
-	{
+	{/*
 		m_StatusBar->SetStatusText(wxString::Format(_("Showing Page: %" wxLongLongFmtSpec "u"), m_PageOffset/wxMax(1,ByteCapacity()) ), 0);    //wxMax for avoid divide by zero
 		m_StatusBar->SetStatusText(wxString::Format(_("Cursor Offset: ") +  m_OffsetControl->GetFormatedOffsetString( CursorOffset(), true )), 1);
 		m_StatusBar->SetStatusText(wxString::Format(_("Cursor Value: %u"), reinterpret_cast<uint8_t*>(buffer.GetData())[0]), 2);
@@ -462,6 +465,7 @@ void UDKHexEditor::UpdateCursorLocation( bool force )
 			m_StatusBar->SetStatusText(wxString::Format(_("Selected Block: %" wxLongLongFmtSpec "u -> %" wxLongLongFmtSpec "u"), m_Select->GetStart(), m_Select->GetEnd()), 3);
 			m_StatusBar->SetStatusText(wxString::Format(_("Block Size: %" wxLongLongFmtSpec "u"), m_Select->GetSize()), 4);
 		}
+	*/
 	}
 #endif // wxUSE_STATUSBAR
 
@@ -502,8 +506,8 @@ void UDKHexEditor::ReadFromBuffer(uint64_t position, unsigned lenght, char* buff
 	//		text_string << static_cast<wxChar>((unsigned char)(buffer[i]));
 	//		text_string << CP473toUnicode((unsigned char)(buffer[i]));
 
-		//Painting Zebra Stripes, -1 means no stripe. 0 means start with normal, 1 means start with zebra
-	*m_ZebraStriping = (m_ZebraEnable ? position / BytePerLine() % 2 : -1);
+	//Painting Zebra Stripes, -1 means no stripe. 0 means start with normal, 1 means start with zebra
+	//*m_ZebraStriping = (m_ZebraEnable ? position / BytePerLine() % 2 : -1);
 
 	if (m_SectorSize > 1)
 	{

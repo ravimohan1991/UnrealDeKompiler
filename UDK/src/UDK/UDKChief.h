@@ -220,6 +220,8 @@ private:
 	wxStatusBar* m_StatusBar;
 
 	wxFileHistory* m_FileHistory;
+
+	wxMenu* m_MenuFileOpenRecent;
 };
 
 enum

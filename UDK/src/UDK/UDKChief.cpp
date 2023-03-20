@@ -77,15 +77,31 @@ UDKHalo::UDKHalo()
 
 	wxMenuBar* menuBar = new wxMenuBar;
 	menuBar->Append(menuFile, "&File");
-	menuBar->Append(menuHelp, "&Help");
-
-	SetMenuBar(menuBar);
 
 	// Instantiate a notebook
 	m_IDANotebook = new wxAuiNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_SPLIT | wxAUI_NB_WINDOWLIST_BUTTON);
 
 	// Set panes and panels
 	PrepareAUI();
+
+	// Memorize recently opened files
+	m_MenuFileOpenRecent = new wxMenu();
+	wxMenuItem* menuFileOpenRecentItem = new wxMenuItem(menuFile, wxID_ANY, wxT("Open &Recent"), wxEmptyString, wxITEM_NORMAL, m_MenuFileOpenRecent);
+	wxMenuItem* menuFileOpenRecentDummy;
+	menuFileOpenRecentDummy = new wxMenuItem(m_MenuFileOpenRecent, wxID_ANY, wxString( wxT("No Recent File") ) , wxEmptyString, wxITEM_NORMAL );
+	m_MenuFileOpenRecent->Append(menuFileOpenRecentDummy);
+	menuFileOpenRecentDummy->Enable( false );
+
+	menuBar->Append(m_MenuFileOpenRecent, "&Recent");
+
+	// Setup history
+	m_FileHistory = new wxFileHistory();
+	m_FileHistory->UseMenu(m_MenuFileOpenRecent);
+	m_MenuFileOpenRecent->Remove(*m_MenuFileOpenRecent->GetMenuItems().begin() ); //Removes "no recent file" message
+	m_FileHistory->Load(*MyConfigBase::Get());
+
+	menuBar->Append(menuHelp, "&Help");
+	SetMenuBar(menuBar);
 
 	m_StatusBar = CreateStatusBar();
 	SetStatusText("Welcome to Unreal DeKompiler!");
@@ -136,6 +152,10 @@ void UDKHalo::OnOpenFile(wxCommandEvent& event)
 		{
 			wxLogError("Sorry, UDK can't and won't work with unfamiliar code packages.");
 			return;
+		}
+		else
+		{
+			OpenFile(filename, true);
 		}
 	}
 }

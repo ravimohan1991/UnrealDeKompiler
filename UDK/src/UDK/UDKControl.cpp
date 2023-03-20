@@ -128,13 +128,12 @@ void UDKElementControl::RePaint(void)
 	m_PaintMutex.Lock();
 	wxCaretSuspend cs(this);
 
-	wxDC* dcTemp;// = UpdateDC(); //Prepare DC <----- need to write this long function
-
+	wxDC* dcTemp = UpdateDC();
 	if (dcTemp != NULL)
 	{
 		wxClientDC dc(this); //Not looks working on GraphicsContext
 		///Directly creating contentx at dc creates flicker!
-		//UpdateDC(&dc);
+		UpdateDC(&dc);
 
 		//dc.DrawBitmap( *internalBufferBMP, this->GetSize().GetWidth(), this->GetSize().GetHeight() ); //This does NOT work
 #ifdef WXOSX_CARBON  //wxCarbon needs +2 patch on both axis somehow.
@@ -168,6 +167,290 @@ void UDKElementControl::RePaint(void)
 	}
 
 	m_PaintMutex.Unlock();
+}
+
+inline wxMemoryDC* UDKElementControl::CreateDC()
+{
+	if(m_InternalBufferDC != nullptr)
+	{
+		delete m_InternalBufferDC;
+	}
+	if(m_InternalBufferBMP != nullptr)
+	{
+		delete m_InternalBufferBMP;
+	}
+
+	// Note that creating a 0-sized bitmap would fail, so ensure that we create
+	// at least 1*1 one.
+	wxSize sizeBmp = GetSize();
+	sizeBmp.IncTo(wxSize(1, 1));
+	m_InternalBufferBMP= new wxBitmap(sizeBmp);
+	m_InternalBufferDC = new wxMemoryDC();
+	m_InternalBufferDC->SelectObject(*m_InternalBufferBMP);
+
+	return m_InternalBufferDC;
+}
+
+inline wxDC* UDKElementControl::UpdateDC(wxDC *xdc)
+{
+	wxDC *dcTemp;
+	if(xdc)
+	{
+		dcTemp = xdc;
+	}
+	else if(m_InternalBufferDC == nullptr)
+	{
+		m_InternalBufferDC = CreateDC();
+		dcTemp = m_InternalBufferDC;
+	}
+	else
+	{
+		dcTemp = m_InternalBufferDC;
+	}
+
+#ifdef _DEBUG_SIZE_
+	std::cout << "wxHexCtrl::Update Sizes: " << this->GetSize().GetWidth() << ":" << this->GetSize().GetHeight() << std::endl;
+#endif
+
+	dcTemp->SetFont(m_HexDefaultAttr.GetFont());
+	dcTemp->SetTextForeground(m_HexDefaultAttr.GetTextColour());
+	dcTemp->SetTextBackground(m_HexDefaultAttr.GetBackgroundColour()); //This will be overriden by Zebra stripping
+	wxBrush dbrush(m_HexDefaultAttr.GetBackgroundColour());
+
+	dcTemp->SetBackground(dbrush );
+	dcTemp->SetBackgroundMode(wxSOLID); // overwrite old value
+	dcTemp->Clear();
+
+	wxString line;
+	line.Alloc( m_Window.x+1 );
+	wxColour col_standart(m_HexDefaultAttr.GetBackgroundColour());
+
+	wxColour col_zebra(0x00FFEEEE);
+// TODO (death#1#): Remove colour lookup for speed up
+	wxString Colour;
+	if( wxConfig::Get()->Read( _T("ColourHexBackgroundZebra"), &Colour) )
+		col_zebra.Set( Colour );
+
+	size_t textLenghtLimit = 0;
+	size_t textLength=m_Text.Length();
+//	char bux[1000];  //++//
+
+	//Normal process
+	if( !m_Hex2ColorMode || m_ControlType == OffsetControl )
+	{
+		dcTemp->SetPen(*wxTRANSPARENT_PEN);
+
+		//Drawing line by line
+		for ( int y = 0 ; y < m_Window.y; y++ )
+		{
+			//Draw base hex value without color tags
+			line.Empty();
+
+			//Prepare for zebra stripping
+			if (*m_ZebraStriping != -1 )
+			{
+				dcTemp->SetTextBackground((y + *m_ZebraStriping) % 2 ? col_standart : col_zebra);
+
+				//This fills empty regions at Zebra Stripes when printed char with lower than defined
+				if(m_DrawCharByChar)
+				{
+					dcTemp->SetBrush(wxBrush((y + *m_ZebraStriping)%2 ? col_standart : col_zebra ));
+					dcTemp->DrawRectangle( m_Margin.x, m_Margin.y + y * m_CharSize.y, m_Window.x*m_CharSize.x, m_CharSize.y);
+				}
+			}
+
+			for (int x = 0 ; x < m_Window.x; x++)
+			{
+				if(IsDenied(x))
+				{
+					line += wxT(' ');
+					continue;
+				}
+				if(textLenghtLimit >= textLength)
+				{
+					break;
+				}
+				line += CharAt(textLenghtLimit++);
+			}
+
+			// For encodings that have variable font with, we need to write characters one by one.
+			if(m_DrawCharByChar)
+			{
+				for(unsigned q = 0 ; q < line.Len() ; q++)
+				{
+					dcTemp->DrawText( line[q], m_Margin.x + q*m_CharSize.x, m_Margin.y + y * m_CharSize.y );
+				}
+			}
+			else
+			{
+				dcTemp->DrawText(line, m_Margin.x, m_Margin.y + y * m_CharSize.y);
+			}
+		}
+	}
+	else
+	{
+		/*** Hex to Color Engine Prototype ***/
+		char chr;
+		unsigned char chrC;
+		unsigned char R,G,B;
+		wxColour RGB;
+		int col[256];
+
+		//Prepare 8bit to 32Bit color table for speed
+		///Bit    7  6  5  4  3  2  1  0
+		///Data   R  R  R  G  G  G  B  B
+		///OnWX   B  B  G  G  G  R  R  R
+
+		for(unsigned chrC=0; chrC<256; chrC++)
+		{
+			R = (chrC>>5)*0xFF/7;
+			G = (0x07 & (chrC>>2))*0xFF/7;
+			B = (0x03 & chrC)*0xFF/3;
+			col[chrC] = B<<16|G<<8|R;
+		}
+
+		wxString RenderedHexByte;
+		for (int y = 0 ; y < m_Window.y; y++)
+		{
+			for (int x = 0 ; x < m_Window.x;)
+			{
+				if(m_ControlType == HexControl)
+				{
+					RenderedHexByte.Empty();
+
+					if(textLenghtLimit >= textLength)
+					{
+						break;
+					}
+
+					//Rebuilding buffer from text
+					//First half of byte
+					RenderedHexByte += CharAt(textLenghtLimit++);
+					chr = RenderedHexByte.ToAscii().data()[0];
+					chrC = atoh(chr) << 4;
+
+					//Space could be here deu custom formating
+					int i = 1;
+					while(IsDenied( x+i ))
+					{
+						RenderedHexByte+=wxT(" ");
+						i++;
+					}
+
+					//Second half of byte.
+					RenderedHexByte += CharAt(textLenghtLimit++);
+					chr = RenderedHexByte.ToAscii().data()[1];
+					chrC |= atoh( chr );
+					//chrC = (atoh( RenderedHexByte.ToAscii()[0] ) << 4) | atoh( RenderedHexByte.ToAscii()[1] );
+
+					//Trailing HEX space
+					i++;
+					while( IsDenied( x+i ) )
+					{
+						RenderedHexByte+=wxT(" ");
+						i++;
+					}
+
+					RGB.Set(col[chrC]);
+					//dcTemp->SetTextBackground( wxColour(R,G,B) );
+					dcTemp->SetTextBackground( RGB );
+					//int cc=col[chrC];
+					//chr&0xda //RRrG GgBb
+					//chr&0x90 //RrrG ggbb //looks better
+					dcTemp->SetTextForeground( chrC&0x90 ? *wxBLACK : *wxWHITE );
+					dcTemp->DrawText( RenderedHexByte, m_Margin.x + x*m_CharSize.x, m_Margin.y + y * m_CharSize.y );
+					chrC = 0;
+					x+=i;
+				}
+				//Text Coloring
+				else
+				{
+					//Not accurate since text buffer is changed due encoding translation
+					chrC=CharAt(textLenghtLimit);
+					wxString stt=CharAt(textLenghtLimit++);
+					RGB.Set(col[chrC]);
+					dcTemp->SetTextBackground( RGB );
+					//int cc=col[chrC];
+					dcTemp->SetTextForeground( chrC&0x90 ? *wxBLACK : *wxWHITE );
+					dcTemp->DrawText( stt, m_Margin.x + x*m_CharSize.x, m_Margin.y + y * m_CharSize.y );
+					x++;
+				}
+			}
+		}
+	}
+
+#ifndef _Use_Graphics_Contex_ //Uding_Graphics_Context disable TAG painting at buffer.
+	int TAC = m_TagArray.Count();
+	if(TAC != 0)
+	{
+		//for(int i = 0 ; i < TAC ; i++)
+			//TagPainter( dcTemp, *m_TagArray.Item(i) );
+	}
+	if(m_Select.m_Selected)
+		//TagPainter( dcTemp, select );
+#endif
+	DrawCursorShadow(dcTemp);
+
+	if(m_ThinSeparationLines.Count() > 0)
+	{
+		for( unsigned i=0 ; i < m_ThinSeparationLines.Count() ; i++)
+		{
+			DrawSeperationLineAfterChar(dcTemp, m_ThinSeparationLines.Item(i));
+		}
+	}
+
+	return dcTemp;
+}
+
+void UDKElementControl::DrawSeperationLineAfterChar( wxDC* dcTemp, int seperationoffset )
+{
+#ifdef _DEBUG_
+	std::cout << "DrawSeperatıonLineAfterChar(" <<  seperationoffset << ")" << std::endl;
+#endif
+
+	if(m_Window.x > 0)
+	{
+		wxPoint z = InternalPositionToVisibleCoord(seperationoffset);
+		int y1=m_CharSize.y*( 1+z.y )+ m_Margin.y;
+		int y2=y1-m_CharSize.y;
+		int x1=m_CharSize.x*(z.x)+m_Margin.x;
+		int x2=m_CharSize.x*2*m_Window.x+m_Margin.x;
+
+		dcTemp->SetPen( *wxRED_PEN );
+		dcTemp->DrawLine( 0,y1,x1,y1);
+		if( z.x != 0)
+			dcTemp->DrawLine( x1,y1,x1,y2);
+		dcTemp->DrawLine( x1,y2,x2,y2);
+	}
+}
+
+// 00 15 21 CC FC
+// 55 10 49 54 [7]7
+wxPoint UDKElementControl::InternalPositionToVisibleCoord(int position)
+{
+	// Visible position is 19, Visible Coord is (9,2)
+	if(position < 0)
+	{
+		wxLogError(wxString::Format(_T("Fatal error at fx InternalPositionToVisibleCoord(%d)"),position));
+	}
+	int x = m_Window.x? m_Window.x : 1;	//prevents divide zero error;
+	int pos = ToVisiblePosition( position );
+	return wxPoint( pos - (pos / x) * x, pos / x );
+}
+
+inline void UDKElementControl::DrawCursorShadow(wxDC* dcTemp)
+{
+	if(m_Window.x <= 0 || FindFocus()==this)
+	{
+		return;
+	}
+
+	int y = m_CharSize.y * (m_Caret.y) + m_Margin.y;
+	int x = m_CharSize.x * (m_Caret.x) + m_Margin.x;
+
+	dcTemp->SetPen( *wxBLACK_PEN );
+	dcTemp->SetBrush( *wxTRANSPARENT_BRUSH );
+	dcTemp->DrawRectangle(x,y,m_CharSize.x*2+1,m_CharSize.y);
 }
 
 wxString UDKOffsetControl::GetFormatString(bool minimal)
