@@ -216,9 +216,12 @@ public:
 		long style = 0);
 
 	/**
-	 * @brief Read the loaded buffer
+	 * @brief Read the loaded buffer from whatever source
 	 *
-	 * @see
+	 * Reads the buffer extracted from file and stores the appropriate data in \n
+	 * m_HexControl, m_TextControl, and m_OffsetControl for display later.
+	 *
+	 * @see UDKHexEditor::LoadFromOffset(int64_t position, bool cursor_reset, bool paint, bool from_comparator)
 	 */
 	void ReadFromBuffer(uint64_t position, unsigned lenght, char* buffer, bool cursor_reset = true, bool paint = true);
 

@@ -36,6 +36,7 @@
 #include <wx/clipbrd.h>
 #include <wx/window.h>
 #include <wx/popupwin.h>
+#include <wx/colourdata.h>
 
 class UDKOffsetControl;
 class UDKElementControl;
@@ -106,6 +107,8 @@ public:
 	uint64_t				m_End;
 	bool					m_Visible;
 	wxPopupWindow*				m_WxP;
+	wxColourData				m_NoteColourData;
+	wxColourData				m_FontColorData;
 };
 
 WX_DEFINE_ARRAY(TagElement*, ArrayOfTAG);
@@ -233,6 +236,18 @@ public:
 
 	wxPoint InternalPositionToVisibleCoord(int position);
 
+#ifdef _USE_GRAPHICS_CONTEXT_
+	/**
+	 * @brief For painting the context supplied by device context
+	 *
+	 * Once the device context, wxMemoryDC here, is complete, this routine \n
+	 * is called to render using a graphics context
+	 *
+	 * @see UDKElementControl::OnPaint(wxPaintEvent &WXUNUSED(event))
+	 */
+	virtual void TagPainterGC(wxGraphicsContext* gc, TagElement& TG);
+#endif // _USE_GRAPHICS_CONTEXT_
+
 public:
 	struct Selector : public TagElement
 	{
@@ -261,6 +276,16 @@ protected:
 	wxMutex				m_PaintMutex;
 	wxPoint				m_LastRightClickPosition;	//Holds last right click for TagEdit function
 	wxString			m_HexFormat;
+
+
+	/**
+	 * @brief The text form of hexdata
+	 *
+	 * The text incarnation of hex data ? obtained from file
+	 *
+	 * @see UDKElementControl::SetBinValue(char* buffer, int byte_count, bool repaint)
+	 */
+
 	wxString			m_Text;
 
 	/**
@@ -275,33 +300,75 @@ protected:
 protected:
 	void ShowContextMenu(wxPoint pos);
 
+	/**
+	 * @brief Updates the device context
+	 *
+	 * This routine updates the device context onto which images and (or) \n
+	 * text can be drawn.
+	 *
+	 * @see UDKElementControl::OnPaint(wxPaintEvent &WXUNUSED(event))
+	 * @return The device context to draw
+	 */
 	wxDC* UpdateDC(wxDC* dc = nullptr);
 
+	/**
+	 * @brief What to do with the event ChangeSize()
+	 *
+	 * @see UDKElementControl::ChangeSize()
+	 */
 	void OnSize(wxSizeEvent &event);
+
+	/**
+	 * @brief What to do with the event RePaint()?
+	 *
+	 *
+	 *
+	 * @see UDKElementControl::RePaint(void)
+	 */
+	void OnPaint(wxPaintEvent &event);
 	DECLARE_EVENT_TABLE();
 
+	/**
+	 * @brief Creates the device context
+	 *
+	 * Creates a memory device context provides a means to draw graphics \n
+	 * onto a bitmap. Fills m_InternalBufferDC and m_InternalBufferBMP
+	 *
+	 * @see UDKElementControl::ChangeSize()
+	 */
 	wxMemoryDC* CreateDC();
 
 public:
 	//inline void DrawSeperationLineAfterChar(wxDC* DC, int offset);
 	//void OnTagHideAll(void);
-	bool* m_TagMutex;
-	int* m_ZebraStriping;
-	bool m_Hex2ColorMode;
-	bool m_Waylander;
+	bool*					m_TagMutex;
+	int*					m_ZebraStriping;
+	bool					m_Hex2ColorMode;
+	bool					m_Waylander;
 
 	/*
 	 * @brief reference to internal buffer wxMemoryDC
 	 *
+	 * A memory device context provides a means to draw graphics onto a bitmap
+	 *
 	 * @see UDKElementControl::CreateDC()
 	 */
-	wxMemoryDC* m_InternalBufferDC;
+	wxMemoryDC*				m_InternalBufferDC;
 
-	wxBitmap* m_InternalBufferBMP;
-	bool		m_DrawCharByChar;
+	/*
+	 * @brief reference to internal buffer wxMemoryDC
+	 *
+	 * This stores the reference to the encapsulation of the concept of \n
+	 * a platform-dependent bitmap, either monochrome or colour or colour \n
+	 * with alpha channel support
+	 *
+	 * @see UDKElementControl::CreateDC()
+	 */
+	wxBitmap*				m_InternalBufferBMP;
+	bool					m_DrawCharByChar;
 
 	// Caret Movement
-	wxCaret* m_Mycaret;
+	wxCaret*				m_Mycaret;
 };
 
 ///<summary>

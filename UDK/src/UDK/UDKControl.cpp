@@ -133,7 +133,7 @@ void UDKElementControl::RePaint(void)
 	wxCaretSuspend cs(this);
 
 	wxDC* dcTemp = UpdateDC();
-	if (dcTemp != NULL)
+	if (dcTemp != nullptr)
 	{
 		wxClientDC dc(this); //Not looks working on GraphicsContext
 		///Directly creating contentx at dc creates flicker!
@@ -146,32 +146,152 @@ void UDKElementControl::RePaint(void)
 		dc.Blit(0, 0, this->GetSize().GetWidth(), this->GetSize().GetHeight(), dcTemp, 0, 0, wxCOPY);
 #endif //WXOSX_CARBON
 
-#ifdef _Use_Graphics_Contex_
+#ifdef _USE_GRAPHICS_CONTEXT_
 		wxGraphicsContext* gc = wxGraphicsContext::Create(dc);
-		if (gc) {
-			//gc->DrawBitmap( *internalBufferBMP, 0.0, 0.0, dc.GetSize().GetWidth(), dc.GetSize().GetHeight());
-			//gc->Flush();
-
-			int TAC = TagArray.Count();
+		if (gc)
+		{
+			int TAC = m_TagArray.Count();
 			if (TAC != 0)
 				for (int i = 0; i < TAC; i++)
-					TagPainterGC(gc, *TagArray.Item(i));
+				{
+					TagPainterGC(gc, *m_TagArray.Item(i));
+				}
 
-			if (select.selected)
-				TagPainterGC(gc, select);
+			if (m_Select.m_Selected)
+			{
+				TagPainterGC(gc, m_Select);
+			}
 			delete gc;
 		}
 		else
 			std::cout << " GraphicContext returs NULL!\n";
 #else
 
-#endif //_Use_Graphics_Contex_
+#endif //_USE_GRAPHICS_CONTEXT_
 
 		///delete dcTemp;
 	}
 
 	m_PaintMutex.Unlock();
 }
+
+void UDKElementControl::OnPaint(wxPaintEvent &WXUNUSED(event))
+{
+	m_PaintMutex.Lock();
+
+#ifdef _DEBUG_PAINT_
+	std::cout << "wxHexCtrl::OnPaint" << std::endl;
+#endif // _DEBUG_
+
+	wxCaretSuspend cs(this);
+	wxDC* dcTemp = UpdateDC(); // Prepare DC
+
+	if(dcTemp != nullptr)
+	{
+		wxPaintDC dc(this); //wxPaintDC because here is under native wxPaintEvent.
+		dc.Blit(0, 0, this->GetSize().GetWidth(), this->GetSize().GetHeight(), dcTemp, 0, 0, wxCOPY);
+
+#ifdef _USE_GRAPHICS_CONTEXT_
+		wxGraphicsContext *gc = wxGraphicsContext::Create( dc );
+		if (gc)
+		{
+			//gc->DrawBitmap( *internalBufferBMP, 0.0, 0.0, dc.GetSize().GetWidth(), dc.GetSize().GetHeight());
+			//gc->Flush();
+
+			// make a path that contains a circle and some lines
+			gc->SetPen(*wxRED_PEN);
+			wxGraphicsPath path = gc->CreatePath();
+			path.AddCircle(50.0, 50.0, 50.0);
+			path.MoveToPoint(0.0, 50.0);
+			path.AddLineToPoint(100.0, 50.0);
+			path.MoveToPoint(50.0, 0.0);
+			path.AddLineToPoint(50.0, 100.0 );
+			path.CloseSubpath();
+			path.AddRectangle(25.0, 25.0, 50.0, 50.0);
+			gc->StrokePath(path);
+
+			int TAC = m_TagArray.Count();
+			if(TAC != 0)
+			{
+				for(int i = 0 ; i < TAC ; i++)
+				{
+					TagPainterGC( gc, *m_TagArray.Item(i) );
+				}
+			}
+
+			if(m_Select.m_Selected)
+			{
+				TagPainterGC(gc, m_Select);
+			}
+
+			delete gc;
+		}
+#endif
+		///delete dcTemp;
+	}
+	m_PaintMutex.Unlock();
+}
+
+#ifdef _USE_GRAPHICS_CONTEXT_
+void UDKElementControl::TagPainterGC(wxGraphicsContext* gc, TagElement& TG)
+{
+	wxGraphicsFont wxgfont = gc->CreateFont(m_HexDefaultAttr.GetFont(), TG.m_FontColorData.GetColour()) ;
+	gc->SetFont(wxgfont);
+	//gc->SetTextBackground( TG.SoftColour( TG.NoteClrData.GetColour() ));
+
+	int start = TG.m_Start;
+	int end = TG.m_End;
+
+	if( start > end )
+		wxSwap( start, end );
+
+	if( start < 0 )
+		start = 0;
+
+	if ( end > ByteCapacity()*2 )
+		end = ByteCapacity()*2;
+
+// TODO (death#1#): Here problem with Text Ctrl.Use smart pointer...?
+	wxPoint _start_ = InternalPositionToVisibleCoord( start );
+	wxPoint _end_   = InternalPositionToVisibleCoord( end );
+	wxPoint _temp_  = _start_;
+
+#ifdef _DEBUG_PAINT_
+	std::cout << "Tag paint from : " << start << " to " << end << std::endl;
+#endif
+	wxColor a;
+	a.SetRGBA(TG.m_NoteColourData.GetColour().GetRGB() | 80 << 24);
+	wxBrush sbrush(wxBrush(a, wxBRUSHSTYLE_SOLID ));
+	gc->SetBrush( sbrush );
+	wxGraphicsBrush gcbrush = gc->CreateBrush( sbrush );
+
+	//Scan for each line
+	for ( ; _temp_.y <= _end_.y ; _temp_.y++ )
+	{
+		wxString line;
+		_temp_.x = ( _temp_.y == _start_.y ) ? _start_.x : 0;	//calculating local line start
+		int z = ( _temp_.y == _end_.y ) ? _end_.x : m_Window.x;	// and end point
+		for ( int x = _temp_.x; x < z; x++ )
+		{
+			//Prepare line to write process
+			if(IsDenied(x))
+			{
+				if(x+1 < z)
+				{
+					line += wxT(' ');
+				}
+				continue;
+			}
+			line += CharAt(start++);
+		}
+
+		gc->DrawText( line, m_Margin.x + _temp_.x * m_CharSize.x,	//Write prepared line
+			m_Margin.x + _temp_.y * m_CharSize.y,  gcbrush );
+
+	}
+}
+#endif // _USE_GRAPHICS_CONTEXT_
+
 
 inline wxMemoryDC* UDKElementControl::CreateDC()
 {
@@ -188,6 +308,7 @@ inline wxMemoryDC* UDKElementControl::CreateDC()
 	// at least 1*1 one.
 	wxSize sizeBmp = GetSize();
 	sizeBmp.IncTo(wxSize(1, 1));
+
 	m_InternalBufferBMP= new wxBitmap(sizeBmp);
 	m_InternalBufferDC = new wxMemoryDC();
 	m_InternalBufferDC->SelectObject(*m_InternalBufferBMP);
@@ -198,6 +319,7 @@ inline wxMemoryDC* UDKElementControl::CreateDC()
 inline wxDC* UDKElementControl::UpdateDC(wxDC *xdc)
 {
 	wxDC *dcTemp;
+
 	if(xdc)
 	{
 		dcTemp = xdc;
@@ -221,7 +343,7 @@ inline wxDC* UDKElementControl::UpdateDC(wxDC *xdc)
 	dcTemp->SetTextBackground(m_HexDefaultAttr.GetBackgroundColour()); //This will be overriden by Zebra stripping
 	wxBrush dbrush(m_HexDefaultAttr.GetBackgroundColour());
 
-	dcTemp->SetBackground(dbrush );
+	dcTemp->SetBackground(dbrush);
 	dcTemp->SetBackgroundMode(wxSOLID); // overwrite old value
 	dcTemp->Clear();
 
@@ -232,26 +354,25 @@ inline wxDC* UDKElementControl::UpdateDC(wxDC *xdc)
 	wxColour col_zebra(0x00FFEEEE);
 // TODO (death#1#): Remove colour lookup for speed up
 	wxString Colour;
-	if( wxConfig::Get()->Read( _T("ColourHexBackgroundZebra"), &Colour) )
+	if( wxConfig::Get()->Read(_T("ColourHexBackgroundZebra"), &Colour))
 		col_zebra.Set( Colour );
 
 	size_t textLenghtLimit = 0;
 	size_t textLength=m_Text.Length();
-//	char bux[1000];  //++//
 
 	//Normal process
-	if( !m_Hex2ColorMode || m_ControlType == OffsetControl )
+	if(!m_Hex2ColorMode || m_ControlType == OffsetControl)
 	{
 		dcTemp->SetPen(*wxTRANSPARENT_PEN);
 
 		//Drawing line by line
-		for ( int y = 0 ; y < m_Window.y; y++ )
+		for (int y = 0 ; y < m_Window.y; y++)
 		{
 			//Draw base hex value without color tags
 			line.Empty();
 
 			//Prepare for zebra stripping
-			if (*m_ZebraStriping != -1 )
+			if (*m_ZebraStriping != -1)
 			{
 				dcTemp->SetTextBackground((y + *m_ZebraStriping) % 2 ? col_standart : col_zebra);
 
@@ -307,10 +428,10 @@ inline wxDC* UDKElementControl::UpdateDC(wxDC *xdc)
 
 		for(unsigned chrC=0; chrC<256; chrC++)
 		{
-			R = (chrC>>5)*0xFF/7;
-			G = (0x07 & (chrC>>2))*0xFF/7;
-			B = (0x03 & chrC)*0xFF/3;
-			col[chrC] = B<<16|G<<8|R;
+			R = (chrC >> 5) * 0xFF / 7;
+			G = (0x07 & (chrC >>2 )) * 0xFF / 7;
+			B = (0x03 & chrC) * 0xFF / 3;
+			col[chrC] = B << 16 | G <<8 | R;
 		}
 
 		wxString RenderedHexByte;
@@ -383,7 +504,7 @@ inline wxDC* UDKElementControl::UpdateDC(wxDC *xdc)
 		}
 	}
 
-#ifndef _Use_Graphics_Contex_ //Uding_Graphics_Context disable TAG painting at buffer.
+#ifndef _USE_GRAPHICS_CONTEXT_ //Uding_Graphics_Context disable TAG painting at buffer.
 	int TAC = m_TagArray.Count();
 	if(TAC != 0)
 	{
@@ -974,6 +1095,7 @@ void UDKElementControl::SetBinValue(wxString buffer, bool repaint)
 	{
 		m_Text += wxString::Format(wxT("%02X"), static_cast<unsigned char>(buffer.at(i)));
 	}
+
 	if (repaint)
 	{
 		RePaint();

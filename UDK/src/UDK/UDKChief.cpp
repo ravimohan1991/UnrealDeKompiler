@@ -208,7 +208,7 @@ UDKHexEditor* UDKHalo::OpenFile(wxFileName filename, bool openAtRight)
 			m_FileHistory->RemoveFileFromHistory( found );
 		}
 
-		m_FileHistory->AddFileToHistory( filename.GetFullPath() );
+		m_FileHistory->AddFileToHistory(filename.GetFullPath());
 		m_FileHistory->Save(*(MyConfigBase::Get()));
 
 		MyConfigBase::Get()->Flush();

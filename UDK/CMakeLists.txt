@@ -4,7 +4,7 @@
     But Abstractions don't care and Models can't understand!!
                                             - Lul, Practicality
  ]]
- 
+
  # Macros
 # Recursive directory list generator
 # Snippet gracefully taken from https://stackoverflow.com/a/53017508
@@ -56,6 +56,8 @@ elseif(APPLE)
     set(wxUSE_ACCESSIBILITY 0)
 endif()
 
+add_compile_definitions(_USE_GRAPHICS_CONTEXT_)
+
 # Handling MSVC static class members for dynamic linkage. I know!
 if(MSVC AND BUILD_SHARED_LIBS)
     if(WIN32)
@@ -95,7 +97,7 @@ file(GLOB_RECURSE HEADERFILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h)
 add_executable(UDK ${CPPFILES} ${HEADERFILES})
 
 target_include_directories(UDK
-        PRIVATE  
+        PRIVATE
 		${CMAKE_CURRENT_SOURCE_DIR}/../UDK/vendor/wxWidgets/include
     	${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/../UDK/vendor/udis86/libudis86
