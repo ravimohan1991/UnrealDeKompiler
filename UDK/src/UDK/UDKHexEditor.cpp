@@ -35,6 +35,20 @@ UDKHexEditor::UDKHexEditor(wxWindow* parent,
 	// This is really crucial step! Be adviced to not remove it, even if you don't believer.
 	printf("Rahman ve Rahim olan Allah'ın adıyla.\n");
 
+	// Set various styles and fonts and all that
+	wxTextAttr UDKStyle;
+	wxColour Foreground,Background;
+	int FontSize = 10;
+	MyConfigBase::Get()->Read( wxT("FontSize"), &FontSize, 10 );
+
+	wxFont afont = wxFont(FontSize, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, 0, wxT("Monospace"), wxFONTENCODING_ISO8859_1);
+	UDKStyle = wxTextAttr(Foreground, Background, afont);
+
+	m_HexControl->SetDefaultStyle(UDKStyle);
+	m_TextControl->SetDefaultStyle(UDKStyle);
+
+	m_OffsetControl->SetDefaultStyle(UDKStyle);
+
 	m_FileInMicroscope = nullptr;
 	m_ComparatorHexEditor = nullptr;
 
@@ -89,15 +103,20 @@ void UDKHexEditor::LoadFromOffset(int64_t position, bool cursor_reset, bool pain
 		m_ComparatorHexEditor->LoadFromOffset(position, cursor_reset, true, true);
 	}
 
-	m_FileInMicroscope->Seek(position, wxFromStart);
-	char* buffer = new char[ByteCapacity()];
-	int readedbytes = m_FileInMicroscope->Read(buffer, ByteCapacity());
+	// Set the UDKFile::m_Getptr and m_Putptr
+	m_FileInMicroscope->UDKSeek(position, wxFromStart);
 
-	if (readedbytes == -1) {
+	unsigned byteCapacity = ByteCapacity();
+	char* buffer = new char[byteCapacity];
+	int readedbytes = m_FileInMicroscope->UDKRead(buffer, byteCapacity);
+
+	if (readedbytes == -1)
+	{
 		wxMessageBox(_("File cannot read!"), _("Error"), wxOK | wxICON_ERROR);
 		delete[] buffer;
 		return;
 	}
+
 	ReadFromBuffer(position, readedbytes, buffer, cursor_reset, paint);
 	delete[] buffer;
 }
@@ -323,7 +342,7 @@ int UDKHexEditor::HashVerify(wxString hash_file, UDKFile* File)
 	wxString MyHashStr = wxString::From8BitData(reinterpret_cast<char*>(mbf.GetData()), hash_block_size*2);
 	wxMemoryBuffer compare = m_HexControl->HexToBin(MyHashStr);
 
-	File->Seek(0);
+	File->UDKSeek(0);
 
 	wxString msg = _("Please wait while calculating checksum.");
 	wxString emsg = wxT("\n");
@@ -342,7 +361,7 @@ int UDKHexEditor::HashVerify(wxString hash_file, UDKFile* File)
 
 	while(rd == rdBlockSz)
 	{
-		rd = File->Read( buff, rdBlockSz );
+		rd = File->UDKRead(buff, rdBlockSz);
 		readfrom+=rd;
 		mhash( myhash, buff, rd);
 		time(&te);
@@ -407,13 +426,13 @@ void UDKHexEditor::UpdateCursorLocation( bool force )
 //	}
 
 	wxMemoryBuffer buffer;
-	m_FileInMicroscope->Seek(CursorOffset(), wxFromStart);
+	m_FileInMicroscope->UDKSeek(CursorOffset(), wxFromStart);
 
 #ifdef _DEBUG_FILE_
 	std::cout << "UpdateCursorLocation() read file for panels" << std::endl;
 #endif
 
-	int size = m_FileInMicroscope->Read(reinterpret_cast<char*>(buffer.GetWriteBuf( 17 )), 17);
+	int size = m_FileInMicroscope->UDKRead(reinterpret_cast<char*>(buffer.GetWriteBuf( 17 )), 17);
 	if(size >0 )
 	{
 		buffer.UngetWriteBuf( size );
@@ -436,13 +455,13 @@ void UDKHexEditor::UpdateCursorLocation( bool force )
 			else
 			{
 				//If there is a selection, use selection up to 100 bytes.
-				m_FileInMicroscope->Seek(m_Select->GetStart(), wxFromStart);
+				m_FileInMicroscope->UDKSeek(m_Select->GetStart(), wxFromStart);
 				//Take just first 128 bytes!
 				int sz = m_Select->GetSize() > 128 ? 128 : m_Select->GetSize();
 #ifdef _DEBUG_FILE_
 				std::cout << "UpdateCursorLocation() read file for dasm" << std::endl;
 #endif
-				int size = m_FileInMicroscope->Read(reinterpret_cast<char*>(buffer.GetWriteBuf( sz )), sz);
+				int size = m_FileInMicroscope->UDKRead(reinterpret_cast<char*>(buffer.GetWriteBuf( sz )), sz);
 				buffer.UngetWriteBuf(size);
 				m_DisassemblerPanel->Set(buffer);
 			}

@@ -100,15 +100,22 @@ class UDKFile;
 class DiffNode
 {
 public:
-	bool flag_undo;			//For undo
+	bool flag_undo;				//For undo
 	bool flag_commit;			//For undo
 	bool flag_inject;			//this is for file size extension. If this flag is true, that means a new data inserted to file
-	uint64_t start_offset;	//start byte of node
+	uint64_t start_offset;			//start byte of node
 	int64_t size;				//size of node
 	unsigned char* old_data;			//old data buffer
 	unsigned char* new_data;			//new data buffer
 	inline uint64_t end_offset(void) { return start_offset + abs(size); }
 	bool Apply(unsigned char* buffer, int64_t size, int64_t irq_skip);
+
+
+	/**
+	 * @brief
+	 *
+	 */
+
 	UDKFile* virtual_node;
 	uint64_t virtual_node_start_offset;
 	uint64_t virtual_node_size;
@@ -124,7 +131,8 @@ public:
 		virtual_node = NULL;
 		virtual_node_start_offset = 0;
 	}
-	~DiffNode(void) {
+	~DiffNode(void)
+	{
 		delete[] new_data;
 		delete[] old_data;
 	}
@@ -226,7 +234,24 @@ public:
 	void ShowDebugState(void);
 	wxFileOffset Length(int PatchIndice = -1);
 
-	wxFileOffset Seek(wxFileOffset ofs, wxSeekMode mode = wxFromStart);
+	/**
+	 * @brief Seeks to the specified position
+	 *
+	 * UDK's implementation of Seek function. Although wxFile::Seek is present \n
+	 * which is "move ptr ofs bytes related to start/current offset/end of file" \n
+	 * This routine, however, correctly sets the m_Getptr and m_Putptr to ofs for \n
+	 * later use.
+	 *
+	 * @param ofs					Offset to seek to
+	 * @param mode					Parameter indicating how file offset should be interpreted.
+	 *						wxFromStart:	Seek from the file beginning
+	 *						wxFromEnd:	Seek from the current position
+	 *						wxFromCurrent	Seek from end of the file
+	 *
+	 * @return The actual offset position achieved
+	 */
+	wxFileOffset UDKSeek(wxFileOffset ofs, wxSeekMode mode = wxFromStart);
+
 	bool OSDependedOpen(wxFileName& myfilename, FileAccessMode FAM = ReadOnly, unsigned ForceBlockRW = 0);
 	bool UDKFileOpen(wxFileName& myfilename, FileAccessMode FAM = ReadOnly, unsigned ForceBlockRW = 0);
 	bool Close();
@@ -248,8 +273,33 @@ public:
 		return wxFile::IsOpened();
 	};
 	int fd() const { return wxFile::fd(); };
-	virtual	long Read(char* buffer, int size);
-	virtual	long Read(unsigned char* buffer, int size);
+
+	/**
+	 * @brief UDK's take on realtime file reading
+	 *
+	 * Calls the UDKFile::UDKRead(unsigned char* buffer, int size) by doing \n
+	 * reinterpret cast.
+	 *
+	 * @param buffer				The buffer to write into (signed)
+	 * @param size					Bytes to read
+	 * @return The number of bytes read, or the symbol wxInvalidOffset.
+	 * @author Someone from Turkey
+	 */
+	long UDKRead(char* buffer, int size);
+
+	/**
+	 * @brief UDK's take on realtime file reading
+	 *
+	 * We want to be able to read from real time file editing environment. \n
+	 * This UDKRead is to take that into account by considering m_DiffArray.
+	 *
+	 * @param buffer				The buffer to write into (signed)
+	 * @param size					Bytes to read
+	 * @return The number of bytes read, or the symbol wxInvalidOffset.
+	 * @author Someone from Turkey
+	 */
+	long UDKRead(unsigned char* buffer, int size);
+
 	void SetXORKey(wxMemoryBuffer);
 	wxMemoryBuffer GetXORKey(void);
 	void ApplyXOR(unsigned char* buffer, unsigned size, uint64_t from);
@@ -280,6 +330,21 @@ public:
 	wxString m_OldOwner;
 
 protected:
+	/**
+	 * @brief Read relevant stuff from file
+	 *
+	 * The state of the art Read function. \n
+	 *
+	 *
+	 * @param buffer				The buffer to write data to
+	 * @param size					Bytes to read
+	 * @param location
+	 * @param Patches
+	 * @param PatchIndice
+	 *
+	 * @see UDKFile::Read(unsigned char* buffer, int size)
+	 */
+
 	long ReadR(unsigned char* buffer, unsigned size, uint64_t location, ArrayOfNode* Patches, int PatchIndice);
 
 	void RemoveTail(DiffNode* remove_node);	//remove further tails.
@@ -296,10 +361,32 @@ private:
 	bool m_RAMProcess;
 	int m_ProcessID;
 	FileAccessMode m_FileAccessMode;
-	ArrayOfNode m_DiffArray;
 	ArrayOfNode m_TempDiffArray;
+
+	/**
+	 * @brief The name of the file that this class is dedicated to
+	 */
 	wxFileName m_TheFile;
-	uint64_t m_Putptr, m_Getptr;
+
+	/**
+	 * @brief Array of changes done to the file?
+	 *
+	 */
+	ArrayOfNode m_DiffArray;
+
+	/**
+	 * @brief
+	 *
+	 */
+	wxFileOffset m_Putptr;
+
+	/**
+	 * @brief I think the location from where to start reading
+	 *
+	 * The offset from where to begin the reading of the file.
+	 */
+	wxFileOffset m_Getptr;
+
 	wxMemoryBuffer m_XORview;
 #ifdef __WXMSW__
 	HANDLE m_HDevice;

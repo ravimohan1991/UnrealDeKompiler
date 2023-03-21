@@ -3,6 +3,10 @@
 #include <wx/encconv.h>
 #include <wx/fontmap.h>
 
+BEGIN_EVENT_TABLE(UDKElementControl, wxScrolledWindow)
+	EVT_SIZE(UDKElementControl::OnSize)
+END_EVENT_TABLE()
+
 int atoh(const char hex)
 {
 	return ( hex >= '0' && hex <= '9' ) ? hex -'0' :
@@ -56,10 +60,10 @@ UDKElementControl::UDKElementControl(wxWindow* parent,
 	m_HexFormat = wxT("xx ");
 	m_Mycaret = NULL;
 
-	//SetSelectionStyle(HexDefaultAttr);
+	//SetSelectionStyle(m_HexDefaultAttr);
 
 	ClearSelection(false);
-	//SetDefaultStyle(HexDefaultAttr);
+	SetDefaultStyle(m_HexDefaultAttr);
 
 	m_Caret.x = m_Caret.y = m_Window.x = m_Window.y = 1;
 	m_Margin.x = m_Margin.y = 0;
@@ -71,7 +75,7 @@ UDKElementControl::UDKElementControl(wxWindow* parent,
 	//CreateCaret();
 
 	MyConfigBase::Get()->Read(_T("Hex2ColorMode"), &m_Hex2ColorMode);
-	//  ChangeSize();
+	ChangeSize();
 
 	//wxCaret *caret = GetCaret();
 	if (m_Mycaret)
@@ -594,19 +598,96 @@ wxPoint UDKElementControl::PixelCoordToInternalCoord(wxPoint mouse)
 	return wxPoint(x, y);
 }
 
+void UDKElementControl::SetDefaultStyle(wxTextAttr& new_attr)
+{
+	m_HexDefaultAttr = new_attr;
+
+	wxClientDC dc(this);
+
+	dc.SetFont(m_HexDefaultAttr.GetFont());
+	SetFont(m_HexDefaultAttr.GetFont());
+	m_CharSize.y = dc.GetCharHeight();
+	m_CharSize.x = dc.GetCharWidth();
+
+	wxCaret *caret = GetCaret();
+#ifdef _DEBUG_CARET_
+	std::cout << "Caret = 0x"<< (intptr_t) caret <<  " - mycaret= 0x" << (intptr_t) mycaret << "m_charSize.x" << m_CharSize.x << std::endl;
+#endif
+	if (caret)
+	{
+		caret->SetSize(m_CharSize.x, m_CharSize.y);
+	}
+	RePaint();
+}
+
+void UDKElementControl::ChangeSize()
+{
+	unsigned gip = GetInsertionPoint();
+	wxSize size = GetClientSize();
+
+	m_Window.x = (size.x - 2 * m_Margin.x) / m_CharSize.x;
+	m_Window.y = (size.y - 2 * m_Margin.x) / m_CharSize.y;
+
+	if (m_Window.x < 1)
+	{
+		m_Window.x = 1;
+	}
+	if (m_Window.y < 1)
+	{
+		m_Window.y = 1;
+	}
+
+	for(int i=0 ; i < m_Window.x+1 ; i++)
+	{
+		m_IsDeniedCache[i] = IsDenied_NoCache(i);
+	}
+
+	CharacterPerLine(true);//Updates CPL static int
+
+	//This Resizes internal buffer!
+	CreateDC();
+
+	RePaint();
+	SetInsertionPoint( gip );
+
+#if wxUSE_STATUSBAR
+	wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
+
+	if (frame && frame->GetStatusBar())
+	{
+		wxString msg;
+		msg.Printf(_T("Panel size is (%d, %d)"), m_Window.x, m_Window.y);
+		frame->SetStatusText(msg, 1);
+	}
+#endif // wxUSE_STATUSBAR
+}
+
+void UDKElementControl::OnSize(wxSizeEvent &event)
+{
+#ifdef _DEBUG_SIZE_
+	std::cout << "wxHexCtrl::OnSize X,Y" << event.GetSize().GetX() <<',' << event.GetSize().GetY() << std::endl;
+#endif
+	ChangeSize();
+	event.Skip();
+}
+
 int UDKElementControl::CharacterPerLine(bool NoCache)
 {
 	//Without spaces
 	if (!NoCache)
 	{
-		return CPL;
+		return m_CPL;
 	}
+
 	int avoid = 0;
 	for (int x = 0; x < m_Window.x; x++)
+	{
 		avoid += m_IsDeniedCache[x];
-	CPL = m_Window.x - avoid;
-	//std::cout << "CPL: " << CPL << std::endl;
-	return (m_Window.x - avoid);
+	}
+
+	m_CPL = m_Window.x - avoid;
+
+	return m_CPL;
 }
 
 int UDKElementControl::xCountDenied(int x)

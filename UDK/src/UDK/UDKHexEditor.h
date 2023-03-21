@@ -230,8 +230,11 @@ public:
 	void Reload();
 
 	/**
-	 * @brief Loads file from specified page offset; refresh
+	 * @brief Loads file from specified page offset
 	 *
+	 * Loads file (or similar process and or buffer) from specified position.
+	 *
+	 * @param position				Position or offset to seek to
 	 * @see
 	 */
 	void LoadFromOffset(int64_t position, bool cursor_reset = false, bool paint = true, bool from_comparator = false);

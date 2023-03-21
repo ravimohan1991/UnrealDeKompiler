@@ -117,6 +117,9 @@ enum ControlTypes
 	OffsetControl
 };
 
+/// <summary>
+/// The UDKElementControl class
+/// </summary>
 class UDKElementControl : public wxScrolledWindow
 {
 public:
@@ -152,15 +155,37 @@ public:
 
 	void OnTagHideAll(void);
 
+	/**
+	 * @brief Update geometry and relevant variables
+	 *
+	 *
+	 */
+	virtual void ChangeSize();
+
+	/**
+	 * @brief Sets the displayable character style
+	 *
+	 * Sets the m_CharSize.x and .y values
+	 *
+	 * @see
+	 */
+	virtual void SetDefaultStyle(wxTextAttr& new_attr);
+
 	// Movement Support
 	virtual int CharacterPerLine(bool NoCache = false);
 
 	virtual int PixelCoordToInternalPosition(wxPoint mouse);
 	wxPoint PixelCoordToInternalCoord(wxPoint mouse);
 
-	// Shaper Classes, All other classes has to be depended to this function for proper action!
+	// Shaper Classes, all other classes have to depend on this function for proper action!
 	bool m_IsDeniedCache[1024];//cache, Enough for these days hehe
-	int CPL;
+
+	/**
+	 * @brief Characters per line
+	 *
+	 * @see UDKElementControl::CharacterPerLine(bool NoCache)
+	 */
+	uint32_t m_CPL;
 	virtual bool IsDenied()
 	{
 		return IsDenied(m_Caret.x);
@@ -222,18 +247,38 @@ public:
 protected:
 	wxPoint				m_Margin;	// the margin around the text (looks nicer)
 	wxPoint				m_Caret;	// position (in text coords) of the caret
-	wxPoint				m_Window;	// the size (in text coords) of the window
+
+	/**
+	 * @brief The size of window in text coordinates
+	 *
+	 * ::x and ::y are the counters of characters in x and y directions (axis)
+	 *
+	 * @see UDKElementControl::CharacterPerLine(bool NoCache)
+	 */
+	wxPoint				m_Window;
+
 	wxTextAttr			m_HexDefaultAttr;
 	wxMutex				m_PaintMutex;
 	wxPoint				m_LastRightClickPosition;	//Holds last right click for TagEdit function
 	wxString			m_HexFormat;
 	wxString			m_Text;
-	wxSize				m_CharSize;	// size (in pixels) of one character
-	ControlTypes			m_ControlType;
 
+	/**
+	 * @brief size (in pixels) of one character
+	 *
+	 * You might wonder why is this not wxPoint and someone from Turkey \n
+	 * should have the answer.
+	 */
+	wxSize				m_CharSize;
+
+	ControlTypes			m_ControlType;
 protected:
 	void ShowContextMenu(wxPoint pos);
+
 	wxDC* UpdateDC(wxDC* dc = nullptr);
+
+	void OnSize(wxSizeEvent &event);
+	DECLARE_EVENT_TABLE();
 
 	wxMemoryDC* CreateDC();
 
@@ -424,6 +469,12 @@ public:
 	//		bool IsAllowedChar(const unsigned char& chr);
 	//int GetInsertionPoint(void);
 	//void SetInsertionPoint(unsigned int pos);
+
+	/**
+	 * @brief Evaluate size relevant variables
+	 *
+	 */
+
 	//void ChangeSize();
 	//wxChar Filter(const unsigned char& chr);
 	//wxString FilterMBBuffer(const char* str, int len, int fontenc);

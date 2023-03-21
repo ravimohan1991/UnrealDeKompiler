@@ -501,9 +501,9 @@ bool UDKFile::UDKFileOpen(wxFileName& myfilename, FileAccessMode FAM, unsigned F
 	if (myfilename.IsFileReadable())
 	{//FileExists()){
 		if (FAM == ReadOnly)
-			Open(myfilename.GetFullPath(), wxFile::read);
+			Open(myfilename.GetFullPath(), read);
 		else
-			Open(myfilename.GetFullPath(), wxFile::read_write);
+			Open(myfilename.GetFullPath(), read_write);
 
 		if (!IsOpened()) {
 			m_FileAccessMode = AccessInvalid;
@@ -533,20 +533,26 @@ bool UDKFile::UDKFileOpen(wxFileName& myfilename, FileAccessMode FAM, unsigned F
 	}
 }
 
-long UDKFile::Read(char* buffer, int size)
+long UDKFile::UDKRead(char* buffer, int size)
 {
-	return Read(reinterpret_cast<unsigned char*>(buffer), size);
+	return UDKRead(reinterpret_cast<unsigned char*>(buffer), size);
 }
 
-long UDKFile::Read(unsigned char* buffer, int size)
+long UDKFile::UDKRead(unsigned char* buffer, int size)
 {
 	//Why did I calculate j here? To find active patch indice...
 	int j = 0;
 	for (unsigned i = 0; i < m_DiffArray.GetCount(); i++)
+	{
 		if (m_DiffArray[i]->flag_undo && !m_DiffArray[i]->flag_commit)	// Allready committed to disk, nothing to do here
+		{
 			break;
+		}
 		else
+		{
 			j = i + 1;
+		}
+	}
 
 	long ret = ReadR(buffer, size, m_Getptr, &m_DiffArray, j);
 
@@ -566,19 +572,18 @@ long UDKFile::ReadR(unsigned char* buffer, unsigned size, uint64_t from, ArrayOf
 #ifdef _DEBUG_FILE_
 	std::cout << "ReadR from:" << std::dec << from << "\t size:" << std::setw(3) << size << "\t PtchIndice" << PatchIndice << std::endl;
 #endif // _DEBUG_FILE_
-	///Getting Data from bellow layer.
+
+	///Getting Data from below layer.
 	if (PatchIndice == 0)	//Deepest layer
 	{
 		//Block Read/Write mechanism.
-		//if( 0 )//for debugging
-
-#ifdef __linux__
+#ifdef UDK_LINUX_PLATFORM
 		//Linux file read speed up hack for Block devices.
 		//This macro disables blockRW code.
 		//Block read code just allowed for memory devices under linux.
 		//Because you can read arbitrary locations from block devices at linux.
-		//Kernel handle the job...
-		//This hack increase reading speed from 164MB to 196MB on my SSD with using read 4MB buffer due use of memcmp.
+		//Kernel handles the job...
+		//This hack increases the reading speed from 164MB to 196MB on my SSD with using read 4MB buffer due use of memcmp.
 		//(Max disk rw is 230MB/s)
 		if (m_ProcessID >= 0)
 #else
@@ -625,8 +630,8 @@ long UDKFile::ReadR(unsigned char* buffer, unsigned size, uint64_t from, ArrayOf
 			//Reading from a file
 			else
 			{
-				wxFile::Seek(StartSector * m_BlockRWSize);
-				rd = wxFile::Read(bfr, rd_size);
+				Seek(StartSector * m_BlockRWSize);
+				rd = Read(bfr, rd_size);
 			}
 			//Here, we adjust shifting by copying bfr to buffer. Inefficient but easy to programe.
 			memcpy(buffer, bfr + StartShift, wxMin(wxMin(rd, rd_size - StartShift), size)); //wxMin protects file ends.
@@ -638,36 +643,47 @@ long UDKFile::ReadR(unsigned char* buffer, unsigned size, uint64_t from, ArrayOf
 			memcpy(buffer, reinterpret_cast<char*>(m_InternalFileBuffer.GetData()) + from, size);
 			return (from + size > m_InternalFileBuffer.GetDataLen() ? m_InternalFileBuffer.GetDataLen() - from : size);
 		}
-		wxFile::Seek(from); //Since this is the Deepest layer
-		return wxFile::Read(buffer, size); //Ends recursion. here
+
+		Seek(from); //Since this is the Deepest layer
+		return Read(buffer, size); //Ends recursion. here
 	}
 
 	int readsize = 0;
 	//than process at current layer
-	if (PatchIndice != 0) {
+	if (PatchIndice != 0)
+	{
 		DiffNode* patch = PatchArray->Item(PatchIndice - 1); //PatchIndice-1 means the last patch item! Don't confuse at upper code.
-		if (patch->flag_inject && patch->size < 0) {//Deletion patch
+		if (patch->flag_inject && patch->size < 0)
+		{
+			//Deletion patch
 			readsize = DeletionPatcher(from, buffer, size, PatchArray, PatchIndice);
 		}
-		else if (patch->flag_inject) {	//Injection patch
+		else if (patch->flag_inject)
+		{
+			//Injection patch
 			readsize = InjectionPatcher(from, buffer, size, PatchArray, PatchIndice);
 		}
-		else {
+		else
+		{
 			readsize = ReadR(buffer, size, from, PatchArray, PatchIndice - 1);//PatchIndice-1 => Makes Patch = 0 for 1 patch. Read from file.
 			if (size != static_cast<unsigned int>(readsize)) //If there is free chars
+			{
 				readsize = (Length(PatchIndice - 1) - from > size) ? (size) : (Length(PatchIndice - 1) - from);	//check for buffer overflow
+			}
 			ModificationPatcher(from, buffer, size, patch);
 		}
 	}
-	//	if(readsize < 0)
-	//		return -1;
-	if (static_cast<int64_t>(from + readsize) > Length(PatchIndice)) {
+
+	if (static_cast<int64_t>(from + readsize) > Length(PatchIndice))
+	{
 		//Injection fills all buffer as requested. So we need truncate it for avoid random memory on file end.
 		readsize = Length(PatchIndice) - from;
 	}
+
 #ifdef _DEBUG_FILE_
 	std::cout << "Read Size:" << std::setw(3) << readsize << std::endl;
 #endif // _DEBUG_FILE_
+
 	return readsize;
 }
 
@@ -945,8 +961,8 @@ bool UDKFile::Apply(void)
 					}
 					else
 					{
-						wxFile::Seek(StartSector * m_BlockRWSize);
-						rd = wxFile::Read(bfr, rd_size);
+						Seek(StartSector * m_BlockRWSize);
+						rd = Read(bfr, rd_size);
 					}
 
 					if (rd != rd_size)
@@ -955,10 +971,10 @@ bool UDKFile::Apply(void)
 						return false;
 					}
 
-					//if already written and makeing undo, than use old_data
+					//if already written and making undo, then use old_data
 					memcpy(bfr + StartShift, (m_DiffArray[i]->flag_commit ? m_DiffArray[i]->old_data : m_DiffArray[i]->new_data), m_DiffArray[i]->size);
 
-					//Than apply the changes
+					//Then apply the changes
 
 					//if memory process
 					if (m_ProcessID >= 0)
@@ -984,7 +1000,7 @@ bool UDKFile::Apply(void)
 					}
 					else
 					{
-						wxFile::Seek(StartSector * m_BlockRWSize);
+						Seek(StartSector * m_BlockRWSize);
 						success = Write(bfr, rd_size) && success;
 					}
 					delete[] bfr;
@@ -1109,17 +1125,24 @@ void UDKFile::ApplyXOR(unsigned char* buffer, unsigned size, uint64_t from)
 	}
 }
 
-wxFileOffset UDKFile::Seek(wxFileOffset ofs, wxSeekMode mode)
+wxFileOffset UDKFile::UDKSeek(wxFileOffset ofs, wxSeekMode mode)
 {
 	if (!IsOpened())
+	{
 		return -1;
+	}
 
-	m_Getptr = m_Putptr = ofs;
+	m_Getptr = m_Putptr = Seek(ofs, mode);
 
+	// No need to offset?
 	if (m_BlockRWSize > 0 || m_FileType == UDK_Buffer || m_ProcessID > 0)
+	{
 		return ofs;
+	}
 
-	return wxFile::Seek(ofs, mode);
+	// seems redundant
+	//return Seek(ofs, mode);
+	return m_Getptr;
 }
 
 bool DiffNode::Apply(unsigned char* data_buffer, int64_t size, int64_t irq_skip)
@@ -1129,7 +1152,7 @@ bool DiffNode::Apply(unsigned char* data_buffer, int64_t size, int64_t irq_skip)
 		memcpy(data_buffer, flag_undo ? old_data : new_data + irq_skip, size);
 		return true;
 	}
-	virtual_node->Seek(virtual_node_start_offset + irq_skip, wxFromStart);
-	virtual_node->Read(data_buffer, size);
+	virtual_node->UDKSeek(virtual_node_start_offset + irq_skip, wxFromStart);
+	virtual_node->UDKRead(data_buffer, size);
 	return true;
 }
