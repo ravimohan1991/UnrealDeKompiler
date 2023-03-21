@@ -70,7 +70,9 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_u_d_k_file-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">UDKFile Class Reference</div></div>
 </div><!--header-->
@@ -87,10 +89,22 @@ Inheritance diagram for UDKFile:</div>
   <img src="class_u_d_k_file.png" alt=""/>
  </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:aeb06ee2de2891c666f4fb5f50e0466cc"><td class="memItemLeft" align="right" valign="top">wxFileOffset&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_file.html#aeb06ee2de2891c666f4fb5f50e0466cc">UDKSeek</a> (wxFileOffset ofs, wxSeekMode mode=wxFromStart)</td></tr>
+<tr class="memdesc:aeb06ee2de2891c666f4fb5f50e0466cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seeks to the specified position.  <br /></td></tr>
+<tr class="separator:aeb06ee2de2891c666f4fb5f50e0466cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16613de033a3a32b6f2a0a41e5a281de"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_file.html#a16613de033a3a32b6f2a0a41e5a281de">UDKRead</a> (char *buffer, int size)</td></tr>
+<tr class="memdesc:a16613de033a3a32b6f2a0a41e5a281de"><td class="mdescLeft">&#160;</td><td class="mdescRight">UDK's take on realtime file reading.  <br /></td></tr>
+<tr class="separator:a16613de033a3a32b6f2a0a41e5a281de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00a941bfd412801cb2ad71977ee2a8e1"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_file.html#a00a941bfd412801cb2ad71977ee2a8e1">UDKRead</a> (unsigned char *buffer, int size)</td></tr>
+<tr class="memdesc:a00a941bfd412801cb2ad71977ee2a8e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">UDK's take on realtime file reading.  <br /></td></tr>
+<tr class="separator:a00a941bfd412801cb2ad71977ee2a8e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a3a86ed57a4c01e8cda625be13cac14d4"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_file.html#a3a86ed57a4c01e8cda625be13cac14d4">ReadR</a> (unsigned char *buffer, unsigned size, uint64_t location, ArrayOfNode *Patches, int PatchIndice)</td></tr>
-<tr class="memdesc:a3a86ed57a4c01e8cda625be13cac14d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">State of the Art Read Function.  <br /></td></tr>
+<tr class="memdesc:a3a86ed57a4c01e8cda625be13cac14d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read relevant stuff from file.  <br /></td></tr>
 <tr class="separator:a3a86ed57a4c01e8cda625be13cac14d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac51ca5894bc7e404cab45c916e6c1ab"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_file.html#aac51ca5894bc7e404cab45c916e6c1ab">DeletionPatcher</a> (uint64_t location, unsigned char *data, int size, ArrayOfNode *Patches, int PatchIndice)</td></tr>
 <tr class="separator:aac51ca5894bc7e404cab45c916e6c1ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -98,6 +112,19 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:ac9ed4c7e786c15483a9f73bc0ede3ab2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba9adf40f2cc0eed7da1104a242a2e86"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_file.html#aba9adf40f2cc0eed7da1104a242a2e86">ModificationPatcher</a> (uint64_t location, unsigned char *data, int size, <a class="el" href="class_diff_node.html">DiffNode</a> *Patch)</td></tr>
 <tr class="separator:aba9adf40f2cc0eed7da1104a242a2e86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a013d9e2b7044b21defee17f0f84734dd"><td class="memItemLeft" align="right" valign="top"><a id="a013d9e2b7044b21defee17f0f84734dd" name="a013d9e2b7044b21defee17f0f84734dd"></a>
+wxFileName&#160;</td><td class="memItemRight" valign="bottom"><b>m_TheFile</b></td></tr>
+<tr class="memdesc:a013d9e2b7044b21defee17f0f84734dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of the file that this class is dedicated to. <br /></td></tr>
+<tr class="separator:a013d9e2b7044b21defee17f0f84734dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d26099083056234b296615da360a3f0"><td class="memItemLeft" align="right" valign="top">ArrayOfNode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_file.html#a6d26099083056234b296615da360a3f0">m_DiffArray</a></td></tr>
+<tr class="memdesc:a6d26099083056234b296615da360a3f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of changes done to the file?  <br /></td></tr>
+<tr class="separator:a6d26099083056234b296615da360a3f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ae7da62d81e1e5513846012f74100df"><td class="memItemLeft" align="right" valign="top">wxFileOffset&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_file.html#a4ae7da62d81e1e5513846012f74100df">m_Getptr</a></td></tr>
+<tr class="memdesc:a4ae7da62d81e1e5513846012f74100df"><td class="mdescLeft">&#160;</td><td class="mdescRight">I think the location from where to start reading.  <br /></td></tr>
+<tr class="separator:a4ae7da62d81e1e5513846012f74100df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The UDK's file class. The file class equivalen of wxHexEditor's FAL. </p>
@@ -323,9 +350,197 @@ Protected Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>State of the Art Read Function. </p>
-<p>Getting Data from bellow layer.</p>
+<p>Read relevant stuff from file. </p>
+<p>State of the Art Read Function.</p>
+<p>The state of the art Read function. <br  />
+</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buffer</td><td>The buffer to write data to </td></tr>
+    <tr><td class="paramname">size</td><td>Bytes to read </td></tr>
+    <tr><td class="paramname">location</td><td></td></tr>
+    <tr><td class="paramname">Patches</td><td></td></tr>
+    <tr><td class="paramname">PatchIndice</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd>UDKFile::Read(unsigned char* buffer, int size) </dd></dl>
+<p>Getting Data from below layer.</p>
 <p>NOTE:This function just read +1 more sectors and copies to buffer via memcpy, thus inefficient, at least for SSD's. TODO:Need to read 1 sector at start to bfs, than read to buffer directly and read one more sector to bfr. Than we could copy readed sectors via memcpy which supposed to increase copy speed some percent.</p>
+
+</div>
+</div>
+<a id="a16613de033a3a32b6f2a0a41e5a281de" name="a16613de033a3a32b6f2a0a41e5a281de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16613de033a3a32b6f2a0a41e5a281de">&#9670;&#160;</a></span>UDKRead() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">long UDKFile::UDKRead </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>UDK's take on realtime file reading. </p>
+<p>Calls the <a class="el" href="class_u_d_k_file.html#a00a941bfd412801cb2ad71977ee2a8e1" title="UDK&#39;s take on realtime file reading.">UDKFile::UDKRead(unsigned char* buffer, int size)</a> by doing <br  />
+reinterpret cast.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buffer</td><td>The buffer to write into (signed) </td></tr>
+    <tr><td class="paramname">size</td><td>Bytes to read </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The number of bytes read, or the symbol wxInvalidOffset. </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Someone from Turkey </dd></dl>
+
+</div>
+</div>
+<a id="a00a941bfd412801cb2ad71977ee2a8e1" name="a00a941bfd412801cb2ad71977ee2a8e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00a941bfd412801cb2ad71977ee2a8e1">&#9670;&#160;</a></span>UDKRead() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">long UDKFile::UDKRead </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>UDK's take on realtime file reading. </p>
+<p>We want to be able to read from real time file editing environment. <br  />
+This UDKRead is to take that into account by considering m_DiffArray.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buffer</td><td>The buffer to write into (signed) </td></tr>
+    <tr><td class="paramname">size</td><td>Bytes to read </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The number of bytes read, or the symbol wxInvalidOffset. </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Someone from Turkey </dd></dl>
+
+</div>
+</div>
+<a id="aeb06ee2de2891c666f4fb5f50e0466cc" name="aeb06ee2de2891c666f4fb5f50e0466cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb06ee2de2891c666f4fb5f50e0466cc">&#9670;&#160;</a></span>UDKSeek()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">wxFileOffset UDKFile::UDKSeek </td>
+          <td>(</td>
+          <td class="paramtype">wxFileOffset&#160;</td>
+          <td class="paramname"><em>ofs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">wxSeekMode&#160;</td>
+          <td class="paramname"><em>mode</em> = <code>wxFromStart</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Seeks to the specified position. </p>
+<p>UDK's implementation of Seek function. Although wxFile::Seek is present <br  />
+which is "move ptr ofs bytes related to start/current offset/end of file" <br  />
+This routine, however, correctly sets the m_Getptr and m_Putptr to ofs for <br  />
+later use.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ofs</td><td>Offset to seek to </td></tr>
+    <tr><td class="paramname">mode</td><td>Parameter indicating how file offset should be interpreted. wxFromStart: Seek from the file beginning wxFromEnd: Seek from the current position wxFromCurrent Seek from end of the file</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The actual offset position achieved </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a6d26099083056234b296615da360a3f0" name="a6d26099083056234b296615da360a3f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d26099083056234b296615da360a3f0">&#9670;&#160;</a></span>m_DiffArray</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ArrayOfNode UDKFile::m_DiffArray</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Array of changes done to the file? </p>
+
+</div>
+</div>
+<a id="a4ae7da62d81e1e5513846012f74100df" name="a4ae7da62d81e1e5513846012f74100df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ae7da62d81e1e5513846012f74100df">&#9670;&#160;</a></span>m_Getptr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">wxFileOffset UDKFile::m_Getptr</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>I think the location from where to start reading. </p>
+<p>The offset from where to begin the reading of the file. </p>
 
 </div>
 </div>

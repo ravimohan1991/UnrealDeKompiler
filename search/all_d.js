@@ -10,8 +10,10 @@ var searchData=
   ['udkhexeditor_7',['UDKHexEditor',['../class_u_d_k_hex_editor.html',1,'UDKHexEditor'],['../class_u_d_k_hex_editor.html#a31ae677eb8803b86d78616859f1b7295',1,'UDKHexEditor::UDKHexEditor()']]],
   ['udkhexeditorcontrol_8',['UDKHexEditorControl',['../class_u_d_k_hex_editor_control.html',1,'']]],
   ['udkoffsetcontrol_9',['UDKOffsetControl',['../class_u_d_k_offset_control.html',1,'']]],
-  ['udktextcontrol_10',['UDKTextControl',['../class_u_d_k_text_control.html',1,'']]],
-  ['unidata_11',['unidata',['../struct_data_interpreter_1_1unidata.html',1,'DataInterpreter']]],
-  ['unrealdekompiler_12',['UnrealDeKompiler',['../index.html',1,'']]],
-  ['updatedc_13',['UpdateDC',['../class_u_d_k_element_control.html#aa0a216e8cb6c7c7ac5e49b3a8cf78bd9',1,'UDKElementControl']]]
+  ['udkread_10',['UDKRead',['../class_u_d_k_file.html#a00a941bfd412801cb2ad71977ee2a8e1',1,'UDKFile::UDKRead(unsigned char *buffer, int size)'],['../class_u_d_k_file.html#a16613de033a3a32b6f2a0a41e5a281de',1,'UDKFile::UDKRead(char *buffer, int size)']]],
+  ['udkseek_11',['UDKSeek',['../class_u_d_k_file.html#aeb06ee2de2891c666f4fb5f50e0466cc',1,'UDKFile']]],
+  ['udktextcontrol_12',['UDKTextControl',['../class_u_d_k_text_control.html',1,'']]],
+  ['unidata_13',['unidata',['../struct_data_interpreter_1_1unidata.html',1,'DataInterpreter']]],
+  ['unrealdekompiler_14',['UnrealDeKompiler',['../index.html',1,'']]],
+  ['updatedc_15',['UpdateDC',['../class_u_d_k_element_control.html#aa0a216e8cb6c7c7ac5e49b3a8cf78bd9',1,'UDKElementControl']]]
 ];
