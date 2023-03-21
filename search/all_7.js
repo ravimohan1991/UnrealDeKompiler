@@ -15,9 +15,10 @@ var searchData=
   ['m_5fpanelofinformation_12',['m_PanelOfInformation',['../class_u_d_k_hex_editor.html#a1892c290093abe9519a2c5858925deae',1,'UDKHexEditor']]],
   ['m_5fpanemanager_13',['m_PaneManager',['../class_u_d_k_halo.html#a56205cbed43429f2fa5dea0d0d415f6f',1,'UDKHalo']]],
   ['m_5fstatusbar_14',['m_StatusBar',['../class_u_d_k_halo.html#a1f0cca61e069d5bd9992d13e16bf8cef',1,'UDKHalo']]],
-  ['m_5fthefile_15',['m_TheFile',['../class_u_d_k_file.html#a013d9e2b7044b21defee17f0f84734dd',1,'UDKFile']]],
-  ['m_5fwindow_16',['m_Window',['../class_u_d_k_element_control.html#a0304f977ba5918b1f2bad5f5a769509c',1,'UDKElementControl']]],
-  ['m_5fzebrastriping_17',['m_ZebraStriping',['../class_u_d_k_hex_editor.html#ae3f2d9a07ca07a6f9c43d1095983a9c8',1,'UDKHexEditor']]],
-  ['modificationpatcher_18',['ModificationPatcher',['../class_u_d_k_file.html#aba9adf40f2cc0eed7da1104a242a2e86',1,'UDKFile']]],
-  ['myconfigbase_19',['MyConfigBase',['../class_my_config_base.html',1,'']]]
+  ['m_5ftext_15',['m_Text',['../class_u_d_k_element_control.html#a9b227070ee1c17d84f7f19b6fa2588c3',1,'UDKElementControl']]],
+  ['m_5fthefile_16',['m_TheFile',['../class_u_d_k_file.html#a013d9e2b7044b21defee17f0f84734dd',1,'UDKFile']]],
+  ['m_5fwindow_17',['m_Window',['../class_u_d_k_element_control.html#a0304f977ba5918b1f2bad5f5a769509c',1,'UDKElementControl']]],
+  ['m_5fzebrastriping_18',['m_ZebraStriping',['../class_u_d_k_hex_editor.html#ae3f2d9a07ca07a6f9c43d1095983a9c8',1,'UDKHexEditor']]],
+  ['modificationpatcher_19',['ModificationPatcher',['../class_u_d_k_file.html#aba9adf40f2cc0eed7da1104a242a2e86',1,'UDKFile']]],
+  ['myconfigbase_20',['MyConfigBase',['../class_my_config_base.html',1,'']]]
 ];

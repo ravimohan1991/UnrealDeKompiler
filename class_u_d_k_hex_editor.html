@@ -99,7 +99,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a31ae677eb8803b86d78616859f1b7295"><td class="mdescLeft">&#160;</td><td class="mdescRight">Usual constructor for <a class="el" href="class_u_d_k_hex_editor.html" title="UDK&#39;s Hex Editor class.">UDKHexEditor</a>. <br /></td></tr>
 <tr class="separator:a31ae677eb8803b86d78616859f1b7295"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a759d63300d5f647a121a19d8cf91eb95"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_hex_editor.html#a759d63300d5f647a121a19d8cf91eb95">ReadFromBuffer</a> (uint64_t position, unsigned lenght, char *buffer, bool cursor_reset=true, bool paint=true)</td></tr>
-<tr class="memdesc:a759d63300d5f647a121a19d8cf91eb95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the loaded buffer.  <br /></td></tr>
+<tr class="memdesc:a759d63300d5f647a121a19d8cf91eb95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the loaded buffer from whatever source.  <br /></td></tr>
 <tr class="separator:a759d63300d5f647a121a19d8cf91eb95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c8775c4986b374f5b0091c369ac91c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_hex_editor.html#a3c8775c4986b374f5b0091c369ac91c4">Reload</a> ()</td></tr>
 <tr class="memdesc:a3c8775c4986b374f5b0091c369ac91c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads file from current page offset; refresh.  <br /></td></tr>
@@ -365,8 +365,10 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Read the loaded buffer. </p>
-<dl class="section see"><dt>See also</dt><dd></dd></dl>
+<p>Read the loaded buffer from whatever source. </p>
+<p>Reads the buffer extracted from file and stores the appropriate data in <br  />
+m_HexControl, m_TextControl, and m_OffsetControl for display later.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_u_d_k_hex_editor.html#ad12aaa00f1e2159ba85ab27125712f88" title="Loads file from specified page offset.">UDKHexEditor::LoadFromOffset(int64_t position, bool cursor_reset, bool paint, bool from_comparator)</a> </dd></dl>
 
 </div>
 </div>

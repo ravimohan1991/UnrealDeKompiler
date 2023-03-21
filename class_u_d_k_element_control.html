@@ -120,13 +120,26 @@ Public Attributes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:aa0a216e8cb6c7c7ac5e49b3a8cf78bd9"><td class="memItemLeft" align="right" valign="top">wxDC *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_element_control.html#aa0a216e8cb6c7c7ac5e49b3a8cf78bd9">UpdateDC</a> (wxDC *dc=nullptr)</td></tr>
+<tr class="memdesc:aa0a216e8cb6c7c7ac5e49b3a8cf78bd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the device context.  <br /></td></tr>
 <tr class="separator:aa0a216e8cb6c7c7ac5e49b3a8cf78bd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32c8c616851cb9cad4b508969c814019"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_element_control.html#a32c8c616851cb9cad4b508969c814019">OnSize</a> (wxSizeEvent &amp;event)</td></tr>
+<tr class="memdesc:a32c8c616851cb9cad4b508969c814019"><td class="mdescLeft">&#160;</td><td class="mdescRight">What to do with the event <a class="el" href="class_u_d_k_element_control.html#a9078c4090775558b5234a473da52ae58" title="Update geometry and relevant variables.">ChangeSize()</a>  <br /></td></tr>
+<tr class="separator:a32c8c616851cb9cad4b508969c814019"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac24ec967004f6f6575d79b4b8eaf16b1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_element_control.html#ac24ec967004f6f6575d79b4b8eaf16b1">OnPaint</a> (wxPaintEvent &amp;event)</td></tr>
+<tr class="memdesc:ac24ec967004f6f6575d79b4b8eaf16b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">What to do with the event <a class="el" href="class_u_d_k_element_control.html#ab770c494a9c18fbb777168c07725c82c">RePaint()</a>?  <br /></td></tr>
+<tr class="separator:ac24ec967004f6f6575d79b4b8eaf16b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac62741d207c65e25833e464d79029ccc"><td class="memItemLeft" align="right" valign="top">wxMemoryDC *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_element_control.html#ac62741d207c65e25833e464d79029ccc">CreateDC</a> ()</td></tr>
+<tr class="memdesc:ac62741d207c65e25833e464d79029ccc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the device context.  <br /></td></tr>
+<tr class="separator:ac62741d207c65e25833e464d79029ccc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a0304f977ba5918b1f2bad5f5a769509c"><td class="memItemLeft" align="right" valign="top">wxPoint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_element_control.html#a0304f977ba5918b1f2bad5f5a769509c">m_Window</a></td></tr>
 <tr class="memdesc:a0304f977ba5918b1f2bad5f5a769509c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of window in text coordinates.  <br /></td></tr>
 <tr class="separator:a0304f977ba5918b1f2bad5f5a769509c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b227070ee1c17d84f7f19b6fa2588c3"><td class="memItemLeft" align="right" valign="top">wxString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_element_control.html#a9b227070ee1c17d84f7f19b6fa2588c3">m_Text</a></td></tr>
+<tr class="memdesc:a9b227070ee1c17d84f7f19b6fa2588c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The text form of hexdata.  <br /></td></tr>
+<tr class="separator:a9b227070ee1c17d84f7f19b6fa2588c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a401c09799c59d3ce11c49e5c2205cb83"><td class="memItemLeft" align="right" valign="top">wxSize&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_element_control.html#a401c09799c59d3ce11c49e5c2205cb83">m_CharSize</a></td></tr>
 <tr class="memdesc:a401c09799c59d3ce11c49e5c2205cb83"><td class="mdescLeft">&#160;</td><td class="mdescRight">size (in pixels) of one character  <br /></td></tr>
 <tr class="separator:a401c09799c59d3ce11c49e5c2205cb83"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -160,6 +173,95 @@ if there are wxHexEditor.cfg file exits on current path, wxHexEditor switches to
 </div><div class="memdoc">
 
 <p>Update geometry and relevant variables. </p>
+
+</div>
+</div>
+<a id="ac62741d207c65e25833e464d79029ccc" name="ac62741d207c65e25833e464d79029ccc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac62741d207c65e25833e464d79029ccc">&#9670;&#160;</a></span>CreateDC()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">wxMemoryDC * UDKElementControl::CreateDC </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates the device context. </p>
+<p>Creates a memory device context provides a means to draw graphics <br  />
+onto a bitmap. Fills m_InternalBufferDC and m_InternalBufferBMP</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_u_d_k_element_control.html#a9078c4090775558b5234a473da52ae58" title="Update geometry and relevant variables.">UDKElementControl::ChangeSize()</a> </dd></dl>
+
+</div>
+</div>
+<a id="ac24ec967004f6f6575d79b4b8eaf16b1" name="ac24ec967004f6f6575d79b4b8eaf16b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac24ec967004f6f6575d79b4b8eaf16b1">&#9670;&#160;</a></span>OnPaint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UDKElementControl::OnPaint </td>
+          <td>(</td>
+          <td class="paramtype">wxPaintEvent &amp;&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>What to do with the event <a class="el" href="class_u_d_k_element_control.html#ab770c494a9c18fbb777168c07725c82c">RePaint()</a>? </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_u_d_k_element_control.html#ab770c494a9c18fbb777168c07725c82c">UDKElementControl::RePaint(void)</a> </dd></dl>
+<p>delete dcTemp;</p>
+
+</div>
+</div>
+<a id="a32c8c616851cb9cad4b508969c814019" name="a32c8c616851cb9cad4b508969c814019"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32c8c616851cb9cad4b508969c814019">&#9670;&#160;</a></span>OnSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UDKElementControl::OnSize </td>
+          <td>(</td>
+          <td class="paramtype">wxSizeEvent &amp;&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>What to do with the event <a class="el" href="class_u_d_k_element_control.html#a9078c4090775558b5234a473da52ae58" title="Update geometry and relevant variables.">ChangeSize()</a> </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_u_d_k_element_control.html#a9078c4090775558b5234a473da52ae58" title="Update geometry and relevant variables.">UDKElementControl::ChangeSize()</a> </dd></dl>
 
 </div>
 </div>
@@ -236,6 +338,12 @@ if there are wxHexEditor.cfg file exits on current path, wxHexEditor switches to
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Updates the device context. </p>
+<p>This routine updates the device context onto which images and (or) <br  />
+text can be drawn.</p>
+<dl class="section see"><dt>See also</dt><dd>UDKElementControl::OnPaint(wxPaintEvent &amp;WXUNUSED(event)) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The device context to draw </dd></dl>
 <p>Bit 7 6 5 4 3 2 1 0 Data R R R G G G B B OnWX B B G G G R R R</p>
 
 </div>
@@ -281,6 +389,32 @@ should have the answer. </p>
 
 <p>Characters per line. </p>
 <dl class="section see"><dt>See also</dt><dd>UDKElementControl::CharacterPerLine(bool NoCache) </dd></dl>
+
+</div>
+</div>
+<a id="a9b227070ee1c17d84f7f19b6fa2588c3" name="a9b227070ee1c17d84f7f19b6fa2588c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b227070ee1c17d84f7f19b6fa2588c3">&#9670;&#160;</a></span>m_Text</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">wxString UDKElementControl::m_Text</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The text form of hexdata. </p>
+<p>The text incarnation of hex data ? obtained from file</p>
+<dl class="section see"><dt>See also</dt><dd>UDKElementControl::SetBinValue(char* buffer, int byte_count, bool repaint) </dd></dl>
 
 </div>
 </div>
