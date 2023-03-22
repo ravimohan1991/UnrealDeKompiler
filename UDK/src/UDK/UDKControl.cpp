@@ -352,13 +352,13 @@ inline wxDC* UDKElementControl::UpdateDC(wxDC *xdc)
 	std::cout << "wxHexCtrl::Update Sizes: " << this->GetSize().GetWidth() << ":" << this->GetSize().GetHeight() << std::endl;
 #endif
 
+	// Setting up display context parameters
+	dcTemp->SetPen(*wxBLACK_PEN);
+	dcTemp->SetBrush(*wxRED_BRUSH);
 	dcTemp->SetFont(m_HexDefaultAttr.GetFont());
 	dcTemp->SetTextForeground(m_HexDefaultAttr.GetTextColour());
-	dcTemp->SetTextBackground(m_HexDefaultAttr.GetBackgroundColour()); //This will be overriden by Zebra stripping
-	wxBrush dbrush(m_HexDefaultAttr.GetBackgroundColour());
-
-	dcTemp->SetBackground(dbrush);
-	dcTemp->SetBackgroundMode(wxSOLID); // overwrite old value
+	dcTemp->SetTextBackground(m_HexDefaultAttr.GetBackgroundColour());
+	dcTemp->SetBackgroundMode(wxSOLID);
 	dcTemp->Clear();
 
 	wxString line;

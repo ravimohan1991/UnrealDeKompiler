@@ -304,7 +304,10 @@ protected:
 	 * @brief Updates the device context
 	 *
 	 * This routine updates the device context onto which images and (or) \n
-	 * text can be drawn.
+	 * text can be drawn.\n
+	 *
+	 * For more (basic and verbose) information I'd go to \n
+	 * https://www.informit.com/articles/article.aspx?p=405047
 	 *
 	 * @see UDKElementControl::OnPaint(wxPaintEvent &WXUNUSED(event))
 	 * @return The device context to draw
