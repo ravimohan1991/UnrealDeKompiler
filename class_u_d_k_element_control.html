@@ -116,6 +116,14 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a62548b1efe067be020fbefc8cf1e5171"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_element_control.html#a62548b1efe067be020fbefc8cf1e5171">m_CPL</a></td></tr>
 <tr class="memdesc:a62548b1efe067be020fbefc8cf1e5171"><td class="mdescLeft">&#160;</td><td class="mdescRight">Characters per line.  <br /></td></tr>
 <tr class="separator:a62548b1efe067be020fbefc8cf1e5171"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af28571f57567d7c8aca3b1cfbf7ef651"><td class="memItemLeft" align="right" valign="top">wxMemoryDC *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_element_control.html#af28571f57567d7c8aca3b1cfbf7ef651">m_InternalBufferDC</a></td></tr>
+<tr class="memdesc:af28571f57567d7c8aca3b1cfbf7ef651"><td class="mdescLeft">&#160;</td><td class="mdescRight">reference to internal buffer wxMemoryDC  <br /></td></tr>
+<tr class="separator:af28571f57567d7c8aca3b1cfbf7ef651"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5658541c33a4f8fbced11c5dedcce0f"><td class="memItemLeft" align="right" valign="top">wxBitmap *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_element_control.html#ab5658541c33a4f8fbced11c5dedcce0f">m_InternalBufferBMP</a></td></tr>
+<tr class="memdesc:ab5658541c33a4f8fbced11c5dedcce0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">reference to internal buffer wxMemoryDC  <br /></td></tr>
+<tr class="separator:ab5658541c33a4f8fbced11c5dedcce0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a251efbdb23db409d7a1fe00e4d1cacda"><td class="memItemLeft" align="right" valign="top">wxCaret *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_element_control.html#a251efbdb23db409d7a1fe00e4d1cacda">m_Mycaret</a></td></tr>
+<tr class="separator:a251efbdb23db409d7a1fe00e4d1cacda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -389,6 +397,59 @@ should have the answer. </p>
 
 <p>Characters per line. </p>
 <dl class="section see"><dt>See also</dt><dd>UDKElementControl::CharacterPerLine(bool NoCache) </dd></dl>
+
+</div>
+</div>
+<a id="ab5658541c33a4f8fbced11c5dedcce0f" name="ab5658541c33a4f8fbced11c5dedcce0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5658541c33a4f8fbced11c5dedcce0f">&#9670;&#160;</a></span>m_InternalBufferBMP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">wxBitmap* UDKElementControl::m_InternalBufferBMP</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>reference to internal buffer wxMemoryDC </p>
+<p>This stores the reference to the encapsulation of the concept of <br  />
+a platform-dependent bitmap, either monochrome or colour or colour <br  />
+with alpha channel support</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_u_d_k_element_control.html#ac62741d207c65e25833e464d79029ccc" title="Creates the device context.">UDKElementControl::CreateDC()</a> </dd></dl>
+
+</div>
+</div>
+<a id="af28571f57567d7c8aca3b1cfbf7ef651" name="af28571f57567d7c8aca3b1cfbf7ef651"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af28571f57567d7c8aca3b1cfbf7ef651">&#9670;&#160;</a></span>m_InternalBufferDC</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">wxMemoryDC* UDKElementControl::m_InternalBufferDC</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>reference to internal buffer wxMemoryDC </p>
+<p>A memory device context provides a means to draw graphics onto a bitmap</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_u_d_k_element_control.html#ac62741d207c65e25833e464d79029ccc" title="Creates the device context.">UDKElementControl::CreateDC()</a> </dd></dl>
+
+</div>
+</div>
+<a id="a251efbdb23db409d7a1fe00e4d1cacda" name="a251efbdb23db409d7a1fe00e4d1cacda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a251efbdb23db409d7a1fe00e4d1cacda">&#9670;&#160;</a></span>m_Mycaret</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">wxCaret* UDKElementControl::m_Mycaret</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>brief A caret is a blinking cursor showing the position where the typed text will appear </p>
 
 </div>
 </div>

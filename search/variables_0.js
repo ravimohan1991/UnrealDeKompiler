@@ -11,12 +11,15 @@ var searchData=
   ['m_5fframe_8',['m_Frame',['../class_u_d_k_application.html#afdd5bbdb49b6836f1be406380bf8183d',1,'UDKApplication']]],
   ['m_5fgetptr_9',['m_Getptr',['../class_u_d_k_file.html#a4ae7da62d81e1e5513846012f74100df',1,'UDKFile']]],
   ['m_5fidanotebook_10',['m_IDANotebook',['../class_u_d_k_halo.html#a1af8d12edeeb4a2a861366c644f39c2c',1,'UDKHalo']]],
-  ['m_5fpageoffset_11',['m_PageOffset',['../class_u_d_k_hex_editor.html#aaa5fe164e9b4f1ed62d2a6c171be7f6c',1,'UDKHexEditor']]],
-  ['m_5fpanelofinformation_12',['m_PanelOfInformation',['../class_u_d_k_hex_editor.html#a1892c290093abe9519a2c5858925deae',1,'UDKHexEditor']]],
-  ['m_5fpanemanager_13',['m_PaneManager',['../class_u_d_k_halo.html#a56205cbed43429f2fa5dea0d0d415f6f',1,'UDKHalo']]],
-  ['m_5fstatusbar_14',['m_StatusBar',['../class_u_d_k_halo.html#a1f0cca61e069d5bd9992d13e16bf8cef',1,'UDKHalo']]],
-  ['m_5ftext_15',['m_Text',['../class_u_d_k_element_control.html#a9b227070ee1c17d84f7f19b6fa2588c3',1,'UDKElementControl']]],
-  ['m_5fthefile_16',['m_TheFile',['../class_u_d_k_file.html#a013d9e2b7044b21defee17f0f84734dd',1,'UDKFile']]],
-  ['m_5fwindow_17',['m_Window',['../class_u_d_k_element_control.html#a0304f977ba5918b1f2bad5f5a769509c',1,'UDKElementControl']]],
-  ['m_5fzebrastriping_18',['m_ZebraStriping',['../class_u_d_k_hex_editor.html#ae3f2d9a07ca07a6f9c43d1095983a9c8',1,'UDKHexEditor']]]
+  ['m_5finternalbufferbmp_11',['m_InternalBufferBMP',['../class_u_d_k_element_control.html#ab5658541c33a4f8fbced11c5dedcce0f',1,'UDKElementControl']]],
+  ['m_5finternalbufferdc_12',['m_InternalBufferDC',['../class_u_d_k_element_control.html#af28571f57567d7c8aca3b1cfbf7ef651',1,'UDKElementControl']]],
+  ['m_5fmycaret_13',['m_Mycaret',['../class_u_d_k_element_control.html#a251efbdb23db409d7a1fe00e4d1cacda',1,'UDKElementControl']]],
+  ['m_5fpageoffset_14',['m_PageOffset',['../class_u_d_k_hex_editor.html#aaa5fe164e9b4f1ed62d2a6c171be7f6c',1,'UDKHexEditor']]],
+  ['m_5fpanelofinformation_15',['m_PanelOfInformation',['../class_u_d_k_hex_editor.html#a1892c290093abe9519a2c5858925deae',1,'UDKHexEditor']]],
+  ['m_5fpanemanager_16',['m_PaneManager',['../class_u_d_k_halo.html#a56205cbed43429f2fa5dea0d0d415f6f',1,'UDKHalo']]],
+  ['m_5fstatusbar_17',['m_StatusBar',['../class_u_d_k_halo.html#a1f0cca61e069d5bd9992d13e16bf8cef',1,'UDKHalo']]],
+  ['m_5ftext_18',['m_Text',['../class_u_d_k_element_control.html#a9b227070ee1c17d84f7f19b6fa2588c3',1,'UDKElementControl']]],
+  ['m_5fthefile_19',['m_TheFile',['../class_u_d_k_file.html#a013d9e2b7044b21defee17f0f84734dd',1,'UDKFile']]],
+  ['m_5fwindow_20',['m_Window',['../class_u_d_k_element_control.html#a0304f977ba5918b1f2bad5f5a769509c',1,'UDKElementControl']]],
+  ['m_5fzebrastriping_21',['m_ZebraStriping',['../class_u_d_k_hex_editor.html#ae3f2d9a07ca07a6f9c43d1095983a9c8',1,'UDKHexEditor']]]
 ];
