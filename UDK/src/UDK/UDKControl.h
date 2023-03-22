@@ -346,7 +346,7 @@ public:
 	bool					m_Hex2ColorMode;
 	bool					m_Waylander;
 
-	/*
+	/**
 	 * @brief reference to internal buffer wxMemoryDC
 	 *
 	 * A memory device context provides a means to draw graphics onto a bitmap
@@ -355,7 +355,7 @@ public:
 	 */
 	wxMemoryDC*				m_InternalBufferDC;
 
-	/*
+	/**
 	 * @brief reference to internal buffer wxMemoryDC
 	 *
 	 * This stores the reference to the encapsulation of the concept of \n
@@ -368,6 +368,10 @@ public:
 	bool					m_DrawCharByChar;
 
 	// Caret Movement
+	/**
+	 * brief A caret is a blinking cursor showing the position where the typed text will appear
+	 *
+	 */
 	wxCaret*				m_Mycaret;
 };
 

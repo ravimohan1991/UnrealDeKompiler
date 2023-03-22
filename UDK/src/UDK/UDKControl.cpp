@@ -5,6 +5,7 @@
 
 BEGIN_EVENT_TABLE(UDKElementControl, wxScrolledWindow)
 	EVT_SIZE(UDKElementControl::OnSize)
+	EVT_PAINT(UDKElementControl::OnPaint)
 END_EVENT_TABLE()
 
 int atoh(const char hex)
@@ -30,12 +31,12 @@ UDKElementControl::UDKElementControl(wxWindow* parent,
 		wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT),
 		wxFont(
 			10,
-			wxFONTFAMILY_MODERN,	// family
-			wxFONTSTYLE_NORMAL,	// style
-			wxFONTWEIGHT_BOLD,// weight
+			wxFONTFAMILY_MODERN,		// family
+			wxFONTSTYLE_NORMAL,		// style
+			wxFONTWEIGHT_BOLD,		// weight
 			true,				// underline
 			wxT(""),			// facename
-			wxFONTENCODING_CP437));// msdos encoding
+			wxFONTENCODING_CP437));		// msdos encoding
 
 	//Need to create object before Draw operation.
 	m_ZebraStriping = new int;
@@ -49,7 +50,9 @@ UDKElementControl::UDKElementControl(wxWindow* parent,
 	m_Waylander = wxGetEnv("WAYLAND_DISPLAY", &waylandStr);
 
 	if (m_Waylander)
+	{
 		std::cout << "Wayland detected. You could have cosmetic cursor issues." << std::endl;
+	}
 
 	m_ControlType = HexControl;
 	m_DrawCharByChar = false;
@@ -71,7 +74,6 @@ UDKElementControl::UDKElementControl(wxWindow* parent,
 	m_LastRightClickPosition = wxPoint(0, 0);
 	m_Select.m_Selected = false;
 
-	//What is caret?
 	//CreateCaret();
 
 	MyConfigBase::Get()->Read(_T("Hex2ColorMode"), &m_Hex2ColorMode);
@@ -136,10 +138,15 @@ void UDKElementControl::RePaint(void)
 	if (dcTemp != nullptr)
 	{
 		wxClientDC dc(this); //Not looks working on GraphicsContext
+
 		///Directly creating contentx at dc creates flicker!
 		UpdateDC(&dc);
 
-		//dc.DrawBitmap( *internalBufferBMP, this->GetSize().GetWidth(), this->GetSize().GetHeight() ); //This does NOT work
+		// https://docs.wxwidgets.org/3.0/classwx_d_c.html#a12bed94a15136b9080683f4151042a34
+		// Copy from a source DC to this DC.
+		// With this method you can specify the destination coordinates and the size of area to copy
+		// which will be the same for both the source and target DCs. If you need to apply scaling while copying
+		// use StretchBlit().
 #ifdef WXOSX_CARBON  //wxCarbon needs +2 patch on both axis somehow.
 		dc.Blit(2, 2, this->GetSize().GetWidth(), this->GetSize().GetHeight(), dcTemp, 0, 0, wxCOPY);
 #else
@@ -242,14 +249,20 @@ void UDKElementControl::TagPainterGC(wxGraphicsContext* gc, TagElement& TG)
 	int start = TG.m_Start;
 	int end = TG.m_End;
 
-	if( start > end )
-		wxSwap( start, end );
+	if(start > end)
+	{
+		wxSwap(start, end);
+	}
 
-	if( start < 0 )
+	if(start < 0)
+	{
 		start = 0;
+	}
 
-	if ( end > ByteCapacity()*2 )
-		end = ByteCapacity()*2;
+	if (end > ByteCapacity() * 2)
+	{
+		end = ByteCapacity() * 2;
+	}
 
 // TODO (death#1#): Here problem with Text Ctrl.Use smart pointer...?
 	wxPoint _start_ = InternalPositionToVisibleCoord( start );
@@ -311,6 +324,7 @@ inline wxMemoryDC* UDKElementControl::CreateDC()
 
 	m_InternalBufferBMP= new wxBitmap(sizeBmp);
 	m_InternalBufferDC = new wxMemoryDC();
+
 	m_InternalBufferDC->SelectObject(*m_InternalBufferBMP);
 
 	return m_InternalBufferDC;
@@ -348,7 +362,7 @@ inline wxDC* UDKElementControl::UpdateDC(wxDC *xdc)
 	dcTemp->Clear();
 
 	wxString line;
-	line.Alloc( m_Window.x+1 );
+	line.Alloc(m_Window.x + 1);
 	wxColour col_standart(m_HexDefaultAttr.GetBackgroundColour());
 
 	wxColour col_zebra(0x00FFEEEE);
@@ -358,7 +372,7 @@ inline wxDC* UDKElementControl::UpdateDC(wxDC *xdc)
 		col_zebra.Set( Colour );
 
 	size_t textLenghtLimit = 0;
-	size_t textLength=m_Text.Length();
+	size_t textLength = m_Text.Length();
 
 	//Normal process
 	if(!m_Hex2ColorMode || m_ControlType == OffsetControl)
