@@ -110,6 +110,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab71cca4b7a6e894f400d9334d3860e43"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_element_control.html#ab71cca4b7a6e894f400d9334d3860e43">SetDefaultStyle</a> (wxTextAttr &amp;new_attr)</td></tr>
 <tr class="memdesc:ab71cca4b7a6e894f400d9334d3860e43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the displayable character style.  <br /></td></tr>
 <tr class="separator:ab71cca4b7a6e894f400d9334d3860e43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b451f2673c4a7043cb97c6b9e32edbf"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_element_control.html#a8b451f2673c4a7043cb97c6b9e32edbf">IsDenied_NoCache</a> (int x)</td></tr>
+<tr class="memdesc:a8b451f2673c4a7043cb97c6b9e32edbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">IsDenied_NoCache.  <br /></td></tr>
+<tr class="separator:a8b451f2673c4a7043cb97c6b9e32edbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -142,6 +145,10 @@ Protected Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
+<tr class="memitem:a3248a6886388b9d9cbfbb41b6f4f8d20"><td class="memItemLeft" align="right" valign="top"><a id="a3248a6886388b9d9cbfbb41b6f4f8d20" name="a3248a6886388b9d9cbfbb41b6f4f8d20"></a>
+wxPoint&#160;</td><td class="memItemRight" valign="bottom"><b>m_Margin</b></td></tr>
+<tr class="memdesc:a3248a6886388b9d9cbfbb41b6f4f8d20"><td class="mdescLeft">&#160;</td><td class="mdescRight">The margin around the text (looks nicer) <br /></td></tr>
+<tr class="separator:a3248a6886388b9d9cbfbb41b6f4f8d20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0304f977ba5918b1f2bad5f5a769509c"><td class="memItemLeft" align="right" valign="top">wxPoint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_d_k_element_control.html#a0304f977ba5918b1f2bad5f5a769509c">m_Window</a></td></tr>
 <tr class="memdesc:a0304f977ba5918b1f2bad5f5a769509c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of window in text coordinates.  <br /></td></tr>
 <tr class="separator:a0304f977ba5918b1f2bad5f5a769509c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -211,6 +218,41 @@ if there are wxHexEditor.cfg file exits on current path, wxHexEditor switches to
 <p>Creates a memory device context provides a means to draw graphics <br  />
 onto a bitmap. Fills m_InternalBufferDC and m_InternalBufferBMP</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_u_d_k_element_control.html#a9078c4090775558b5234a473da52ae58" title="Update geometry and relevant variables.">UDKElementControl::ChangeSize()</a> </dd></dl>
+
+</div>
+</div>
+<a id="a8b451f2673c4a7043cb97c6b9e32edbf" name="a8b451f2673c4a7043cb97c6b9e32edbf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b451f2673c4a7043cb97c6b9e32edbf">&#9670;&#160;</a></span>IsDenied_NoCache()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool UDKElementControl::IsDenied_NoCache </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>IsDenied_NoCache. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 </div>
 </div>
@@ -349,7 +391,9 @@ onto a bitmap. Fills m_InternalBufferDC and m_InternalBufferBMP</p>
 
 <p>Updates the device context. </p>
 <p>This routine updates the device context onto which images and (or) <br  />
-text can be drawn.</p>
+text can be drawn.<br  />
+ For more (basic and verbose) information I'd go to <br  />
+<a href="https://www.informit.com/articles/article.aspx?p=405047">https://www.informit.com/articles/article.aspx?p=405047</a></p>
 <dl class="section see"><dt>See also</dt><dd>UDKElementControl::OnPaint(wxPaintEvent &amp;WXUNUSED(event)) </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The device context to draw </dd></dl>
 <p>Bit 7 6 5 4 3 2 1 0 Data R R R G G G B B OnWX B B G G G R R R</p>
