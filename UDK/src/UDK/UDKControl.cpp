@@ -763,6 +763,9 @@ void UDKElementControl::ChangeSize()
 	m_Window.x = (size.x - 2 * m_Margin.x) / m_CharSize.x;
 	m_Window.y = (size.y - 2 * m_Margin.x) / m_CharSize.y;
 
+	std::cout << "size (x, y): (" << size.x << ", " << size.y << ") (" << m_CharSize.x << ", " << m_CharSize.y << ")" << std::endl;
+	std::cout << "m_Window.x .y" << " (" << m_Window.x << ", " << m_Window.y << ") (" << m_Margin.x << ", " << m_Margin.y << std::endl;
+
 	if (m_Window.x < 1)
 	{
 		m_Window.x = 1;
@@ -772,12 +775,12 @@ void UDKElementControl::ChangeSize()
 		m_Window.y = 1;
 	}
 
-	for(int i=0 ; i < m_Window.x+1 ; i++)
+	for(int i=0 ; i < m_Window.x + 1 ; i++)
 	{
 		m_IsDeniedCache[i] = IsDenied_NoCache(i);
 	}
 
-	CharacterPerLine(true);//Updates CPL static int
+	CharacterPerLine(true);//Updates m_CPL
 
 	//This Resizes internal buffer!
 	CreateDC();
@@ -808,7 +811,6 @@ void UDKElementControl::OnSize(wxSizeEvent &event)
 
 int UDKElementControl::CharacterPerLine(bool NoCache)
 {
-	//Without spaces
 	if (!NoCache)
 	{
 		return m_CPL;
@@ -818,8 +820,9 @@ int UDKElementControl::CharacterPerLine(bool NoCache)
 	for (int x = 0; x < m_Window.x; x++)
 	{
 		avoid += m_IsDeniedCache[x];
-	}
 
+		//std::cout<< "avoid: " << avoid << "m_IsDeniedCache: " << m_IsDeniedCache[x] << std::endl;
+	}
 	m_CPL = m_Window.x - avoid;
 
 	return m_CPL;
@@ -925,8 +928,7 @@ inline bool UDKElementControl::IsDenied_NoCache(int x)
 	{
 		return true;
 	}
-	//	if( x == 3*8 )
-	//		return true;
+
 	return !((x + 1) % 3);				// Byte coupling
 }
 

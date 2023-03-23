@@ -194,6 +194,12 @@ public:
 		return IsDenied(m_Caret.x);
 	}
 	virtual bool IsDenied(int x);
+
+	/**
+	 * @brief IsDenied_NoCache
+	 * @param x
+	 * @return
+	 */
 	virtual bool IsDenied_NoCache(int x);
 	virtual bool IsAllowedChar(const char& chr);
 	int xCountDenied(int x);
@@ -213,11 +219,13 @@ public:
 
 	virtual int ByteCapacity(void)
 	{
+		std::cout << "m_Window.y = " << m_Window.y << std::endl;
 		return m_Window.y * BytePerLine();
 	}
 
 	virtual int BytePerLine(void)
 	{
+		std::cout << "CharacterPerLine: " << CharacterPerLine() / 2 << std::endl;
 		return CharacterPerLine() / 2;
 	}
 
@@ -260,7 +268,10 @@ public:
 	wxArrayInt		m_ThinSeparationLines;
 
 protected:
-	wxPoint				m_Margin;	// the margin around the text (looks nicer)
+	/**
+	 * @brief The margin around the text (looks nicer)
+	 */
+	wxPoint				m_Margin;
 	wxPoint				m_Caret;	// position (in text coords) of the caret
 
 	/**

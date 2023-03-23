@@ -322,6 +322,8 @@ public:
 
 	void UpdateCursorLocation(bool force = false);
 
+	//virtual void OnResize(wxSizeEvent &event) override;
+
 	wxFileName GetFileName(void);
 
 	int HashVerify(wxString hash_file, UDKFile* File = NULL);

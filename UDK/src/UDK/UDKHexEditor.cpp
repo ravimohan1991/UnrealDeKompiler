@@ -67,6 +67,7 @@ UDKHexEditor::UDKHexEditor(wxWindow* parent,
 		}
 	}
 
+	//this->Connect(wxEVT_SIZE, wxSizeEventHandler(UDKHexEditor::OnResize ));
 	//offset_scroll->Enable( true );
 	//Dynamic_Connector();
 	//BlockSelectOffset = -1;
@@ -85,6 +86,20 @@ bool UDKHexEditor::FileAddDiff(int64_t start_byte, const char* data, int64_t siz
 		return m_FileInMicroscope->Add(start_byte, data, size, injection);
 	}
 }
+
+/*
+void UDKHexEditor::OnResize( wxSizeEvent &event )
+{
+#ifdef _DEBUG_SIZE_
+	std::cout << "HexEditor::OnResize() Event Type:" << event.GetEventType() << std::endl ;
+	std::cout << "ByteCapacity() Before:" << ByteCapacity() << std::endl;
+#endif
+	//event.Skip( true );
+	if(m_FileInMicroscope != NULL && 0 < BytePerLine())
+	{
+		Reload();
+	}
+}*/
 
 void UDKHexEditor::Reload()
 {
@@ -107,7 +122,11 @@ void UDKHexEditor::LoadFromOffset(int64_t position, bool cursor_reset, bool pain
 	m_FileInMicroscope->UDKSeek(position, wxFromStart);
 
 	unsigned byteCapacity = ByteCapacity();
+
+	std::cout<<"ByteCapacity: " << byteCapacity << std::endl;
+
 	char* buffer = new char[byteCapacity];
+
 	int readedbytes = m_FileInMicroscope->UDKRead(buffer, byteCapacity);
 
 	if (readedbytes == -1)
